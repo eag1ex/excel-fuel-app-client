@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@pl/material';
 import { AppRoutingModule } from './app.routing.module';
 import { PLbackendProvider } from '@pl/http';
+import { ComponentsModule } from '@pl/components';
+import { MainComponent } from './main/main.component';
 if (environment.production === true) {
     debug(`-- Using Angular 11.x --`);
     debug(`-- CONSOLE LOGS DISABLES --`);
@@ -19,9 +21,10 @@ if (environment.production === true) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, MainComponent
   ],
   imports: [
+    ComponentsModule,
     AppRoutingModule,
     MaterialModule,
     BrowserAnimationsModule,
@@ -35,7 +38,19 @@ if (environment.production === true) {
   }),
   ],
   providers: [
-    PLbackendProvider
+    PLbackendProvider,
+    {
+      provide: 'ENVIRONMENT_PRODUCTION',
+      useValue: environment.production,
+  },
+  {
+      provide: 'ENVIRONMENT',
+      useValue: environment,
+  },
+  {
+      provide: 'API_BASE_URL',
+      useValue: environment.apiBaseUrl,
+  },
   ],
   bootstrap: [AppComponent]
 })

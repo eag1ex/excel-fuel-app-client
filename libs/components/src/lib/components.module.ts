@@ -1,16 +1,26 @@
 import { NgModule } from '@angular/core';
-import { ComponentsComponent } from './components.component';
-
+import { MaterialModule } from '@pl/material';
+import { LayoutComponent } from './layout/layout.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { FooterComponent } from './footer/footer.component';
+import { IconsComponent } from './icons/icons.component';
+// import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { CommonModule } from '@angular/common'
 
 
 @NgModule({
   declarations: [
-    ComponentsComponent
+    LayoutComponent,
+    NavBarComponent,
+    FooterComponent,
+    IconsComponent
   ],
   imports: [
+    CommonModule,
+    MaterialModule
   ],
   exports: [
-    ComponentsComponent
+    LayoutComponent
   ]
 })
 export class ComponentsModule { }

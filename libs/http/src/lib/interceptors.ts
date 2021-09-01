@@ -1,14 +1,14 @@
 /**
-* @description Intercept all http trafic, and check for Bearer/token
-*/
+ * @description Intercept all http trafic, and check for Bearer/token
+ */
 
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http'
-import {  Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { HttpManagerService } from '@pl/utils'
 
 import { Observable, of, throwError } from 'rxjs'
 import { catchError, switchMap, timeout } from 'rxjs/operators'
-
+import { log } from 'x-utils-es'
 
 @Injectable()
 export class PLhttpInterceptor implements HttpInterceptor {
@@ -39,6 +39,9 @@ export class PLhttpInterceptor implements HttpInterceptor {
             headers: new HttpHeaders({ ...headers }),
         })
 
+        log('intercept/url', request.url)
+        log('intercept/headers', request.headers)
+		
         return next.handle(request).pipe(
             switchMap((l) => {
                 // if (!token) {
@@ -50,7 +53,7 @@ export class PLhttpInterceptor implements HttpInterceptor {
                 return of(l)
             }),
             this.httpManager.operators(),
-			timeout(10000),
+            timeout(10000),
             catchError((error) => this.errorHandler(request.method, error))
         )
     }

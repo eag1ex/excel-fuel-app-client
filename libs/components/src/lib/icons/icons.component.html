@@ -1,0 +1,8 @@
+<img
+    *ngIf="item"
+    [src]="item.path"
+    [alt]="item.name"
+    [style.width]="size ? size + 'px' : ''"
+    [style.height]="size ? 'auto' : ''"
+    class="{{ item.name }} svg-icon align-self-center"
+/>

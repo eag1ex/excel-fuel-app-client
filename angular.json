@@ -30,6 +30,7 @@
             "assets": [
               "projects/petrol-locator/src/favicon.ico",
               "projects/petrol-locator/src/assets",
+              "projects/petrol-locator/src/manifest.webmanifest",
               {
                 "glob": "**/*",
                 "input": "libs/theme/assets/",

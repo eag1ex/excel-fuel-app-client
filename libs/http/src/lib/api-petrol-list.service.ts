@@ -13,7 +13,7 @@ import { ENV } from '@pl/interfaces';
 @Injectable({
     providedIn: 'root',
 })
-export class ConstitutionHttpService {
+export class ApiPetrolListHttpService {
     private apiBaseUrl: string;
     sub$: Subject<any> = new Subject();
     constructor(
@@ -21,27 +21,27 @@ export class ConstitutionHttpService {
       this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl;
     }
 
-   locationList(params: any): Observable<any> {
+   list(params: any): Observable<any> {
 
         // if (isEmpty(params)) { params = {} }
 
-        const url = this.apiBaseUrl + `/petrol/locations`
+        const url = this.apiBaseUrl + `/petrol/list`
         log(`-- calling ${url}`)
         return this.http.get<any>(`${url}`).pipe( timeout(10000))
 
     }
 
-    get locationList$(): Observable<any[]> {
+    get list$(): Observable<any[]> {
       return this.sub$.pipe(
        // filter(v => !!v),
         debounceTime(300),
         switchMap(m => {
-          return this.locationList(m);
+          return this.list(m);
         }),
         catchError(err => {
           onerror(err);
           // re/sub on error
-          return this.locationList$;
+          return this.list$;
         })
       );
     }

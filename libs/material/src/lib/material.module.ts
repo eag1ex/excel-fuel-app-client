@@ -18,28 +18,28 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+// import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 // import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 const ANGULAR_MATERIAL_MODULES = [
-    MatToolbarModule,
-    MatTooltipModule,
-    MatSlideToggleModule,
-    MatAutocompleteModule,
-    MatButtonToggleModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
+       MatToolbarModule,
+//     MatTooltipModule,
+//     MatSlideToggleModule,
+//    // MatAutocompleteModule,
+//     MatButtonToggleModule,
+//     MatInputModule,
+//     MatFormFieldModule,
+//     MatSelectModule,
+//     MatIconModule,
+//     MatListModule,
+//     MatMenuModule,
     MatButtonModule,
-    MatRippleModule,
-    // MatCardModule,
-    MatChipsModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
+//     MatRippleModule,
+//     // MatCardModule,
+//     MatChipsModule,
+//     MatProgressSpinnerModule,
+//     MatProgressBarModule,
     MatDividerModule,
 ];
 

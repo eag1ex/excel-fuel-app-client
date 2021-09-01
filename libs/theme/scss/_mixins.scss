@@ -1,1 +1,8 @@
 //@import './colors';
+
+@mixin icons-preset() {
+    vertical-align: middle;
+    height: auto;
+    max-width: 40px;
+    align-self: center !important;
+}
