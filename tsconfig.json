@@ -4,6 +4,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "resolveJsonModule":true,
+    "esModuleInterop":true,
+    "allowSyntheticDefaultImports":true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -15,7 +18,33 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@pl/theme":[
+        "libs/theme/scss"
+      ],
+      "@pl/material": [
+        "libs/material/src/public-api.ts"
+      ],
+      "@pl/components": [
+        "libs/components/src/public-api.ts"
+      ],
+      "@pl/page-routes": [
+        "libs/page-routes/src/public-api.ts"
+      ],
+      "@pl/utils": [
+        "libs/utils/src/public-api.ts"
+      ],
+      "@pl/http": [
+        "libs/http/src/public-api.ts"
+      ],
+      "@pl/interfaces": [
+        "libs/interfaces/src/public-api.ts"
+      ],
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false

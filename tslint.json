@@ -10,17 +10,20 @@
         "statements"
       ]
     },
+    "no-empty-interface":false,
+    "component-selector":false,
     "array-type": false,
     "arrow-return-shorthand": true,
-    "curly": true,
+    "curly": false,
     "deprecation": {
       "severity": "warning"
     },
-    "eofline": true,
+    "eofline": false,
     "import-blacklist": [
       true,
       "rxjs/Rx"
     ],
+    "jsdoc-format":false,
     "import-spacing": true,
     "indent": {
       "options": [
@@ -28,10 +31,7 @@
       ]
     },
     "max-classes-per-file": false,
-    "max-line-length": [
-      true,
-      140
-    ],
+    "max-line-length": false,
     "member-ordering": [
       true,
       {
@@ -68,11 +68,7 @@
       true,
       "single"
     ],
-    "semicolon": {
-      "options": [
-        "always"
-      ]
-    },
+    "semicolon": false,
     "space-before-function-paren": {
       "options": {
         "anonymous": "never",
@@ -83,7 +79,7 @@
       }
     },
     "typedef": [
-      true,
+      false,
       "call-signature"
     ],
     "typedef-whitespace": {
@@ -91,14 +87,14 @@
         {
           "call-signature": "nospace",
           "index-signature": "nospace",
-          "parameter": "nospace",
+       
           "property-declaration": "nospace",
           "variable-declaration": "nospace"
         },
         {
           "call-signature": "onespace",
           "index-signature": "onespace",
-          "parameter": "onespace",
+         
           "property-declaration": "onespace",
           "variable-declaration": "onespace"
         }
@@ -108,7 +104,9 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-leading-underscore",
+        "allow-pascal-case",
+        "allow-snake-case"
       ]
     },
     "whitespace": {

@@ -1,0 +1,27 @@
+/* stylelint-disable */
+
+$font-family: 'muliregular', 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+
+$primary: $black;
+$secondary: #22b573;
+//$danger: $red;
+$dark: #323232;
+//$warning: $orange;
+$muted: $gray;
+$light: $gray-100;
+$body-color: $black;
+$white: #f0f0f0;
+$body-bg: $white;
+
+$theme-colors: (
+    'primary': $primary,
+    'secondary': $secondary,
+    'dark': $black,
+    'white': $white,
+    'light': $light,
+    'muted': $muted,
+);
+
+// refer to https://getbootstrap.com/docs/5.0/utilities/background/
+
+$default-border-radius: 2px;

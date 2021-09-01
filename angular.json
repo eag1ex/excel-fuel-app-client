@@ -3,5 +3,432 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "petrol-locator": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss",
+          "style": "scss"
+        }
+      },
+      "root": "projects/petrol-locator",
+      "sourceRoot": "projects/petrol-locator/src",
+      "prefix": "pl",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "allowedCommonJsDependencies":[
+              "x-utils-es"
+            ],
+            "outputPath": "dist/petrol-locator",
+            "index": "projects/petrol-locator/src/index.html",
+            "main": "projects/petrol-locator/src/main.ts",
+            "polyfills": "projects/petrol-locator/src/polyfills.ts",
+            "tsConfig": "projects/petrol-locator/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/petrol-locator/src/favicon.ico",
+              "projects/petrol-locator/src/assets",
+              {
+                "glob": "**/*",
+                "input": "libs/theme/assets/",
+                "output": "/libs/theme/assets/"
+              },
+             
+              {
+                "glob": "**/*",
+                "input": "libs/theme/fonts/",
+                "output": "/libs/theme/fonts/"
+              }
+            ],
+            "styles": [  {
+              "input": "projects/petrol-locator/src/styles.scss",
+              "bundleName": "project-pl"
+            },
+            {
+              "input": "libs/theme/scss/styles.scss",
+              "bundleName": "theme-pl"
+            }],
+
+            "stylePreprocessorOptions": {
+              "includePaths": ["libs/theme/scss/"]
+            },
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "projects/petrol-locator/ngsw-config.json"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/petrol-locator/src/environments/environment.ts",
+                  "with": "projects/petrol-locator/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "petrol-locator:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "petrol-locator:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "petrol-locator:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/petrol-locator/src/test.ts",
+            "polyfills": "projects/petrol-locator/src/polyfills.ts",
+            "tsConfig": "projects/petrol-locator/tsconfig.spec.json",
+            "karmaConfig": "projects/petrol-locator/karma.conf.js",
+            "assets": [
+              "projects/petrol-locator/src/favicon.ico",
+              "projects/petrol-locator/src/assets"
+            ],
+            "styles": [
+              "projects/petrol-locator/src/styles.css"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/petrol-locator/tsconfig.app.json",
+              "projects/petrol-locator/tsconfig.spec.json",
+              "projects/petrol-locator/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/petrol-locator/e2e/protractor.conf.js",
+            "devServerTarget": "petrol-locator:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "petrol-locator:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "theme": {
+      "projectType": "library",
+      "root": "libs/theme",
+      "sourceRoot": "libs/theme/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/theme/tsconfig.lib.json",
+            "project": "libs/theme/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/theme/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/theme/src/test.ts",
+            "tsConfig": "libs/theme/tsconfig.spec.json",
+            "karmaConfig": "libs/theme/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/theme/tsconfig.lib.json",
+              "libs/theme/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "material": {
+      "projectType": "library",
+      "root": "libs/material",
+      "sourceRoot": "libs/material/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/material/tsconfig.lib.json",
+            "project": "libs/material/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/material/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/material/src/test.ts",
+            "tsConfig": "libs/material/tsconfig.spec.json",
+            "karmaConfig": "libs/material/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/material/tsconfig.lib.json",
+              "libs/material/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "page-routes": {
+      "projectType": "library",
+      "root": "libs/page-routes",
+      "sourceRoot": "libs/page-routes/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/page-routes/tsconfig.lib.json",
+            "project": "libs/page-routes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/page-routes/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/page-routes/src/test.ts",
+            "tsConfig": "libs/page-routes/tsconfig.spec.json",
+            "karmaConfig": "libs/page-routes/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/page-routes/tsconfig.lib.json",
+              "libs/page-routes/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "components": {
+      "projectType": "library",
+      "root": "libs/components",
+      "sourceRoot": "libs/components/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/components/tsconfig.lib.json",
+            "project": "libs/components/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/components/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/components/src/test.ts",
+            "tsConfig": "libs/components/tsconfig.spec.json",
+            "karmaConfig": "libs/components/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/components/tsconfig.lib.json",
+              "libs/components/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "utils": {
+      "projectType": "library",
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/utils/tsconfig.lib.json",
+            "project": "libs/utils/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/utils/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/utils/src/test.ts",
+            "tsConfig": "libs/utils/tsconfig.spec.json",
+            "karmaConfig": "libs/utils/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/utils/tsconfig.lib.json",
+              "libs/utils/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "http": {
+      "projectType": "library",
+      "root": "libs/http",
+      "sourceRoot": "libs/http/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/http/tsconfig.lib.json",
+            "project": "libs/http/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/http/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/http/src/test.ts",
+            "tsConfig": "libs/http/tsconfig.spec.json",
+            "karmaConfig": "libs/http/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/http/tsconfig.lib.json",
+              "libs/http/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "projectType": "library",
+      "root": "libs/interfaces",
+      "sourceRoot": "libs/interfaces/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/interfaces/tsconfig.lib.json",
+            "project": "libs/interfaces/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/interfaces/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/interfaces/src/test.ts",
+            "tsConfig": "libs/interfaces/tsconfig.spec.json",
+            "karmaConfig": "libs/interfaces/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/interfaces/tsconfig.lib.json",
+              "libs/interfaces/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "petrol-locator"
 }

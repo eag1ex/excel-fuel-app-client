@@ -1,0 +1,43 @@
+@import './colors';
+@import './variables';
+@import './mixins';
+@import './fontface';
+// NOTE only 2 free types are available no italics
+//@import url('https://fonts.googleapis.com/css?family=Material+Icons');
+
+@import './theme';
+
+//@import '@angular/cdk/overlay-prebuilt.css';
+@import './bootstrap';
+@import './responsive';
+
+html {
+    background: $white;
+    background-color: $white !important;
+    // background: $body-bg;
+    // background-color: $body-bg !important;
+}
+
+body {
+    font-family: $font-family;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.6em;
+    color: $body-color;
+}
+
+html .mat-divider {
+    border-top-color: $muted !important;
+}
+
+.bg-pure-white {
+    background-color: #fff !important;
+}
+
+.cf {
+    &::after {
+        display: block;
+        clear: both;
+        content: '';
+    }
+}
