@@ -1,0 +1,37 @@
+<mat-form-field class="w-100" appearance="fill">
+    <!-- <mat-label>Favorite Fruits</mat-label> -->
+    <mat-chip-list selectable #chipList aria-label="Fruit selection" sec>
+        <div class="d-flex flex-row">
+            <mat-chip
+                class="mat-chip-selected"
+                [selected]="true"
+                [value]="fruit"
+                [color]="'warn'"
+                *ngFor="let fruit of fruits"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(fruit)"
+            >
+                <span>{{ fruit }}</span>
+                <lib-icons class="pl-1" icon="close" [size]="20"></lib-icons>
+            </mat-chip>
+
+            <input
+                class="light-weigth input-search"
+                placeholder="Search gas location"
+                #fruitInput
+                [formControl]="fruitCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)"
+            />
+        </div>
+    </mat-chip-list>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+            {{ fruit }}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

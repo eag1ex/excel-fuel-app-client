@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiPetrolListHttpService } from '@pl/http';
+import { PetrolHttpService } from '@pl/http';
 import { log } from 'x-utils-es';
 
 @Component({
@@ -9,8 +9,8 @@ import { log } from 'x-utils-es';
 })
 export class AppComponent {
   title = 'petrol-locator';
-  constructor(private listHttpService: ApiPetrolListHttpService){
-    this.listHttpService.list(undefined).subscribe(n => {
+  constructor(private petrolHttpService: PetrolHttpService){
+    this.petrolHttpService.list(undefined).subscribe(n => {
       log({locationList: n})
     })
   }

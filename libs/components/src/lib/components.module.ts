@@ -4,18 +4,21 @@ import { LayoutComponent } from './layout/layout.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { IconsComponent } from './icons/icons.component';
-// import { ReactiveFormsModule, FormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-
+import { CommonModule } from '@angular/common';
+import { SearchComponent } from './search/search.component'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
     LayoutComponent,
     NavBarComponent,
     FooterComponent,
-    IconsComponent
+    IconsComponent,
+    SearchComponent
   ],
   imports: [
+    ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     MaterialModule
   ],

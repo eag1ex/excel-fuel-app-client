@@ -2,26 +2,33 @@
 
 $font-family: 'muliregular', 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
 
-$primary: $black;
-$secondary: #22b573;
-//$danger: $red;
-$dark: #323232;
-//$warning: $orange;
-$muted: $gray;
-$light: $gray-100;
-$body-color: $black;
 $white: #f0f0f0;
 $body-bg: $white;
+$body-color: $black;
+
+// scss-docs-start theme-color-variables
+$muted: $gray;
+$primary: $black;
+$secondary: $blue;
+//$success: $green;
+$info: $blue;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-900;
 
 $theme-colors: (
+    'white': $white,
     'primary': $primary,
     'secondary': $secondary,
-    'dark': $black,
-    'white': $white,
+    //'success': $success,
+    //'info': $green,
+    'warning': $warning,
+    'danger': $red,
     'light': $light,
+    'dark': $dark,
     'muted': $muted,
+    'alert': $yellow,
 );
-
-// refer to https://getbootstrap.com/docs/5.0/utilities/background/
 
 $default-border-radius: 2px;

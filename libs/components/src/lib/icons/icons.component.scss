@@ -3,6 +3,7 @@
 :host {
     display: block;
     img.svg-icon {
+        &.close,
         &.menu {
             @include icons-preset();
         }

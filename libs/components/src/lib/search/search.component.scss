@@ -1,0 +1,10 @@
+:host {
+    display: block;
+    input.input-search {
+        margin-left: 1rem;
+        font-size: 0.75em;
+        &::placeholder {
+            color: #fff;
+        }
+    }
+}

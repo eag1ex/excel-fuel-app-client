@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+/* 
+ * Your main theme styles are declared via themes module
+ * Here we override particilar component styles and apply theme settings or import mixins
+ */
+
+@import 'mixins';
+
+@include typography();

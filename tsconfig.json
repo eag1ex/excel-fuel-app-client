@@ -44,6 +44,12 @@
       "@pl/interfaces": [
         "libs/interfaces/src/public-api.ts"
       ],
+      "@pl/data": [
+        "libs/data/src/public-api.ts"
+      ],
+      "@pl/services": [
+        "libs/services/src/public-api.ts"
+      ],
     }
   },
   "angularCompilerOptions": {

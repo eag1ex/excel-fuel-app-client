@@ -1,19 +1,16 @@
 @import './colors';
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import '~bootstrap/scss/functions';
 @import './variables';
 @import './mixins';
 @import './fontface';
-
 @import './theme';
-
-//@import '@angular/cdk/overlay-prebuilt.css';
 @import './bootstrap';
 @import './responsive';
 
 html {
     background: $white;
     background-color: $white !important;
-    // background: $body-bg;
-    // background-color: $body-bg !important;
 }
 
 body {

@@ -6,3 +6,32 @@
     max-width: 40px;
     align-self: center !important;
 }
+
+@mixin typography() {
+    .bold,
+    .strong {
+        font-family: 'mulibold' !important;
+        font-weight: normal;
+    }
+
+    .light-weigth {
+        font-family: 'muliextralight' !important;
+        font-weight: normal;
+    }
+
+    .italic {
+        font-family: 'muliregularitalic' !important;
+        font-weight: normal;
+    }
+
+    h1 {
+        // font-size: ;
+    }
+    .uppercase {
+        text-transform: uppercase;
+    }
+
+    .lowercase {
+        text-transform: lowercase;
+    }
+}
