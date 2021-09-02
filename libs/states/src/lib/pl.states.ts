@@ -1,4 +1,4 @@
-import { PetrolModel } from './../../../interfaces/src/lib/petrol.interface';
+
 /**
  * NOTE This is my own RX store implementation, and use on other angular projects
  * - Implements RxStore logic, used to store data instead of new http request.
@@ -10,13 +10,22 @@ import { Observable } from 'rxjs'
 import { copy, log, objectSize, onerror, isFalsy } from 'x-utils-es'
 import { map, filter } from 'rxjs/operators';
 import { RxStore } from '@pl/utils';
-import { PetrolListResp } from '@pl/interfaces';
+import { PetrolListResp, PetrolModel } from '@pl/interfaces';
 
 /** Get currernt route  */
 
+interface PetrolItemExt extends PetrolModel{
+    removed?: boolean
+}
+
+
 interface IState {
     petrolList: PetrolListResp;
-    selectedSearchResults: PetrolModel[]
+    selectedSearchResults: {
+        data: PetrolItemExt[]
+        // so the state is alwasy new
+        index?: number
+    }
 }
 
 
@@ -44,13 +53,15 @@ export class PLstates extends RxStore<IState> {
     }
 
     /** provide any number of PetrolModel items in an array */
-    setSelectedSearchResults(items: PetrolModel[]): void {
-        this.setState({ selectedSearchResults: copy(items) })
+    setSelectedSearchResults(items: PetrolItemExt[]): void {
+        let index = Number(this.getState().selectedSearchResults?.index) || 0
+        index++
+        this.setState({ selectedSearchResults: {data: copy(items), index }})
     }
 
-    get selectedSearchResults$(): Observable<PetrolModel[]> {
+    get selectedSearchResults$(): Observable<PetrolItemExt[]> {
         return this.select((state) => {
-            return state.selectedSearchResults
+            return state.selectedSearchResults?.data
         })
     }
 }

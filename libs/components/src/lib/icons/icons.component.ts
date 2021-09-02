@@ -12,7 +12,8 @@ export class IconsComponent implements OnInit, OnChanges {
     icons: Iicon[] = [
         {name: 'menu', path: 'libs/theme/assets/icons/menu_white_24dp.svg'},
         {name: 'close', path: 'libs/theme/assets/icons/close_black_24dp.svg'},
-
+        {name: 'local_gas_station_black', path: 'libs/theme/assets/icons/local_gas_station_black_24dp.svg'},
+        {name: 'local_gas_station_yellow', path: 'libs/theme/assets/icons/local_gas_station_yellow_24dp.svg'}
     ]
     item: Iicon
     constructor() {}

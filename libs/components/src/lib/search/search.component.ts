@@ -8,9 +8,9 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { Observable } from 'rxjs'
-import { filter, map, startWith, tap } from 'rxjs/operators'
+import { filter, map, retry, startWith, tap } from 'rxjs/operators'
 import {  PetrolModel } from '@pl/interfaces'
-import {  log } from 'x-utils-es'
+import {  delay, log } from 'x-utils-es'
 import { petrolListByName } from '@pl/utils';
 import { PLstates } from '@pl/states';
 
@@ -29,13 +29,15 @@ export class SearchComponent implements OnInit, OnChanges {
     items: PetrolModel[] = []
 
     constructor(private states: PLstates) {
+
          this.filteredItems = this.searchCtrl.valueChanges.pipe(
             filter((n) => this.searchList !== undefined),
             // tslint:disable-next-line: deprecation
             startWith(null),
             // show filtered results or all if not typed
-            map((str: string | null) => (str ? petrolListByName(str, this.listDifference) : this.listDifference?.slice()))
+            map((str: string | null) => (str ? petrolListByName(str, this.listDifference.slice()) : this.listDifference?.slice())), retry(1)
         )
+
     }
 
     @Input() searchList: PetrolModel[]
@@ -43,7 +45,7 @@ export class SearchComponent implements OnInit, OnChanges {
 
     // list only items not yet selected
     get listDifference(): PetrolModel[]{
-        return this.searchList.filter(x => this.items.length ? this.items.filter(y => x.id !== y.id).length : true)
+        return this.searchList.filter(x => this.items?.length ? this.items.filter(y => x.id === y.id).length === 0 : true)
     }
 
     /** on item added clear last input value */
@@ -52,20 +54,23 @@ export class SearchComponent implements OnInit, OnChanges {
     }
 
    public remove(el: PetrolModel, inx: number): void {
-        const deleted = this.items.splice(inx, 1)
-        log('removed item', deleted)
+        this.items.splice(inx, 1)
+        this.states.setSelectedSearchResults(this.items)
     }
 
+    /** update last selection */
+    public onUpdate(event: any): void {
+        this.searchCtrl.setValue(null)
+    }
     public selected(event: MatAutocompleteSelectedEvent): void {
 
         const item: PetrolModel = event.option.value
         this.nameInput.nativeElement.value = ''
         if (!item) return
         this.items.push(item)
-        
+
         // NOTE  add/reset chosen item/s to our state managment so we can offer results to Leaflet map
         this.states.setSelectedSearchResults(this.items)
-
         this.searchCtrl.setValue(null)
     }
 
@@ -73,6 +78,7 @@ export class SearchComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.searchList?.currentValue) {
            // this.items = copy(this.searchList)
+           this.searchCtrl.setValue(null)
         }
     }
 

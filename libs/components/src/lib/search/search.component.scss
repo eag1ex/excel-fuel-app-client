@@ -4,6 +4,7 @@
         cursor: pointer;
     }
     input.input-search {
+        min-height: 30px;
         margin-left: 1rem;
         font-size: 0.75em;
         &::placeholder {

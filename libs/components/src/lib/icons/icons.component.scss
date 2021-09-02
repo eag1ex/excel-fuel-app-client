@@ -4,6 +4,8 @@
     display: block;
     img.svg-icon {
         &.close,
+        &.local_gas_station_black,
+        &.local_gas_station_yellow,
         &.menu {
             @include icons-preset();
         }

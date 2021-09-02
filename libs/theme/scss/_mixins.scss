@@ -48,6 +48,9 @@
                 img[src*='baseline_article_black_24dp.png'] {
                     @include box-shadow(/*$top*/ 4px, /*$left:*/ 8px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.4));
                 }
+                img[src*='local_gas_station_yellow_24dp.svg'] {
+                    @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.35));
+                }
             }
         }
     }
