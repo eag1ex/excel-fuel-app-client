@@ -23,7 +23,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
     MaterialModule
   ],
   exports: [
-    LayoutComponent
+    LayoutComponent,
+    SearchComponent
   ]
 })
 export class ComponentsModule { }

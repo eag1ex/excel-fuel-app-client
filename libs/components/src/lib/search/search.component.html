@@ -1,37 +1,35 @@
 <mat-form-field class="w-100" appearance="fill">
     <!-- <mat-label>Favorite Fruits</mat-label> -->
-    <mat-chip-list selectable #chipList aria-label="Fruit selection" sec>
+    <mat-chip-list selectable #chipList aria-label="Fruit selection">
         <div class="d-flex flex-row">
             <mat-chip
                 class="mat-chip-selected"
                 [selected]="true"
-                [value]="fruit"
+                [value]="el"
                 [color]="'warn'"
-                *ngFor="let fruit of fruits"
+                *ngFor="let el of items; let inx = index"
                 [selectable]="selectable"
                 [removable]="removable"
-                (removed)="remove(fruit)"
+                (removed)="remove(el, inx)"
             >
-                <span>{{ fruit }}</span>
-                <lib-icons class="pl-1" icon="close" [size]="20"></lib-icons>
+                <span>{{ el.name }}</span>
+                <lib-icons matChipRemove class="pl-1" icon="close" [size]="20"></lib-icons>
             </mat-chip>
 
             <input
                 class="light-weigth input-search"
                 placeholder="Search gas location"
-                #fruitInput
-                [formControl]="fruitCtrl"
+                #nameInput
+                (change)="added(nameInput)"
+                [formControl]="searchCtrl"
                 [matAutocomplete]="auto"
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="add($event)"
             />
         </div>
     </mat-chip-list>
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-            {{ fruit }}
-        </mat-option>
+        <mat-option *ngFor="let item of filteredItems | async" [value]="item"> {{ item.name }} | {{ item.city }} </mat-option>
     </mat-autocomplete>
 </mat-form-field>

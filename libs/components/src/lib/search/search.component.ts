@@ -1,70 +1,77 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
+/**
+ * @description display items from search dropdown
+ * - add selected item to state management
+ */
+
+import { Component, ElementRef, Input, OnInit, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
-import { MatChipInputEvent } from '@angular/material/chips'
 import { Observable } from 'rxjs'
-import { map, startWith } from 'rxjs/operators'
-import { PetrolListResolver, PetrolModel } from '@pl/interfaces'
-import { ActivatedRoute } from '@angular/router'
-import { log } from 'x-utils-es'
+import { filter, map, startWith, tap } from 'rxjs/operators'
+import {  PetrolModel } from '@pl/interfaces'
+import {  log } from 'x-utils-es'
+import { petrolListByName } from '@pl/utils';
+import { PLstates } from '@pl/states';
 
 @Component({
     selector: 'lib-search',
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
-    selectable = true
-    removable = true
+export class SearchComponent implements OnInit, OnChanges {
+
     separatorKeysCodes: number[] = [ENTER, COMMA]
-    fruitCtrl = new FormControl()
-    filteredFruits: Observable<string[]>
-    fruits: string[] = ['Lemon']
-    allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry']
-    constructor() {
-        this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+    searchCtrl = new FormControl()
+    filteredItems: Observable<PetrolModel[]>
+
+    /** loaded and selected item*/
+    items: PetrolModel[] = []
+
+    constructor(private states: PLstates) {
+         this.filteredItems = this.searchCtrl.valueChanges.pipe(
+            filter((n) => this.searchList !== undefined),
+            // tslint:disable-next-line: deprecation
             startWith(null),
-            map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice()))
+            // show filtered results or all if not typed
+            map((str: string | null) => (str ? petrolListByName(str, this.listDifference) : this.listDifference?.slice()))
         )
+    }
 
+    @Input() searchList: PetrolModel[]
+    @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>
 
+    // list only items not yet selected
+    get listDifference(): PetrolModel[]{
+        return this.searchList.filter(x => this.items.length ? this.items.filter(y => x.id !== y.id).length : true)
+    }
+
+    /** on item added clear last input value */
+    public added(input: HTMLInputElement): void {
+        input.value = ''
+    }
+
+   public remove(el: PetrolModel, inx: number): void {
+        const deleted = this.items.splice(inx, 1)
+        log('removed item', deleted)
+    }
+
+    public selected(event: MatAutocompleteSelectedEvent): void {
+
+        const item: PetrolModel = event.option.value
+        this.nameInput.nativeElement.value = ''
+        if (!item) return
+        this.items.push(item)
+        this.states.setSelectedSearchResults(this.items)
+
+        this.searchCtrl.setValue(null)
     }
 
 
-    @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>
-    add(event: MatChipInputEvent): void {
-        const value = (event.value || '').trim()
-
-        // Add our fruit
-        if (value) {
-            this.fruits.push(value)
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.searchList?.currentValue) {
+           // this.items = copy(this.searchList)
         }
-
-        // Clear the input value
-        (event as any).chipInput!.clear();
-
-        this.fruitCtrl.setValue(null)
-    }
-
-    remove(fruit: string): void {
-        const index = this.fruits.indexOf(fruit)
-
-        if (index >= 0) {
-            this.fruits.splice(index, 1)
-        }
-    }
-
-    selected(event: MatAutocompleteSelectedEvent): void {
-        this.fruits.push(event.option.viewValue)
-        this.fruitInput.nativeElement.value = ''
-        this.fruitCtrl.setValue(null)
-    }
-
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase()
-
-        return this.allFruits.filter((fruit) => fruit.toLowerCase().includes(filterValue))
     }
 
     ngOnInit(): void {}

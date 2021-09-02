@@ -6,8 +6,7 @@ import {  isEmpty, isFalsy, log, onerror } from 'x-utils-es';
 import {  from, Observable, Subject, throwError,  of } from 'rxjs';
 import { switchMap,  timeout, debounceTime, catchError, filter, first, share } from 'rxjs/operators';
 import { Inject, Injectable } from '@angular/core';
-import { ENV, PetrolModel } from '@pl/interfaces';
-import { PetrolListResp } from 'libs/interfaces/src/lib/http.interface';
+import { ENV, PetrolListResp, PetrolModel } from '@pl/interfaces';
 
 
 @Injectable({

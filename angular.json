@@ -19,7 +19,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies":[
-              "x-utils-es"
+              "x-utils-es",
+              "deep-object-diff"
             ],
             "outputPath": "dist/petrol-locator",
             "index": "projects/petrol-locator/src/index.html",
@@ -502,6 +503,46 @@
             "tsConfig": [
               "libs/services/tsconfig.lib.json",
               "libs/services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "states": {
+      "projectType": "library",
+      "root": "libs/states",
+      "sourceRoot": "libs/states/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/states/tsconfig.lib.json",
+            "project": "libs/states/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/states/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/states/src/test.ts",
+            "tsConfig": "libs/states/tsconfig.spec.json",
+            "karmaConfig": "libs/states/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/states/tsconfig.lib.json",
+              "libs/states/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
