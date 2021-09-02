@@ -34,6 +34,11 @@
               "projects/petrol-locator/src/manifest.webmanifest",
               {
                 "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "/libs/theme/assets/"
+              },
+              {
+                "glob": "**/*",
                 "input": "libs/theme/assets/",
                 "output": "/libs/theme/assets/"
               },
@@ -543,6 +548,46 @@
             "tsConfig": [
               "libs/states/tsconfig.lib.json",
               "libs/states/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "plugins": {
+      "projectType": "library",
+      "root": "libs/plugins",
+      "sourceRoot": "libs/plugins/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "libs/plugins/tsconfig.lib.json",
+            "project": "libs/plugins/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/plugins/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/plugins/src/test.ts",
+            "tsConfig": "libs/plugins/tsconfig.spec.json",
+            "karmaConfig": "libs/plugins/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/plugins/tsconfig.lib.json",
+              "libs/plugins/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

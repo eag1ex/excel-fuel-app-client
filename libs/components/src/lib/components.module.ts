@@ -6,7 +6,7 @@ import { FooterComponent } from './footer/footer.component';
 import { IconsComponent } from './icons/icons.component';
 import { CommonModule } from '@angular/common';
 import { SearchComponent } from './search/search.component'
-import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
     NavBarComponent,
     FooterComponent,
     IconsComponent,
-    SearchComponent
+    SearchComponent,
+
   ],
   imports: [
     ReactiveFormsModule,

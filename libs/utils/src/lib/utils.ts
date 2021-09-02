@@ -1,5 +1,5 @@
 import { routeList } from '@pl/data'
-import { AvailRoutes, PetrolModel, RouteItem } from '@pl/interfaces'
+import { AvailRoutes, LatLng, PetrolModel, RouteItem } from '@pl/interfaces'
 import { copy, matched } from 'x-utils-es'
 
 
@@ -16,6 +16,10 @@ export const formatTime = (time) => {
 
 export const now = () => formatTime(new Date())
 
+/** make compatible propt */
+export const latLong = ({latitude, longitude}): LatLng => {
+    return {lat: latitude, lng: longitude}
+}
 
 export const currentRoute = (routeValue: AvailRoutes, ref?: string): RouteItem => {
     return copy(routeList).filter((n) => n.value.includes(routeValue))[0]

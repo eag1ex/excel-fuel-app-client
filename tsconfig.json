@@ -53,6 +53,9 @@
       "@pl/states": [
         "libs/states/src/public-api.ts"
       ],
+      "pl/plugins": [
+        "libs/plugins/src/public-api.ts"
+      ],
     }
   },
   "angularCompilerOptions": {

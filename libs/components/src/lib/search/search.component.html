@@ -8,8 +8,8 @@
                 [value]="el"
                 [color]="'warn'"
                 *ngFor="let el of items; let inx = index"
-                [selectable]="selectable"
-                [removable]="removable"
+                [selectable]="true"
+                [removable]="true"
                 (removed)="remove(el, inx)"
             >
                 <span>{{ el.name }}</span>

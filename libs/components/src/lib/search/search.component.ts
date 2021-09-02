@@ -62,6 +62,8 @@ export class SearchComponent implements OnInit, OnChanges {
         this.nameInput.nativeElement.value = ''
         if (!item) return
         this.items.push(item)
+        
+        // NOTE  add/reset chosen item/s to our state managment so we can offer results to Leaflet map
         this.states.setSelectedSearchResults(this.items)
 
         this.searchCtrl.setValue(null)

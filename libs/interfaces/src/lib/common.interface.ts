@@ -9,6 +9,10 @@ export interface ENV{
     apiBaseUrl: string;
 }
 
+export interface LatLng {
+    lat: number
+    lng: number
+}
 
 export interface Iicon{
     name: string; path: string;

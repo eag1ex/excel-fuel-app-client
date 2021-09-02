@@ -10,6 +10,7 @@
         "statements"
       ]
     },
+    "prefer-for-of":false,
     "no-empty-interface":false,
     "component-selector":false,
     "array-type": false,
