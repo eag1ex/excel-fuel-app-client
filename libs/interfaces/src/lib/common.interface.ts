@@ -7,6 +7,7 @@ export interface ENV{
     serviceWorker: boolean;
     /** REVIEW Update our api in production  */
     apiBaseUrl: string;
+    user: PLUser;
 }
 
 export interface LatLng {

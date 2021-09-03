@@ -40,7 +40,7 @@ export class AuthPermissionsService extends RxStore<IState>  {
     }
 
     /** return user from start or from localStore */
-    user$(): Observable<PLUser>{
+    get user$(): Observable<PLUser>{
         return this.select((state) => {
             const user: PLUser =  JSON.parse(localStorage.getItem('pl-user'))
             if (isFalsy(user)) return state.user

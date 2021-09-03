@@ -44,6 +44,10 @@ if (environment.production === true) {
       useValue: environment.production,
   },
   {
+    provide: 'USER',
+    useValue: environment.user,
+  },
+  {
       provide: 'ENVIRONMENT',
       useValue: environment,
   },

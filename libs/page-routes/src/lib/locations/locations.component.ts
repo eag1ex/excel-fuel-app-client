@@ -10,9 +10,7 @@ import { log } from 'x-utils-es'
 })
 export class LocationsComponent implements OnInit {
     constructor(private route: ActivatedRoute) {
-
       log({petrolListSnapShot: this.petrolListSnapShot})
-
     }
 
 
