@@ -1,18 +1,21 @@
 export type PetrolProductPoinStatus = 'available' | 'not_available'
 
-export interface PetrolPrices {
+export interface PetrolPrice {
+     /** editable */
     price: number;
+     /** non editable */
     currency: string;
+    /** non editable */
     product_id: string;
 }
-export interface PetrolProductPoints {
+export interface PetrolProductPoint {
     id: string
     status: PetrolProductPoinStatus
 }
 
-export interface PetrolProducts {
+export interface PetrolProduct {
     product_id: string
-    points: PetrolProductPoints[]
+    points: PetrolProductPoint[]
 }
 
 export interface PetrolModel {
@@ -24,6 +27,6 @@ export interface PetrolModel {
     latitude: number
     longitude: number
     /** user can update */
-    prices: PetrolPrices[]
-    products: PetrolProducts[]
+    prices: PetrolPrice[]
+    products: PetrolProduct[]
 }

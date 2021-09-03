@@ -31,3 +31,4 @@ export const petrolListByName = (name: string, all: PetrolModel[]): PetrolModel[
     if (!name) return undefined
     return all.filter((el) => matched(el.name, new RegExp(name, 'gi') ))
 }
+

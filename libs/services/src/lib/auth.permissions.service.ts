@@ -10,8 +10,6 @@ import { RxStore } from '@pl/utils';
 import { Observable } from 'rxjs';
 import { copy, isFalsy } from 'x-utils-es';
 
-
-
 interface IState{
     user: PLUser
 }
@@ -23,7 +21,8 @@ const initialState = {
 @Injectable({
     providedIn: 'root',
 })
-export class AuthPermissions extends RxStore<IState>  {
+export class AuthPermissionsService extends RxStore<IState>  {
+
     /** global access  */
     user: PLUser
 

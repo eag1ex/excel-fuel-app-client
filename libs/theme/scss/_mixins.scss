@@ -61,6 +61,10 @@
     .border-none {
         border: none !important;
     }
+
+    input:disabled {
+        border-style: dotted !important;
+    }
 }
 
 @mixin cdk-overlay-container() {

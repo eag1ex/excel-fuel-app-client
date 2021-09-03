@@ -4,5 +4,5 @@
     [alt]="item.name"
     [style.width]="size ? size + 'px' : ''"
     [style.height]="size ? 'auto' : ''"
-    class="{{ item.name }} svg-icon align-self-center"
+    class="{{ item.name }} svg-icon align-self-center {{ offset ? 'offset ' + 'o-' + offset : '' }} {{ className || '' }}"
 />

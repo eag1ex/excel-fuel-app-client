@@ -1,11 +1,52 @@
-<mat-card *ngIf="item" class="m-2">
-    <mat-card-title>{{ item.name }}</mat-card-title>
-    <mat-card-subtitle>{{ item.city }}</mat-card-subtitle>
-    <mat-card-content>
-        <p>Address: {{ item.address }}</p>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-button>LIKE</button>
-        <button mat-button>SHARE</button>
+<mat-card *ngIf="item" class="m-2" [formGroup]="mapItemGroup">
+    <mat-card-actions *ngIf="canEdit" class="mx-0 pt-0 mb-2">
+        <button (click)="onEdit()" *ngIf="canEdit" type="button" [value]="1" mat-stroked-button>EDIT</button>
+        <button color="warn" (click)="onUpdate()" *ngIf="canUpdate" type="button" [value]="1" mat-stroked-button>UPDATE</button>
+        <input *ngIf="canEdit" type="hidden" formControlName="editCtr" />
+        <input *ngIf="canUpdate" type="hidden" formControlName="updateCtr" />
     </mat-card-actions>
+
+    <mat-card-title class="mb-1">
+        <div class="d-flex align-items-center">
+            <input class="input-update name-item" *ngIf="permissions === 'ADMINISTRATOR'" formControlName="nameCtr" matInput type="text" />
+            <span class="name-item" *ngIf="permissions === 'BASIC'">{{ item.name }}</span>
+            <lib-icons *ngIf="fieldUpdated('name')" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
+        </div>
+    </mat-card-title>
+
+    <mat-card-subtitle class="mb-1">{{ item.city }}</mat-card-subtitle>
+    <mat-card-content>
+        <p class="text-muted address-item"><span class="strong">Address:&nbsp;</span>{{ item.address }},&nbsp;{{ item.city }}</p>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="productsWithPrice.length" class="mb-1">
+        <div class="products-item">
+            <div class="text-muted strong">Available Products:</div>
+
+            <div *ngFor="let prod of productsWithPrice" class="text-muted price-item mx-2">
+                <div class="d-flex flex-row mr-1">
+                    <span>Product:&nbsp;{{ prod.product_id }}&nbsp;</span>
+                    <span>Price:&nbsp;{{ prod.priceItem.price | currency: prod.priceItem.currency }}</span>
+                </div>
+
+                <!-- Not too sure what points is for ?-->
+                <div class="mt-1">
+                    <div class="d-flex flex-row points-item mr-1" *ngFor="let point of prod.points">
+                        <span>ID:&nbsp; {{ point.id }}&nbsp;</span>
+                        <span>Status:&nbsp; {{ point.status }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="products-item-update-price mt-2" *ngIf="canUpdate">
+            <div class="text-muted strong">Update product prices:</div>
+            <div *ngFor="let price of item.prices; let inx = index" class="price-item-update d-flex flex-column">
+                <div class="d-flex flex-row my-1">
+                    <span>{{ price.product_id }}/{{ price.currency }}&nbsp;</span
+                    ><input [(ngModel)]="itemPriceValuesArray[inx]" type="text" formControlName="priceCtr" class="py-0" />
+                    <lib-icons *ngIf="fieldUpdated('price')" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
 </mat-card>

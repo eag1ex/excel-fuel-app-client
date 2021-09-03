@@ -1,11 +1,56 @@
 @import 'mixins';
 
 :host {
+    .offset {
+        display: block;
+        // available offsets from .25 to .5
+        // mt-1, mt-2, mr-1, mr-2, mb-1, mb-2,ml-1, ml-2
+        &.o-mt-1 {
+            margin-top: -0.25rem;
+        }
+        &.o-mt-2 {
+            margin-top: -0.5rem;
+        }
+
+        &.o-ml-1 {
+            margin-left: -0.25rem;
+        }
+
+        &.o-ml-2 {
+            margin-left: -0.5rem;
+        }
+
+        &.o-mr-1 {
+            margin-right: -0.25rem;
+        }
+        &.o-mr-2 {
+            margin-right: -0.5rem;
+        }
+
+        &.o-mb-1 {
+            margin-bottom: -0.25rem;
+        }
+
+        &.o-mb-2 {
+            margin-bottom: -0.5rem;
+        }
+
+        &.o-mt-1 {
+            margin-top: -0.25rem;
+        }
+
+        &.o-mt-2 {
+            margin-top: -0.5rem;
+        }
+    }
+
+    height: auto;
     display: block;
     img.svg-icon {
         &.close,
         &.local_gas_station_black,
         &.local_gas_station_yellow,
+        &.update_yellow,
         &.menu {
             @include icons-preset();
         }
