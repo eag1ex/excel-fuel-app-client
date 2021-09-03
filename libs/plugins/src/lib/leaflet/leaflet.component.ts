@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router'
 import { EUROPE_LAT_LNG } from '@pl/data'
 import { PetrolModel, LatLng } from '@pl/interfaces'
 import { latLong } from '@pl/utils'
-import { map, tileLayer, icon, marker, Marker, Map, geoJSON, GeoJSON, LatLngExpression, Icon } from 'leaflet'
+import { map, tileLayer, icon, marker, Marker, Map, geoJSON, GeoJSON, LatLngExpression, Icon, MarkerOptions, MapOptions, ControlPosition } from 'leaflet'
 import { log, delay, sq, warn, onerror, isEmpty, copy, isFalsy, unsubscribe } from 'x-utils-es';
 import { dymmyItem } from './dummy.data'
 import { Subject } from 'rxjs';
@@ -21,7 +21,8 @@ interface TargetOptions{
 
 
 
-const iconUrl = 'libs/theme/assets/icons/local_gas_station_yellow_24dp.svg'
+const iconUrlSelected = 'libs/theme/assets/icons/local_gas_station_yellow_24dp.svg'
+const iconUrl = 'libs/theme/assets/icons/local_gas_station_blue_24dp.svg'
 const iconDefault = icon({
   //  iconRetinaUrl,
     iconUrl,
@@ -85,13 +86,15 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
         let mapElement = this.mapFrame.nativeElement as HTMLBaseElement
         mapElement = mapElement.querySelector('#map')
-        log('init map', latLng)
-        this.map = map(mapElement, {
+        let mapOpts:MapOptions = {
             center: latLng,
             zoom: 4,
             preferCanvas: true,
             trackResize: true,
-        })
+        }
+        this.map = map(mapElement, mapOpts)
+        this.map.zoomControl.setPosition('topright')
+
 
         const tiles = tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -100,6 +103,28 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
         })
 
         tiles.addTo(this.map)
+    }
+
+
+    makePopUp(metadata: PetrolModel): string {
+        const list = (el) => `<li class="border-none list-group-item list-group-item-light p-0">${el}</li>`
+
+        const items: Array<string> = [
+            metadata.name ? { value: metadata.name } : null,
+            // metadata.city ? { value: 'City: ' + metadata.city } : null,
+            // metadata.address ? { value: 'Address: ' + metadata.address } : null,
+        ]
+            .filter((n) => !!n)
+            .map((n) => n.value)
+            .map((n) => list(n))
+
+        let htmlList = ''
+
+        for (let inx = 0; inx < items.length; inx++) htmlList += items[inx]
+        return `
+                <ul class="list-group p-0">
+                    ${htmlList}
+                </ul> `
     }
 
     /** add constitiotion marker to current map selection */
@@ -126,52 +151,48 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
             //  shadowUrl: 'https://unpkg.com/leaflet@1.5.1/dist/images/marker-shadow.png',
         })
 
-        const options = {
+        const options:MarkerOptions = {
             draggable: true,
             title: metadata.name,
-            data: metadata,
+            data: metadata, // << custom field
             opacity: 0.8,
             icon: markerIcon,
-        }
+            autoPanSpeed: 10        
+        } as any
 
-        const popupHTML = () => {
-            const list = (el) => `<li class="list-group-item list-group-item-light">${el}</li>`
-
-            const items: Array<string> = [
-                metadata.name ? { value: 'Name: ' + metadata.name } : null,
-                metadata.city ? { value: 'City: ' + metadata.city } : null,
-                metadata.address ? { value: 'Address: ' + metadata.address } : null,
-            ]
-                .filter((n) => !!n)
-                .map((n) => n.value)
-                .map((n) => list(n))
-
-            let htmlList = ''
-
-            for (let inx = 0; inx < items.length; inx++) htmlList += items[inx]
-            return `
-                <ul class="list-group px-2">
-                    ${htmlList}
-                </ul> `
-        }
-
+       
         const mrkr: Marker = marker(latLng, options)
-
-        mrkr.addTo(this.map).bindPopup(popupHTML())
-
-        // add click trigget over the marker and next event
-        mrkr.on('popupopen', (e) => {
-            const opts: TargetOptions = e.target?.options
-            if (opts) this.subSelect$.next({ ...opts, status: 'OPEN' })
-        })
-        mrkr.on('popupclose', (e) => {
-            const opts: TargetOptions = e.target?.options
-            if (opts) this.subSelect$.next({ ...opts, status: 'CLOSE' })
-        })
+        mrkr.addTo(this.map).bindPopup(this.makePopUp(metadata))
+        this.markerTriggerEvents(mrkr)
+     
 
         this.markerHistory.push({ m: mrkr, id: metadata.id })
         return true
     }
+
+    /** provide events to each marker on map */
+    markerTriggerEvents(mrkr:Marker):void{
+
+          // add click trigget over the marker and next event
+        mrkr.on('popupopen', (e) => {
+            const opts: TargetOptions = e.target?.options
+   
+            // update icon on selected
+            let iconEl:HTMLImageElement = e.sourceTarget._icon
+            if(iconEl) iconEl.src = iconUrlSelected   
+            if (opts) this.subSelect$.next({ ...opts, status: 'OPEN' })
+        })
+
+        mrkr.on('popupclose', (e) => {
+            const opts: TargetOptions = e.target?.options
+
+             // restore icon 
+             let iconEl:HTMLImageElement = e.sourceTarget._icon  
+             if(iconEl) iconEl.src = iconUrl
+            if (opts) this.subSelect$.next({ ...opts, status: 'CLOSE' })
+        })
+    }
+
 
     /** Remove any existing ConstMarkers*/
     private removeMarkerById(id?: any, all = false): void {
@@ -179,7 +200,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.markerHistory.forEach((el, inx) => {
             try {
-                if (all){
+                if (all) {
                     this.map.removeLayer(el.m)
                     this.markerHistory.splice(inx, 1)
                     index++
@@ -207,12 +228,11 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
             // remove all if non received
             this.removeMarkerById(undefined, true)
         } else {
-            const oldIds = this.markerHistory.filter((x) => !latestItems.filter((y) => y.id === x.id).length).map(n => n.id)
+            const oldIds = this.markerHistory.filter((x) => !latestItems.filter((y) => y.id === x.id).length).map((n) => n.id)
 
-            oldIds.forEach(id => {
+            oldIds.forEach((id) => {
                 this.removeMarkerById(id)
             })
-
         }
     }
 
@@ -230,11 +250,8 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
                         this.map.flyTo(latLong(x), 9)
                     }
                 })
-
             })
             this.subscriptions.push(...[s0])
-
-
         })
     }
     ngOnInit(): void {}

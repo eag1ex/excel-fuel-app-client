@@ -35,7 +35,7 @@ export class SearchComponent implements OnInit, OnChanges {
             // tslint:disable-next-line: deprecation
             startWith(null),
             // show filtered results or all if not typed
-            map((str: string | null) => (str ? petrolListByName(str, this.listDifference.slice()) : this.listDifference?.slice())), retry(1)
+            map((str: string | null) => (str ? petrolListByName(str, this.listDiff.slice()) : this.listDiff?.slice())), retry(1)
         )
 
     }
@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit, OnChanges {
     @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>
 
     // list only items not yet selected
-    get listDifference(): PetrolModel[]{
+    get listDiff(): PetrolModel[]{
         return this.searchList.filter(x => this.items?.length ? this.items.filter(y => x.id === y.id).length === 0 : true)
     }
 

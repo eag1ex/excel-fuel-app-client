@@ -6,9 +6,13 @@
     input.input-search {
         min-height: 30px;
         margin-left: 1rem;
-        font-size: 0.75em;
+        font-size: 1.5em;
+        width: 100%;
+        max-width: 239px;
+        position: relative;
+
         &::placeholder {
-            color: #fff;
+            // color: #fff;
         }
     }
 }

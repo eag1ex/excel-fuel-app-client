@@ -1,4 +1,9 @@
+@import 'mixins';
+
 :host {
     display: block;
     width: 100%;
+    mat-card {
+        @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 8px, /* $size:*/ 3px, /*$color:*/ rgba(0, 0, 0, 0.2));
+    }
 }

@@ -6,4 +6,14 @@
 @import 'mixins';
 
 @include typography();
+@include resets();
+@include cdk-overlay-container();
 @include leaflet-map();
+
+lib-search {
+    mat-chip-list {
+        .mat-chip-list-wrapper {
+            padding: 0.5rem;
+        }
+    }
+}

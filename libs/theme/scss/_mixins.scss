@@ -1,8 +1,8 @@
 //@import './colors';
 @mixin box-shadow($top: 0, $left: 0, $blur: 0, $size: 0, $color: rgba(0, 0, 0.2)) {
-    -webkit-box-shadow: $top $left $blur $size $color;
-    -moz-box-shadow: $top $left $blur $size $color;
-    box-shadow: $top $left $blur $size $color;
+    -webkit-box-shadow: $top $left $blur $size $color !important;
+    -moz-box-shadow: $top $left $blur $size $color !important;
+    box-shadow: $top $left $blur $size $color !important;
 }
 
 @mixin icons-preset() {
@@ -30,8 +30,13 @@
     }
 
     h1 {
-        // font-size: ;
+        font-size: 2.25em;
     }
+
+    .smaller {
+        font-size: smaller !important;
+    }
+
     .uppercase {
         text-transform: uppercase;
     }
@@ -41,17 +46,48 @@
     }
 }
 
+@mixin mat-form-field-reset() {
+    mat-form-field {
+        .mat-form-field-infix {
+            border-top: 0 !important;
+        }
+    }
+}
+
+/** provide some resets to native elements */
+@mixin resets() {
+    @include mat-form-field-reset();
+
+    .border-none {
+        border: none !important;
+    }
+}
+
+@mixin cdk-overlay-container() {
+    // increas index so it sits above the leaflet map
+    .cdk-overlay-container {
+        z-index: 10000 !important;
+    }
+}
+
 @mixin leaflet-map() {
     lib-leaflet {
         #map {
-            .leaflet-marker-pane {
-                img[src*='baseline_article_black_24dp.png'] {
-                    @include box-shadow(/*$top*/ 4px, /*$left:*/ 8px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.4));
-                }
-                img[src*='local_gas_station_yellow_24dp.svg'] {
-                    @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.35));
+            .leaflet-popup {
+                .leaflet-popup-content {
+                    margin: 0.25rem 1.25rem 0.25rem 0.2rem;
                 }
             }
         }
+        // #map {
+        //     .leaflet-marker-pane {
+        //         img[src*='baseline_article_black_24dp.png'] {
+        //             @include box-shadow(/*$top*/ 4px, /*$left:*/ 8px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.4));
+        //         }
+        //         img[src*='local_gas_station_yellow_24dp.svg'] {
+        //             @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 5px, /* $size:*/ -1px, /*$color:*/ rgba(0, 0, 0, 0.35));
+        //         }
+        //     }
+        // }
     }
 }

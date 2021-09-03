@@ -7,32 +7,26 @@
 import { Injectable, isDevMode } from '@angular/core'
 
 import { Observable } from 'rxjs'
-import { copy, log, objectSize, onerror, isFalsy } from 'x-utils-es'
-import { map, filter } from 'rxjs/operators';
+import { copy} from 'x-utils-es'
 import { RxStore } from '@pl/utils';
 import { PetrolListResp, PetrolModel } from '@pl/interfaces';
 
-/** Get currernt route  */
-
-interface PetrolItemExt extends PetrolModel{
-    removed?: boolean
-}
 
 
 interface IState {
     petrolList: PetrolListResp;
     selectedSearchResults: {
-        data: PetrolItemExt[]
+        data: PetrolModel[]
         // so the state is alwasy new
         index?: number
     }
 }
 
-
 const initialState: IState = {
     petrolList: undefined,
     selectedSearchResults: undefined
 }
+
 
 @Injectable({
     providedIn: 'root',
@@ -53,13 +47,15 @@ export class PLstates extends RxStore<IState> {
     }
 
     /** provide any number of PetrolModel items in an array */
-    setSelectedSearchResults(items: PetrolItemExt[]): void {
-        let index = Number(this.getState().selectedSearchResults?.index) || 0
+    setSelectedSearchResults(items: PetrolModel[]): void {
+        // make sure state is never equal
+        let index = Number(this.getState().selectedSearchResults?.index) || 0;
         index++
+        
         this.setState({ selectedSearchResults: {data: copy(items), index }})
     }
 
-    get selectedSearchResults$(): Observable<PetrolItemExt[]> {
+    get selectedSearchResults$(): Observable<PetrolModel[]> {
         return this.select((state) => {
             return state.selectedSearchResults?.data
         })
