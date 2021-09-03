@@ -21,6 +21,7 @@ export class PLhttpInterceptor implements HttpInterceptor {
             'Access-Control-Allow-Origin': '*',
         }
 
+
         // let token;
         // if (this.FAKE_AUTH) {
         // 	token = localStorage.getItem('token'); /// not auth integrated for the moment
