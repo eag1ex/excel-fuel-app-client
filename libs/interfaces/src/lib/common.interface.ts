@@ -10,6 +10,9 @@ export interface ENV{
     user: PLUser;
 }
 
+/** store go to routes, available locations */
+export type ToLocations = 'locations'
+
 export interface LatLng {
     lat: number
     lng: number

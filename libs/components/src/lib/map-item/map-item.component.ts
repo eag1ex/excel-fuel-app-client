@@ -3,14 +3,13 @@
  * - each item is a station map item
  */
 
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { PetrolModel, PetrolPrice, PetrolProduct, UserPermType } from '@pl/interfaces';
-import { AuthPermissionsService } from '@pl/services';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { FormControl, FormGroup } from '@angular/forms'
+import { PetrolModel, PetrolPrice, PetrolProduct, UserPermType } from '@pl/interfaces'
+import { AuthPermissionsService } from '@pl/services'
 
-import { filter } from 'rxjs/operators';
-import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es';
-
+import { filter } from 'rxjs/operators'
+import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es'
 
 /*
    "prices": [
@@ -39,20 +38,19 @@ import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es';
     ]
 * */
 
-interface ProductWithPrice extends PetrolProduct{
-  priceItem?: PetrolPrice
+interface ProductWithPrice extends PetrolProduct {
+    priceItem?: PetrolPrice
 }
-
 
 /** each station has price presets assigned to products */
 
 type EditableField = 'name' | 'price'
 
-interface StationMapItem{
-  nameCtr: string;
-  priceCtr: number;
-  updateCtr: any;
-  editCtr:number
+interface StationMapItem {
+    nameCtr: string
+    priceCtr: number
+    updateCtr: any
+    editCtr: number
 }
 
 @Component({
@@ -61,11 +59,10 @@ interface StationMapItem{
     styleUrls: ['./map-item.component.scss'],
 })
 export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
-
     subscriptions = []
     item: PetrolModel
     itemNameValue: string
-    permissions: UserPermType
+    permissions: UserPermType = 'BASIC'
 
     /** aka station map item */
     mapItemGroup = new FormGroup({
@@ -79,8 +76,6 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(private authService: AuthPermissionsService) {
 
-      
-       
         this.initSubs()
 
         // disable permissions on load
@@ -93,21 +88,20 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     @Input() selectedMapItem: PetrolModel
 
     initSubs(): void {
-
-       const s0 = this.authService.user$.subscribe(n=>{
-            if(n?.type){
+        // set user permissions
+        const s0 = this.authService.user$.subscribe((n) => {
+            if (n?.type) {
                 this.permissions = n.type
-            }else{
+            } else {
                 this.permissions = 'BASIC'
                 warn('setting basic permission due unhandled setting')
             }
         })
-    
 
         const s1 = this.mapItemGroup
             .get('editCtr')
             .valueChanges.pipe(filter((n) => this.canEdit))
-            .subscribe((n: Number) => {
+            .subscribe((n: number) => {
                 if (n) {
                     this.mapItemGroup.get('updateCtr').enable({ onlySelf: true })
                     this.mapItemGroup.get('nameCtr').enable({ onlySelf: true })
@@ -131,7 +125,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
                 }
             })
 
-        this.subscriptions.push(...[s0, s1,s2])
+        this.subscriptions.push(...[s0, s1, s2])
     }
 
     /** we are an admit, ctr is enabled and value is th>0 */
@@ -155,8 +149,8 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
         } else return false
     }
 
-    validPrice(price:number){
-        return !isNaN(Number((price||'').toString()))
+    validPrice(price: number) {
+        return !isNaN(Number((price || '').toString()))
     }
 
     get canEdit(): boolean {
@@ -167,18 +161,15 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
         return this.canEdit && this.mapItemGroup.get('updateCtr').enabled && this.mapItemGroup.touched
     }
 
-
-    
     get productsWithPrice(): ProductWithPrice[] {
-       const matchedWithPrice = (prod_id: string): PetrolPrice => this.item.prices.filter((n) => n.product_id === prod_id)[0]
+        const matchedWithPrice = (prod_id: string): PetrolPrice => this.item.prices.filter((n) => n.product_id === prod_id)[0]
 
-       return  this.item.products.reduce((n, prod, i) => {
+        return this.item.products.reduce((n, prod, i) => {
             const priceItem = matchedWithPrice(prod.product_id)
             if (priceItem) n.push({ ...prod, priceItem })
             return n
         }, []) as any
     }
-
 
     public onEdit() {
         this.mapItemGroup.get('editCtr').patchValue(1)
@@ -191,7 +182,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.selectedMapItem?.currentValue) {
             this.item = copy(this.selectedMapItem)
-           
+
             // this.mapItemGroup.get('nameCtr').enable({onlySelf: true})
             this.mapItemGroup.get('nameCtr').setValue(this.item.name)
         }

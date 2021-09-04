@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PetrolHttpService } from '@pl/http';
+import { PetrolItemHttpService } from '@pl/http';
 import { log } from 'x-utils-es';
 
 @Component({
@@ -9,9 +9,17 @@ import { log } from 'x-utils-es';
 })
 export class AppComponent {
   title = 'petrol-locator';
-  constructor(private petrolHttpService: PetrolHttpService){
-    this.petrolHttpService.list(undefined).subscribe(n => {
-      log({locationList: n})
+  constructor(private petrolItemHttpService: PetrolItemHttpService){
+    log('app loaded?')
+    this.petrolItemHttpService.getStation$.subscribe(n => {
+      log({getStation: n})
     })
+
+    // static ids
+   // 61335ac2faf7da2be5d966db
+   // 61335ac2faf7da2be5a0dad3
+
+    this.petrolItemHttpService.sub$.next('61335ac2faf7da2be5d966db')
+
   }
 }

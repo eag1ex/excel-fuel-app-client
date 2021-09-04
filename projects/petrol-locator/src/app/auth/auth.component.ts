@@ -29,7 +29,18 @@ export class AuthComponent implements OnInit {
         type: 'ADMINISTRATOR'
       }
       this.authService.setUser(user)
-      this.router.navigate(['app/locations'])
+
+      // value gets set on the url being asked to load, so if asking from top route, then will follow routing step process instead
+      // go to designated location
+      if (this.authService.toLocation ){
+        this.router.navigate(['app/' + this.authService.toLocation])
+        this.authService.toLocation = undefined
+
+      } else{
+        this.router.navigate(['app/locations'])
+      }
+
+
     }
 
     get userSnapShotdata(): { user: PLUser } {

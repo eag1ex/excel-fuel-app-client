@@ -7,6 +7,8 @@ export const dymmyItem: PetrolModel = {
     city: 'Zürich',
     latitude: 47.3943939,
     longitude: 8.52981,
+    created_at: 'Sat Sep 04 2021',
+    updated_at: 'Sat Sep 04 2021',
     prices: [
       {
         price: 1.81,

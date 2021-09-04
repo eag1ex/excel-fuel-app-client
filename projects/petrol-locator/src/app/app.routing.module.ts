@@ -6,28 +6,22 @@ import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
+  {
+    path: 'app',
+    component: MainComponent,
+    loadChildren: () =>      import('@pl/page-routes').then((mod) => mod.PageRoutesModule),
+
+  },
   // improvise authentication
   // this component route can redirect back to > app/locations
   {
-    path: 'app/auth',
+    path: 'auth',
     component: AuthComponent,
     data: {
       user: environment.user
     }
   },
-  {
-    path: 'app',
-    component: MainComponent,
-    loadChildren: () =>
-      import('@pl/page-routes').then((mod) => mod.PageRoutesModule),
-      canLoad: [AuthGuardService]
-  },
-  {
-    path: '',
-    redirectTo: `app/locations`,
-    pathMatch: 'full',
-  },
-  { path: '**', redirectTo: 'app/auth', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth', pathMatch: 'full'  },
 ];
 
 @NgModule({

@@ -19,14 +19,25 @@ export interface PetrolProduct {
 }
 
 export interface PetrolModel {
-    id: string
+    /** server assigned */
+    id?: string
     /** user can update */
     name: string
     address: string
     city: string
     latitude: number
-    longitude: number
+    longitude: number;
+    /** server assigned */
+    updated_at?: Date | string;
+    /** server assigned */
+    created_at?: Date | string;
     /** user can update */
     prices: PetrolPrice[]
     products: PetrolProduct[]
+}
+
+export interface PetrolUpdate{
+    product_id: string;
+    name: string;
+    price: number;
 }

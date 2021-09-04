@@ -5,7 +5,7 @@
  */
 
 import { Injectable, isDevMode } from '@angular/core';
-import { PLUser } from '@pl/interfaces';
+import { PLUser, ToLocations } from '@pl/interfaces';
 import { RxStore } from '@pl/utils';
 import { Observable } from 'rxjs';
 import { copy, isFalsy } from 'x-utils-es';
@@ -13,6 +13,7 @@ import { copy, isFalsy } from 'x-utils-es';
 interface IState{
     user: PLUser
 }
+
 
 const initialState = {
     user: undefined
@@ -26,6 +27,8 @@ export class AuthPermissionsService extends RxStore<IState>  {
     /** global access  */
     user: PLUser
 
+    /** store last route where canLoad guard is set*/
+    toLocation: ToLocations
     constructor(){
         super(initialState, { debug: isDevMode() })
     }
