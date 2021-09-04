@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { appTitle } from '@pl/data';
+import { PLUser } from '@pl/interfaces';
 
 @Component({
   selector: 'lib-nav-bar',
@@ -8,7 +9,10 @@ import { appTitle } from '@pl/data';
 })
 export class NavBarComponent implements OnInit {
   title = appTitle
-  constructor() { }
+  userName: string
+  constructor( @Inject('USER') protected USER: PLUser) {
+    this.userName = this.USER?.username
+  }
 
   ngOnInit(): void {
   }

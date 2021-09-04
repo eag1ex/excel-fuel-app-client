@@ -51,6 +51,7 @@
         &.local_gas_station_black,
         &.local_gas_station_yellow,
         &.update_yellow,
+        &.account_circle,
         &.menu {
             @include icons-preset();
         }

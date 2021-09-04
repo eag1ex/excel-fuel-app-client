@@ -3,8 +3,15 @@
         <span class="app-title strong uppercase">{{ title }}</span>
 
         <!-- <span class="spacer"></span> -->
-        <button mat-icon-button aria-label="Example icon-button with menu icon">
-            <lib-icons icon="menu" [size]="30"></lib-icons>
-        </button>
+        <div class="d-flex justify-content-end align-items-center">
+            <div *ngIf="userName" class="d-flex align-items-center lh-2 mt-1 mx-2">
+                <span class="smaller strong uppercase mx-1 text-secondary">{{ userName }}</span>
+                <lib-icons mat-icon-button icon="account_circle" [size]="25"></lib-icons>
+            </div>
+
+            <button mat-icon-button aria-label="Example icon-button with menu icon">
+                <lib-icons icon="menu" [size]="30"></lib-icons>
+            </button>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>

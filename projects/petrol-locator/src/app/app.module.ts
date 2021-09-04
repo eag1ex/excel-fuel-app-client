@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app.routing.module';
 import { PLbackendProvider } from '@pl/http';
 import { ComponentsModule } from '@pl/components';
 import { MainComponent } from './main/main.component';
+import { AuthComponent } from './auth/auth.component';
 if (environment.production === true) {
     debug(`-- Using Angular 11.x --`);
     debug(`-- CONSOLE LOGS DISABLES --`);
@@ -21,7 +22,7 @@ if (environment.production === true) {
 
 @NgModule({
   declarations: [
-    AppComponent, MainComponent
+    AppComponent, MainComponent, AuthComponent
   ],
   imports: [
     ComponentsModule,

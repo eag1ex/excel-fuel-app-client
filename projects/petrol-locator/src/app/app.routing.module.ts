@@ -4,8 +4,10 @@ import { AuthGuardService } from '@pl/services';
 import { environment } from '../environments/environment';
 import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
+
 const routes: Routes = [
-  // improvise fake authentication
+  // improvise authentication
+  // this component route can redirect back to > app/locations
   {
     path: 'app/auth',
     component: AuthComponent,
@@ -13,7 +15,6 @@ const routes: Routes = [
       user: environment.user
     }
   },
-
   {
     path: 'app',
     component: MainComponent,

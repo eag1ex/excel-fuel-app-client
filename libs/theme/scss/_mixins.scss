@@ -13,6 +13,22 @@
 }
 
 @mixin typography() {
+    .lh-1 {
+        line-height: 0.25em;
+    }
+    .lh-2 {
+        line-height: 0.5em;
+    }
+    .lh-3 {
+        line-height: 0.75em;
+    }
+    .lh-4 {
+        line-height: 1em;
+    }
+    .lh-5 {
+        line-height: 1.25em;
+    }
+
     .bold,
     .strong {
         font-family: 'mulibold' !important;

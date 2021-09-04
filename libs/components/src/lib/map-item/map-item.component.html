@@ -19,31 +19,33 @@
         <p class="text-muted address-item"><span class="strong">Address:&nbsp;</span>{{ item.address }},&nbsp;{{ item.city }}</p>
     </mat-card-content>
 
-    <mat-card-content *ngIf="productsWithPrice.length" class="mb-1">
+    <mat-card-content *ngIf="productsWithPrice?.length" class="mb-1">
         <div class="products-item">
             <div class="text-muted strong">Available Products:</div>
 
             <div *ngFor="let prod of productsWithPrice" class="text-muted price-item mx-2">
-                <div class="d-flex flex-row mr-1">
-                    <span>Product:&nbsp;{{ prod.product_id }}&nbsp;</span>
-                    <span>Price:&nbsp;{{ prod.priceItem.price | currency: prod.priceItem.currency }}</span>
-                </div>
-
-                <!-- Not too sure what points is for ?-->
-                <div class="mt-1">
-                    <div class="d-flex flex-row points-item mr-1" *ngFor="let point of prod.points">
-                        <span>ID:&nbsp; {{ point.id }}&nbsp;</span>
-                        <span>Status:&nbsp; {{ point.status }}</span>
+                <ng-container *ngIf="validPrice(prod.priceItem.price)">
+                    <div class="d-flex flex-row mr-1">
+                        <span>Product:&nbsp;{{ prod.product_id }}&nbsp;</span>
+                        <span>Price:&nbsp;{{ prod.priceItem.price | currency: prod.priceItem.currency }}</span>
                     </div>
-                </div>
+
+                    <!-- Not too sure what points is for ?-->
+                    <div class="mt-1">
+                        <div class="d-flex flex-row points-item mr-1 small" *ngFor="let point of prod.points">
+                            <span>ID:&nbsp;{{ point.id }},</span>
+                            <span>Status:&nbsp;{{ point.status }}</span>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </div>
-        <div class="products-item-update-price mt-2" *ngIf="canUpdate">
+        <div class="products-item-update-price mt-2" *ngIf="canEdit">
             <div class="text-muted strong">Update product prices:</div>
             <div *ngFor="let price of item.prices; let inx = index" class="price-item-update d-flex flex-column">
                 <div class="d-flex flex-row my-1">
-                    <span>{{ price.product_id }}/{{ price.currency }}&nbsp;</span
-                    ><input [(ngModel)]="itemPriceValuesArray[inx]" type="text" formControlName="priceCtr" class="py-0" />
+                    <span>{{ price.product_id }}/{{ price.currency }}&nbsp;</span>
+                    <input pattern="/^\d*$/" *ngIf="item?.prices[inx]" [(ngModel)]="item?.prices[inx].price" type="text" formControlName="priceCtr" class="py-0" />
                     <lib-icons *ngIf="fieldUpdated('price')" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
                 </div>
             </div>

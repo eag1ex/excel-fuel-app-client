@@ -17,6 +17,7 @@ export class IconsComponent implements OnInit, OnChanges {
         {name: 'local_gas_station_black', path: 'libs/theme/assets/icons/local_gas_station_black_24dp.svg'},
         {name: 'local_gas_station_yellow', path: 'libs/theme/assets/icons/local_gas_station_yellow_24dp.svg'},
         {name: 'update_yellow', path: 'libs/theme/assets/icons/update_yellow_24dp.svg'},
+        {name: 'account_circle', path: 'libs/theme/assets/icons/account_circle_white_24dp.svg'},
 
     ]
 

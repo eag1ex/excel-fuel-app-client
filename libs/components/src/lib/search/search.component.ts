@@ -10,7 +10,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { Observable } from 'rxjs'
 import { filter, map, retry, startWith, tap } from 'rxjs/operators'
 import {  PetrolModel } from '@pl/interfaces'
-import {  delay, log } from 'x-utils-es'
+import {  copy, delay, log } from 'x-utils-es'
 import { petrolListByName } from '@pl/utils';
 import { PLstates } from '@pl/states';
 
@@ -45,7 +45,8 @@ export class SearchComponent implements OnInit, OnChanges {
 
     // list only items not yet selected
     get listDiff(): PetrolModel[]{
-        return this.searchList.filter(x => this.items?.length ? this.items.filter(y => x.id === y.id).length === 0 : true)
+        if(!this.searchList) return undefined
+        return this.searchList?.filter(x => this.items?.length ? this.items.filter(y => x.id === y.id).length === 0 : true)
     }
 
     /** on item added clear last input value */
@@ -77,7 +78,8 @@ export class SearchComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.searchList?.currentValue) {
-           // this.items = copy(this.searchList)
+          // will preselect all items in search bar 
+          // this.items = copy(this.searchList)
            this.searchCtrl.setValue(null)
         }
     }

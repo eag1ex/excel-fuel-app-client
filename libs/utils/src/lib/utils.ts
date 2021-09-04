@@ -1,6 +1,6 @@
 import { routeList } from '@pl/data'
 import { AvailRoutes, LatLng, PetrolModel, RouteItem } from '@pl/interfaces'
-import { copy, matched } from 'x-utils-es'
+import { copy, log, matched } from 'x-utils-es'
 
 
 export const repeat = (str, times) => new Array(times + 1).join(str)
@@ -15,6 +15,8 @@ export const formatTime = (time) => {
 }
 
 export const now = () => formatTime(new Date())
+
+
 
 /** make compatible propt */
 export const latLong = ({latitude, longitude}): LatLng => {

@@ -21,7 +21,7 @@ export class AuthComponent implements OnInit {
     }
 
     /** set user and reroute */
-    reRoute(){
+    reRoute(): void{
       const user: PLUser = {
         username: 'johndoe',
         // we will change that to match with server token
