@@ -1,6 +1,6 @@
-import { PetrolModel } from '@pl/interfaces';
+import { ExcelModel } from '@excel/interfaces';
 
-export const dymmyItem: PetrolModel = {
+export const dymmyItem: ExcelModel = {
     id: '1234',
     name: 'Migrol Tankstelle',
     address: 'Scheffelstrasse 16',

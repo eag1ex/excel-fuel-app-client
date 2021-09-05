@@ -5,8 +5,8 @@
 
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
-import { PetrolModel, PetrolPrice, PetrolProduct, UserPermType } from '@pl/interfaces'
-import { AuthPermissionsService } from '@pl/services'
+import { ExcelModel, ExcelPrice, ExcelProduct, UserPermType } from '@excel/interfaces'
+import { AuthPermissionsService } from '@excel/services'
 
 import { filter } from 'rxjs/operators'
 import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es'
@@ -38,8 +38,8 @@ import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es'
     ]
 * */
 
-interface ProductWithPrice extends PetrolProduct {
-    priceItem?: PetrolPrice
+interface ProductWithPrice extends ExcelProduct {
+    priceItem?: ExcelPrice
 }
 
 /** each station has price presets assigned to products */
@@ -60,7 +60,7 @@ interface StationMapItem {
 })
 export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     subscriptions = []
-    item: PetrolModel
+    item: ExcelModel
     itemNameValue: string
     permissions: UserPermType = 'BASIC'
 
@@ -85,7 +85,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
         this.mapItemGroup.get('editCtr').disable({ onlySelf: true })
     }
 
-    @Input() selectedMapItem: PetrolModel
+    @Input() selectedMapItem: ExcelModel
 
     initSubs(): void {
         // set user permissions
@@ -162,7 +162,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     get productsWithPrice(): ProductWithPrice[] {
-        const matchedWithPrice = (prod_id: string): PetrolPrice => this.item.prices.filter((n) => n.product_id === prod_id)[0]
+        const matchedWithPrice = (prod_id: string): ExcelPrice => this.item.prices.filter((n) => n.product_id === prod_id)[0]
 
         return this.item.products.reduce((n, prod, i) => {
             const priceItem = matchedWithPrice(prod.product_id)

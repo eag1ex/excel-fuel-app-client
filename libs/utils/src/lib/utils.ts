@@ -1,5 +1,5 @@
-import { routeList } from '@pl/data'
-import { AvailRoutes, LatLng, PetrolModel, RouteItem } from '@pl/interfaces'
+import { routeList } from '@excel/data'
+import { AvailRoutes, LatLng, ExcelModel, RouteItem } from '@excel/interfaces'
 import { copy, log, matched } from 'x-utils-es'
 
 
@@ -28,7 +28,7 @@ export const currentRoute = (routeValue: AvailRoutes, ref?: string): RouteItem =
 }
 
 
-export const petrolListByName = (name: string, all: PetrolModel[]): PetrolModel[] => {
+export const excelListByName = (name: string, all: ExcelModel[]): ExcelModel[] => {
     if (!all) return undefined
     if (!name) return undefined
     return all.filter((el) => matched(el.name, new RegExp(name, 'gi') ))

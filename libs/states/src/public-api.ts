@@ -2,4 +2,4 @@
  * Public API Surface of states
  */
 
-export * from './lib/pl.states';
+export * from './lib/excel.states';

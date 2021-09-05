@@ -3,6 +3,6 @@
  */
 
 export * from './lib/common.interface';
-export * from './lib/petrol.interface'
+export * from './lib/excel.interface'
 export * from './lib/http.interface';
 

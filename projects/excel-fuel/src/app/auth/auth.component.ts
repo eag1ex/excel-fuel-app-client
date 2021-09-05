@@ -5,8 +5,8 @@
 
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute,  Router } from '@angular/router';
-import { PLUser } from '@pl/interfaces'
-import { AuthPermissionsService } from '@pl/services'
+import { PLUser } from '@excel/interfaces'
+import { AuthPermissionsService } from '@excel/services'
 import { log } from 'x-utils-es'
 
 @Component({

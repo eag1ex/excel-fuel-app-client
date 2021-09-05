@@ -1,9 +1,9 @@
 {
-  "name": "petrol-locator-app-client",
+  "name": "excel-fuel-app-client",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve petrol-locator --proxy-config ./proxy/pl-proxy.json  --disable-host-check --port 4444",
+    "start": "ng serve excel-fuel --proxy-config ./proxy/excel-proxy.json  --disable-host-check --port 4444",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

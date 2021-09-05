@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { appTitle } from '@pl/data';
-import { PLUser } from '@pl/interfaces';
+import { appTitle } from '@excel/data';
+import { PLUser } from '@excel/interfaces';
 
 @Component({
   selector: 'lib-nav-bar',

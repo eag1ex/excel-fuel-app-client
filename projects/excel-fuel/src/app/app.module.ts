@@ -6,10 +6,10 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@pl/material';
+import { MaterialModule } from '@excel/material';
 import { AppRoutingModule } from './app.routing.module';
-import { PLbackendProvider } from '@pl/http';
-import { ComponentsModule } from '@pl/components';
+import { PLbackendProvider } from '@excel/http';
+import { ComponentsModule } from '@excel/components';
 import { MainComponent } from './main/main.component';
 import { AuthComponent } from './auth/auth.component';
 if (environment.production === true) {

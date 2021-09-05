@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PetrolItemHttpService } from '@pl/http';
+import { ExcelItemHttpService } from '@excel/http';
 import { log } from 'x-utils-es';
 
 @Component({
@@ -8,10 +8,10 @@ import { log } from 'x-utils-es';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'petrol-locator';
-  constructor(private petrolItemHttpService: PetrolItemHttpService){
+  title = 'excel-fuel';
+  constructor(private excelItemHttpService: ExcelItemHttpService){
     log('app loaded?')
-    this.petrolItemHttpService.getStation$.subscribe(n => {
+    this.excelItemHttpService.getStation$.subscribe(n => {
       log({getStation: n})
     })
 
@@ -19,7 +19,7 @@ export class AppComponent {
    // 61335ac2faf7da2be5d966db
    // 61335ac2faf7da2be5a0dad3
 
-    this.petrolItemHttpService.sub$.next('61335ac2faf7da2be5d966db')
+    this.excelItemHttpService.sub$.next('61335ac2faf7da2be5d966db')
 
   }
 }

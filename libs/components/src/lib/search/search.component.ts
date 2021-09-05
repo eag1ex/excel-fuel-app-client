@@ -9,10 +9,9 @@ import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { Observable } from 'rxjs'
 import { filter, map, retry, startWith, tap } from 'rxjs/operators'
-import {  PetrolModel } from '@pl/interfaces'
-import {  copy, delay, log } from 'x-utils-es'
-import { petrolListByName } from '@pl/utils';
-import { PLstates } from '@pl/states';
+import {  ExcelModel } from '@excel/interfaces'
+import { excelListByName } from '@excel/utils';
+import { ExcelStates } from '@excel/states';
 
 @Component({
     selector: 'lib-search',
@@ -23,28 +22,28 @@ export class SearchComponent implements OnInit, OnChanges {
 
     separatorKeysCodes: number[] = [ENTER, COMMA]
     searchCtrl = new FormControl()
-    filteredItems: Observable<PetrolModel[]>
+    filteredItems: Observable<ExcelModel[]>
 
     /** loaded and selected item*/
-    items: PetrolModel[] = []
+    items: ExcelModel[] = []
 
-    constructor(private states: PLstates) {
+    constructor(private states: ExcelStates) {
 
          this.filteredItems = this.searchCtrl.valueChanges.pipe(
             filter((n) => this.searchList !== undefined),
             // tslint:disable-next-line: deprecation
             startWith(null),
             // show filtered results or all if not typed
-            map((str: string | null) => (str ? petrolListByName(str, this.listDiff.slice()) : this.listDiff?.slice())), retry(1)
+            map((str: string | null) => (str ? excelListByName(str, this.listDiff.slice()) : this.listDiff?.slice())), retry(1)
         )
 
     }
 
-    @Input() searchList: PetrolModel[]
+    @Input() searchList: ExcelModel[]
     @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>
 
     // list only items not yet selected
-    get listDiff(): PetrolModel[]{
+    get listDiff(): ExcelModel[]{
         if(!this.searchList) return undefined
         return this.searchList?.filter(x => this.items?.length ? this.items.filter(y => x.id === y.id).length === 0 : true)
     }
@@ -54,7 +53,7 @@ export class SearchComponent implements OnInit, OnChanges {
         input.value = ''
     }
 
-   public remove(el: PetrolModel, inx: number): void {
+   public remove(el: ExcelModel, inx: number): void {
         this.items.splice(inx, 1)
         this.states.setSelectedSearchResults(this.items)
     }
@@ -65,7 +64,7 @@ export class SearchComponent implements OnInit, OnChanges {
     }
     public selected(event: MatAutocompleteSelectedEvent): void {
 
-        const item: PetrolModel = event.option.value
+        const item: ExcelModel = event.option.value
         this.nameInput.nativeElement.value = ''
         if (!item) return
         this.items.push(item)

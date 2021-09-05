@@ -1,20 +1,20 @@
 import { Output, EventEmitter, ElementRef, ViewChild, OnDestroy } from '@angular/core'
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { EUROPE_LAT_LNG } from '@pl/data'
-import { PetrolModel, LatLng } from '@pl/interfaces'
-import { latLong } from '@pl/utils'
+import { EUROPE_LAT_LNG } from '@excel/data'
+import { ExcelModel, LatLng } from '@excel/interfaces'
+import { latLong } from '@excel/utils'
 import { map, tileLayer, icon, marker, Marker, Map, geoJSON, GeoJSON, LatLngExpression, Icon, MarkerOptions, MapOptions, ControlPosition } from 'leaflet'
 import { log, delay, sq, warn, onerror, isEmpty, copy, isFalsy, unsubscribe } from 'x-utils-es';
 import { dymmyItem } from './dummy.data'
 import { Subject } from 'rxjs';
 import { filter, debounceTime } from 'rxjs/operators';
-import { PLstates } from '@pl/states'
+import { ExcelStates } from '@excel/states'
 
 interface TargetOptions{
         draggable?: boolean;
         title?: string,
-        data: PetrolModel,
+        data: ExcelModel,
         opacity?: number,
         icon?: Icon
 }
@@ -46,10 +46,10 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private _mapFrame: ElementRef
     mapReady = sq()
-    selectedMapItem: PetrolModel
+    selectedMapItem: ExcelModel
     private map: Map & { enablePopup?: boolean }
     markerHistory: Array<{ m: Marker; id: string }> = []
-    constructor(private states: PLstates, private route: ActivatedRoute) {
+    constructor(private states: ExcelStates, private route: ActivatedRoute) {
         const s0 = this.subSelect$
             .pipe(
                 debounceTime(500),
@@ -106,7 +106,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
 
-    makePopUp(metadata: PetrolModel): string {
+    makePopUp(metadata: ExcelModel): string {
         const list = (el) => `<li class="border-none list-group-item list-group-item-light p-0">${el}</li>`
 
         const items: Array<string> = [
@@ -128,7 +128,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /** add constitiotion marker to current map selection */
-    private addMarker(latLng: LatLng, metadata: PetrolModel): boolean {
+    private addMarker(latLng: LatLng, metadata: ExcelModel): boolean {
         if (metadata?.id === undefined) {
             onerror('[addMarker]', '{metadata.id} not provided')
             return false
@@ -223,7 +223,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Remove map items not received from selectedSearchResults$ event
      */
-    recycle(latestItems: PetrolModel[]): void {
+    recycle(latestItems: ExcelModel[]): void {
         if (!latestItems?.length) {
             // remove all if non received
             this.removeMarkerById(undefined, true)

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { AuthGuardService } from '@pl/services';
+import { AuthGuardService } from '@excel/services';
 import { environment } from '../environments/environment';
 import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: 'app',
     component: MainComponent,
-    loadChildren: () =>      import('@pl/page-routes').then((mod) => mod.PageRoutesModule),
+    loadChildren: () =>      import('@excel/page-routes').then((mod) => mod.PageRoutesModule),
 
   },
   // improvise authentication

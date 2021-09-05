@@ -2,4 +2,4 @@
  * Public API Surface of plugins
  */
 
-export * from './lib/leaflet/PLLeaflet.module';
+export * from './lib/leaflet/ExcelLeaflet.module';

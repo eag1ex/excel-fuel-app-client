@@ -1,17 +1,17 @@
 /**
- * @description petrol/delete api calling our pl/server
+ * @description excel/delete api calling our excel/server
  */
 import { HttpClient } from '@angular/common/http'
 import {  log, onerror } from 'x-utils-es'
 import { Observable, Subject } from 'rxjs'
 import { switchMap, timeout, debounceTime, map, catchError, retry } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
-import { ENV, PetrolDeleteResp} from '@pl/interfaces'
+import { ENV, ExcelDeleteResp} from '@excel/interfaces'
 
 @Injectable({
     providedIn: 'root',
 })
-export class PetrolDeleteHttpService {
+export class ExcelDeleteHttpService {
     private apiBaseUrl: string
     sub$: Subject<string> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
@@ -19,11 +19,11 @@ export class PetrolDeleteHttpService {
     }
 
     /**
-     * (POST) /api/petrol/delete/:id
-     * Delete One item by petron product {id}
+     * (POST) /api/excel/delete/:id
+     * Delete One item by excel product {id}
      */
-    delete(id: string): Observable<PetrolDeleteResp> {
-        const url = this.apiBaseUrl + `/petrol/delete/${id}`
+    delete(id: string): Observable<ExcelDeleteResp> {
+        const url = this.apiBaseUrl + `/excel/delete/${id}`
         log(`-- calling ${url}`)
         return this.http.get<any>(`${url}`).pipe(
             timeout(10000),

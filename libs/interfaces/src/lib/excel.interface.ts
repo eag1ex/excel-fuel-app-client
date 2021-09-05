@@ -1,6 +1,6 @@
-export type PetrolProductPoinStatus = 'available' | 'not_available'
+export type ExcelProductPoinStatus = 'available' | 'not_available'
 
-export interface PetrolPrice {
+export interface ExcelPrice {
      /** editable */
     price: number;
      /** non editable */
@@ -8,17 +8,17 @@ export interface PetrolPrice {
     /** non editable */
     product_id: string;
 }
-export interface PetrolProductPoint {
+export interface ExcelProductPoint {
     id: string
-    status: PetrolProductPoinStatus
+    status: ExcelProductPoinStatus
 }
 
-export interface PetrolProduct {
+export interface ExcelProduct {
     product_id: string
-    points: PetrolProductPoint[]
+    points: ExcelProductPoint[]
 }
 
-export interface PetrolModel {
+export interface ExcelModel {
     /** server assigned */
     id?: string
     /** user can update */
@@ -32,11 +32,11 @@ export interface PetrolModel {
     /** server assigned */
     created_at?: Date | string;
     /** user can update */
-    prices: PetrolPrice[]
-    products: PetrolProduct[]
+    prices: ExcelPrice[]
+    products: ExcelProduct[]
 }
 
-export interface PetrolUpdate{
+export interface ExcelUpdate{
     product_id: string;
     name: string;
     price: number;

@@ -1,6 +1,6 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Iicon } from '@pl/interfaces';
+import { Iicon } from '@excel/interfaces';
 
 type Offset = 'mt-1'| 'mt-2' | 'mr-1' | 'mr-2'| 'mb-1'| 'mb-2' |'ml-1'| 'ml-2' 
 

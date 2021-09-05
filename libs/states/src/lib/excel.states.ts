@@ -8,22 +8,22 @@ import { Injectable, isDevMode } from '@angular/core'
 
 import { Observable } from 'rxjs'
 import { copy} from 'x-utils-es'
-import { RxStore } from '@pl/utils';
-import { PetrolListResp, PetrolModel } from '@pl/interfaces';
+import { RxStore } from '@excel/utils';
+import { ExcelListResp, ExcelModel } from '@excel/interfaces';
 
 
 
 interface IState {
-    petrolList: PetrolListResp;
+    excelList: ExcelListResp;
     selectedSearchResults: {
-        data: PetrolModel[]
+        data: ExcelModel[]
         // so the state is alwasy new
         index?: number
     }
 }
 
 const initialState: IState = {
-    petrolList: undefined,
+    excelList: undefined,
     selectedSearchResults: undefined
 }
 
@@ -31,23 +31,23 @@ const initialState: IState = {
 @Injectable({
     providedIn: 'root',
 })
-export class PLstates extends RxStore<IState> {
+export class ExcelStates extends RxStore<IState> {
     constructor() {
         super(initialState, { debug: isDevMode() })
     }
 
-    setPetrolList(data: PetrolListResp): void {
-        this.setState({ petrolList: copy(data) })
+    setExcelList(data: ExcelListResp): void {
+        this.setState({ excelList: copy(data) })
     }
 
-    get petrolList$(): Observable<PetrolModel[]> {
+    get excelList$(): Observable<ExcelModel[]> {
         return this.select((state) => {
-            return state.petrolList?.response
+            return state.excelList?.response
         })
     }
 
-    /** provide any number of PetrolModel items in an array */
-    setSelectedSearchResults(items: PetrolModel[]): void {
+    /** provide any number of ExcelModel items in an array */
+    setSelectedSearchResults(items: ExcelModel[]): void {
         // make sure state is never equal
         let index = Number(this.getState().selectedSearchResults?.index) || 0;
         index++
@@ -55,7 +55,7 @@ export class PLstates extends RxStore<IState> {
         this.setState({ selectedSearchResults: {data: copy(items), index }})
     }
 
-    get selectedSearchResults$(): Observable<PetrolModel[]> {
+    get selectedSearchResults$(): Observable<ExcelModel[]> {
         return this.select((state) => {
             return state.selectedSearchResults?.data
         })

@@ -5,8 +5,8 @@
  */
 
 import { Injectable, isDevMode } from '@angular/core';
-import { PLUser, ToLocations } from '@pl/interfaces';
-import { RxStore } from '@pl/utils';
+import { PLUser, ToLocations } from '@excel/interfaces';
+import { RxStore } from '@excel/utils';
 import { Observable } from 'rxjs';
 import { copy, isFalsy } from 'x-utils-es';
 

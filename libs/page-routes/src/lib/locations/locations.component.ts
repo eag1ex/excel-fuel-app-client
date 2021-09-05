@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { PetrolListResolver } from '@pl/interfaces'
+import { ExcelListResolver } from '@excel/interfaces'
 import { log } from 'x-utils-es'
 
 @Component({
@@ -10,11 +10,11 @@ import { log } from 'x-utils-es'
 })
 export class LocationsComponent implements OnInit {
     constructor(private route: ActivatedRoute) {
-      log({petrolListSnapShot: this.petrolListSnapShot})
+      log({excelListSnapShot: this.excelListSnapShot})
     }
 
 
-    get petrolListSnapShot(): PetrolListResolver {
+    get excelListSnapShot(): ExcelListResolver {
         return this.route.snapshot.data?.list as any
     }
 

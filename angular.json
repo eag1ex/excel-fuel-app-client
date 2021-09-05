@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "petrol-locator": {
+    "excel-fuel": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -11,9 +11,9 @@
           "style": "scss"
         }
       },
-      "root": "projects/petrol-locator",
-      "sourceRoot": "projects/petrol-locator/src",
-      "prefix": "pl",
+      "root": "projects/excel-fuel",
+      "sourceRoot": "projects/excel-fuel/src",
+      "prefix": "excel",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -22,16 +22,16 @@
               "x-utils-es",
               "deep-object-diff"
             ],
-            "outputPath": "dist/petrol-locator",
-            "index": "projects/petrol-locator/src/index.html",
-            "main": "projects/petrol-locator/src/main.ts",
-            "polyfills": "projects/petrol-locator/src/polyfills.ts",
-            "tsConfig": "projects/petrol-locator/tsconfig.app.json",
+            "outputPath": "dist/excel-fuel",
+            "index": "projects/excel-fuel/src/index.html",
+            "main": "projects/excel-fuel/src/main.ts",
+            "polyfills": "projects/excel-fuel/src/polyfills.ts",
+            "tsConfig": "projects/excel-fuel/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "projects/petrol-locator/src/favicon.ico",
-              "projects/petrol-locator/src/assets",
-              "projects/petrol-locator/src/manifest.webmanifest",
+              "projects/excel-fuel/src/favicon.ico",
+              "projects/excel-fuel/src/assets",
+              "projects/excel-fuel/src/manifest.webmanifest",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
@@ -50,12 +50,12 @@
               }
             ],
             "styles": [  {
-              "input": "projects/petrol-locator/src/styles.scss",
-              "bundleName": "project-pl"
+              "input": "projects/excel-fuel/src/styles.scss",
+              "bundleName": "project-excel"
             },
             {
               "input": "libs/theme/scss/styles.scss",
-              "bundleName": "theme-pl"
+              "bundleName": "theme-excel"
             }],
 
             "stylePreprocessorOptions": {
@@ -63,14 +63,14 @@
             },
             "scripts": [],
             "serviceWorker": true,
-            "ngswConfigPath": "projects/petrol-locator/ngsw-config.json"
+            "ngswConfigPath": "projects/excel-fuel/ngsw-config.json"
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/petrol-locator/src/environments/environment.ts",
-                  "with": "projects/petrol-locator/src/environments/environment.prod.ts"
+                  "replace": "projects/excel-fuel/src/environments/environment.ts",
+                  "with": "projects/excel-fuel/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -98,33 +98,33 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "petrol-locator:build"
+            "browserTarget": "excel-fuel:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "petrol-locator:build:production"
+              "browserTarget": "excel-fuel:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "petrol-locator:build"
+            "browserTarget": "excel-fuel:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/petrol-locator/src/test.ts",
-            "polyfills": "projects/petrol-locator/src/polyfills.ts",
-            "tsConfig": "projects/petrol-locator/tsconfig.spec.json",
-            "karmaConfig": "projects/petrol-locator/karma.conf.js",
+            "main": "projects/excel-fuel/src/test.ts",
+            "polyfills": "projects/excel-fuel/src/polyfills.ts",
+            "tsConfig": "projects/excel-fuel/tsconfig.spec.json",
+            "karmaConfig": "projects/excel-fuel/karma.conf.js",
             "assets": [
-              "projects/petrol-locator/src/favicon.ico",
-              "projects/petrol-locator/src/assets"
+              "projects/excel-fuel/src/favicon.ico",
+              "projects/excel-fuel/src/assets"
             ],
             "styles": [
-              "projects/petrol-locator/src/styles.css"
+              "projects/excel-fuel/src/styles.css"
             ],
             "scripts": []
           }
@@ -133,9 +133,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/petrol-locator/tsconfig.app.json",
-              "projects/petrol-locator/tsconfig.spec.json",
-              "projects/petrol-locator/e2e/tsconfig.json"
+              "projects/excel-fuel/tsconfig.app.json",
+              "projects/excel-fuel/tsconfig.spec.json",
+              "projects/excel-fuel/e2e/tsconfig.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -145,12 +145,12 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/petrol-locator/e2e/protractor.conf.js",
-            "devServerTarget": "petrol-locator:serve"
+            "protractorConfig": "projects/excel-fuel/e2e/protractor.conf.js",
+            "devServerTarget": "excel-fuel:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "petrol-locator:serve:production"
+              "devServerTarget": "excel-fuel:serve:production"
             }
           }
         }
@@ -597,5 +597,5 @@
       }
     }
   },
-  "defaultProject": "petrol-locator"
+  "defaultProject": "excel-fuel"
 }

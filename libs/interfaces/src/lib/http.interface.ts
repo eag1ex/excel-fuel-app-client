@@ -1,16 +1,16 @@
-import { PetrolModel } from './petrol.interface';
+import { ExcelModel } from './excel.interface';
 
 
-export interface PetrolListResp{
-    response: PetrolModel[];
+export interface ExcelListResp{
+    response: ExcelModel[];
     code: number
 }
 
-export interface PetrolItemResp{
-    response: PetrolModel;
+export interface ExcelItemResp{
+    response: ExcelModel;
     code: number
 }
-export interface PetrolDeleteResp{
+export interface ExcelDeleteResp{
     response: Array<string>;
     code: number
 }

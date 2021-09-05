@@ -1,4 +1,4 @@
-import { PetrolModel } from './petrol.interface';
+import { ExcelModel } from './excel.interface';
 
 export type AvailRoutes = 'locations' | 'login'
 
@@ -33,8 +33,8 @@ export interface RouteItem{
 }
 
 
-export interface PetrolListResolver extends RouteItem{
-    data: PetrolModel[]
+export interface ExcelListResolver extends RouteItem{
+    data: ExcelModel[]
 }
 
 export type UserPermType = 'ADMINISTRATOR' | 'BASIC'

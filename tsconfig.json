@@ -23,37 +23,37 @@
       "node_modules/@types"
     ],
     "paths": {
-      "@pl/theme":[
+      "@excel/theme":[
         "libs/theme/scss"
       ],
-      "@pl/material": [
+      "@excel/material": [
         "libs/material/src/public-api.ts"
       ],
-      "@pl/components": [
+      "@excel/components": [
         "libs/components/src/public-api.ts"
       ],
-      "@pl/page-routes": [
+      "@excel/page-routes": [
         "libs/page-routes/src/public-api.ts"
       ],
-      "@pl/utils": [
+      "@excel/utils": [
         "libs/utils/src/public-api.ts"
       ],
-      "@pl/http": [
+      "@excel/http": [
         "libs/http/src/public-api.ts"
       ],
-      "@pl/interfaces": [
+      "@excel/interfaces": [
         "libs/interfaces/src/public-api.ts"
       ],
-      "@pl/data": [
+      "@excel/data": [
         "libs/data/src/public-api.ts"
       ],
-      "@pl/services": [
+      "@excel/services": [
         "libs/services/src/public-api.ts"
       ],
-      "@pl/states": [
+      "@excel/states": [
         "libs/states/src/public-api.ts"
       ],
-      "pl/plugins": [
+      "@excel/plugins": [
         "libs/plugins/src/public-api.ts"
       ],
     }

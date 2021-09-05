@@ -1,6 +1,6 @@
-import { LatLng, RouteItem } from '@pl/interfaces';
+import { LatLng, RouteItem } from '@excel/interfaces';
 
-export const appTitle = 'Petrol Locator';
+export const appTitle = 'Excel Fuel';
 export const routeList: RouteItem[] = [
     { name: 'Locations', value: 'locations', id: 1, ref: undefined }
 ]

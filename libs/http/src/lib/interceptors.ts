@@ -4,7 +4,7 @@
 
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { HttpManagerService } from '@pl/utils'
+import { HttpManagerService } from '@excel/utils'
 
 import { Observable, of, throwError } from 'rxjs'
 import { catchError, switchMap, timeout } from 'rxjs/operators'
