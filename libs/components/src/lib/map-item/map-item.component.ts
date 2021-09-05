@@ -58,11 +58,9 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
         this.initSubs()
 
         // disable permissions on load
-        this.mapItemGroup.get('nameCtr').disable({ onlySelf: true })
-        this.mapItemGroup.get('priceCtr').disable({ onlySelf: true })
-        this.mapItemGroup.get('updateCtr').disable({ onlySelf: true })
-        this.mapItemGroup.get('editCtr').disable({ onlySelf: true })
-        this.mapItemGroup.get('productCtr').disable({ onlySelf: true })
+
+        this.mapItemGroup.disable({ onlySelf: true })
+
     }
 
     @Input() selectedMapItem: ExcelModel
@@ -72,9 +70,11 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
        // http update events
        // we emit change to location component to update {excelStationsSnapShot}
        const s0 = this.excelUpdateHttpService.update$.subscribe(n => {
+
             log('[excelUpdateHttpService]', n)
-            this.resetForm()
+           
             if (n){
+                this.resetForm()
                 this.states.setUpdatedStation(n)
             }
 
@@ -137,15 +137,15 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /** we are an admit, ctr is enabled and value is th>0 */
-    canEditField(fieldName: EditableField): boolean {
-        if (fieldName === 'name') {
-            return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('nameCtr').enabled
-        }
+    // canEditField(fieldName: EditableField): boolean {
+    //     if (fieldName === 'name') {
+    //         return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('nameCtr').enabled
+    //     }
 
-        if (fieldName === 'price') {
-            return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('priceCtr').enabled
-        } else return false
-    }
+    //     if (fieldName === 'price') {
+    //         return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('priceCtr').enabled
+    //     } else return false
+    // }
 
     /** check if current ctr was updated */
     fieldUpdated(fieldName: EditableField): boolean {

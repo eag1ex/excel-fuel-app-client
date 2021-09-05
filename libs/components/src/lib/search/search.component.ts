@@ -3,7 +3,7 @@
  * - add selected item to state management
  */
 
-import { Component, ElementRef, Input, OnInit, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
@@ -12,18 +12,19 @@ import { filter, map, retry, startWith, tap } from 'rxjs/operators'
 import {  ExcelModel } from '@excel/interfaces'
 import { excelListByName } from '@excel/utils';
 import { ExcelStates } from '@excel/states';
-import { log } from 'x-utils-es';
+import { delay, log, unsubscribe } from 'x-utils-es';
 
 @Component({
     selector: 'lib-search',
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit, OnChanges {
+export class SearchComponent implements OnInit, OnDestroy {
+    subscriptions = []
     separatorKeysCodes: number[] = [ENTER, COMMA]
     searchCtrl = new FormControl()
     filteredItems: Observable<ExcelModel[]>
-
+    searchStations: ExcelModel[]
     /** loaded and selected item*/
     items: ExcelModel[] = []
 
@@ -38,7 +39,8 @@ export class SearchComponent implements OnInit, OnChanges {
         )
     }
 
-    @Input() searchStations: ExcelModel[]
+    @Input() searchStations$: Observable<ExcelModel[]>
+
     @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>
 
     // list only items not yet selected
@@ -73,19 +75,18 @@ export class SearchComponent implements OnInit, OnChanges {
         this.searchCtrl.setValue(null)
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.searchStations?.currentValue) {
-            // will preselect all items in search bar
-            // this.items = copy(this.searchStations)
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     if (changes?.searchStations$?.currentValue) {
+    //         // will preselect all items in search bar
+    //         // this.items = copy(this.searchStations)
 
-            this.itemsRealTimeUpdate()
-            this.searchCtrl.setValue(null)
-        }
-    }
+    //         this.searchCtrl.setValue(null)
+    //     }
+    // }
 
     /** on real time update make change to selected chip items */
-    itemsRealTimeUpdate(): void {
-        const match = (id): ExcelModel => this.searchStations.filter((n) => n.id === id)[0]
+    itemsRealTimeUpdate(list: ExcelModel[]): void {
+        const match = (id): ExcelModel => list.filter((n) => n.id === id)[0]
 
         if (this.items?.length) {
             this.items = this.items.map((station) => {
@@ -96,5 +97,29 @@ export class SearchComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        let initial = true
+        if (this.searchStations$){
+           const s0 = this.searchStations$.subscribe(n => {
+                if (n){
+                    this.searchStations = n
+                    this.itemsRealTimeUpdate(n)
+
+                    // also send update to the map
+                    if (!initial) {
+                        delay(200).then(() => {
+                            this.states.setSelectedSearchResults(this.items)
+                        })
+
+                    }
+                    initial = false
+                    this.searchCtrl.setValue(null)
+                }
+            })
+           this.subscriptions.push(...[s0])
+        }
+    }
+    ngOnDestroy(): void{
+        unsubscribe(this.subscriptions, 'SearchComponent')
+    }
 }
