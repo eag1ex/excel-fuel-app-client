@@ -6,12 +6,14 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
 import { ExcelUpdateHttpService } from '@excel/http'
-import { ExcelModel, ExcelPrice, ExcelProduct, ExcelUpdate, UserPermType } from '@excel/interfaces'
+import { ExcelModel, ExcelPrice, ExcelProduct, ExcelUpdate, SelectedMapItem, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
+import { makeMarkerPopUp } from '@excel/utils'
+import { Marker } from 'leaflet'
 
 import { filter, debounceTime } from 'rxjs/operators';
-import { copy, log,  unsubscribe, warn } from 'x-utils-es'
+import { copy, delay, log,  unsubscribe, warn } from 'x-utils-es'
 
 interface ProductWithPrice extends ExcelProduct {
     priceItem?: ExcelPrice
@@ -38,6 +40,11 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
     subscriptions = []
     item: ExcelModel
 
+    /**
+     * Give power to this component and allow interaction with current marker it belongs to!
+     */
+    activeMarker: Marker
+
     permissions: UserPermType = 'BASIC'
 
     /** aka station map item */
@@ -63,7 +70,7 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    @Input() selectedMapItem: ExcelModel
+    @Input() selectedMapItem: SelectedMapItem
 
     initSubs(): void {
 
@@ -75,7 +82,9 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
 
             if (n){
                 this.resetForm()
-                this.states.setUpdatedStation(n)
+                 // update selected marker
+                this.updateLeafletMarker(n)
+                this.states.setUpdatedStation(n, this.activeMarker)
             }
 
         })
@@ -121,6 +130,13 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
             price: Number(excelPrice.price),
             product_id: excelPrice.product_id,
         }
+    }
+
+    updateLeafletMarker(n: ExcelModel): void{
+        this.activeMarker.options.title = n.name;
+        (this.activeMarker.options as any).data = n;
+        this.activeMarker.bindPopup(makeMarkerPopUp(n))
+        this.activeMarker = Object.assign(this.activeMarker)
     }
 
     /**
@@ -187,9 +203,14 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
         this.mapItemGroup.get('updateCtr').patchValue(1)
     }
 
+
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.selectedMapItem?.currentValue) {
-            this.item = copy(this.selectedMapItem)
+
+            this.activeMarker = this.selectedMapItem.marker
+            const selectedMapItemStation = copy(this.selectedMapItem.station)
+            this.item = selectedMapItemStation
 
             // this.mapItemGroup.get('nameCtr').enable({onlySelf: true})
             this.mapItemGroup.get('nameCtr').setValue(this.item.name)
@@ -201,6 +222,14 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
         if (this.permissions === 'ADMINISTRATOR') {
             this.mapItemGroup.get('editCtr').enable({ onlySelf: true })
         }
+
+        // NOTE optional!
+        // this will bind immidate power to each chip in search list
+        if (this.activeMarker){
+            this.states.setUpdatedStation(this.item, this.activeMarker)
+        }
+
+
     }
 
     ngOnDestroy(): void {

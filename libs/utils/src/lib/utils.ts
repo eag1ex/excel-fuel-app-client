@@ -17,6 +17,28 @@ export const formatTime = (time) => {
 export const now = () => formatTime(new Date())
 
 
+/** make html marker content, popup */
+export const makeMarkerPopUp = (metadata: ExcelModel): string => {
+    const list = (el) => `<li class="border-none list-group-item list-group-item-light p-0">${el}</li>`
+
+    const items: Array<string> = [
+        metadata.name ? { value: metadata.name } : null,
+        // metadata.city ? { value: 'City: ' + metadata.city } : null,
+        // metadata.address ? { value: 'Address: ' + metadata.address } : null,
+    ]
+        .filter((n) => !!n)
+        .map((n) => n.value)
+        .map((n) => list(n))
+
+    let htmlList = ''
+
+    for (let inx = 0; inx < items.length; inx++) htmlList += items[inx]
+    return `
+            <ul class="list-group p-0">
+                ${htmlList}
+            </ul> `
+}
+
 
 /** make compatible propt */
 export const latLong = ({latitude, longitude}): LatLng => {

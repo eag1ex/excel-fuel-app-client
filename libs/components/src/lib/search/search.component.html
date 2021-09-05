@@ -3,6 +3,7 @@
     <mat-chip-list (click)="onUpdate($event)" selectable #chipList aria-label="Fruit selection">
         <div class="d-flex flex-row">
             <mat-chip
+                (click)="chipOnClick(el.id)"
                 class="mat-chip-selected"
                 [selected]="true"
                 [value]="el"

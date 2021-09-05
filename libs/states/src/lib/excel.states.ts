@@ -10,11 +10,15 @@ import { Observable } from 'rxjs'
 import { copy} from 'x-utils-es'
 import { RxStore } from '@excel/utils';
 import { ExcelStationsResp, ExcelModel } from '@excel/interfaces';
+import { Marker } from 'leaflet';
 
 
 interface IState {
     /** last updated station from map-item */
-    updatedStation: ExcelModel,
+    updatedStation: {
+        station:ExcelModel,
+        marker?:Marker
+    },
     excelStations: ExcelStationsResp;
     selectedSearchResults: {
         data: ExcelModel[]
@@ -39,8 +43,8 @@ export class ExcelStates extends RxStore<IState> {
         super(initialState, { debug: isDevMode() })
     }
 
-    setUpdatedStation(data: ExcelModel): void {
-        this.setState({ updatedStation: copy(data) })
+    setUpdatedStation(data: ExcelModel,marker?:Marker): void {
+        this.setState({ updatedStation: {station:copy(data),marker }})
     }
 
     setExcelStations(data: ExcelStationsResp): void {
@@ -48,7 +52,7 @@ export class ExcelStates extends RxStore<IState> {
     }
 
     /** last updated station from map-item */
-    get updatedStation$(): Observable<ExcelModel> {
+    get updatedStation$(): Observable<{station:ExcelModel,marker?:Marker}> {
         return this.select((state) => {
             return state.updatedStation
         })
