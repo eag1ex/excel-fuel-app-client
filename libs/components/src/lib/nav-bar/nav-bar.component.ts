@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { appTitle } from '@excel/data';
-import { PLUser } from '@excel/interfaces';
+import { ExcelUser } from '@excel/interfaces';
 
 @Component({
   selector: 'lib-nav-bar',
@@ -10,7 +10,7 @@ import { PLUser } from '@excel/interfaces';
 export class NavBarComponent implements OnInit {
   title = appTitle
   userName: string
-  constructor( @Inject('USER') protected USER: PLUser) {
+  constructor( @Inject('USER') protected USER: ExcelUser) {
     this.userName = this.USER?.username
   }
 

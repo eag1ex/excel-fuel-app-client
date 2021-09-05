@@ -1,7 +1,7 @@
 import { ExcelModel } from './excel.interface';
 
 
-export interface ExcelListResp{
+export interface ExcelStationsResp{
     response: ExcelModel[];
     code: number
 }

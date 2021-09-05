@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService, ExcelListServiceResolver } from '@excel/services';
+import { AuthGuardService, ExcelStationsServiceResolver } from '@excel/services';
 const routes: Routes = [
 
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
       runGuardsAndResolvers: 'paramsChange',
       canLoad: [AuthGuardService],
       resolve: {
-        list: ExcelListServiceResolver,
+        list: ExcelStationsServiceResolver,
     },
   },
   { path: '**', redirectTo: 'locations' },

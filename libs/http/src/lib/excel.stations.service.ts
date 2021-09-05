@@ -6,20 +6,24 @@ import { log } from 'x-utils-es'
 import { Observable, Subject } from 'rxjs'
 import { timeout, retry } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
-import { ENV, ExcelListResp } from '@excel/interfaces'
+import { ENV, ExcelStationsResp } from '@excel/interfaces'
 
 @Injectable({
     providedIn: 'root',
 })
-export class ExcelListHttpService {
+export class ExcelStationsHttpService {
     private apiBaseUrl: string
     sub$: Subject<any> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
         this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
     }
 
-    list(): Observable<ExcelListResp> {
-        const url = this.apiBaseUrl + `/excel/list`
+     /**
+     * (GET) /api/excel/stations
+     * Get all available items from StaticDB
+     */
+    stations(): Observable<ExcelStationsResp> {
+        const url = this.apiBaseUrl + `/excel/stations`
         log(`-- calling ${url}`)
         return this.http.get<any>(`${url}`)
         .pipe(
@@ -28,12 +32,12 @@ export class ExcelListHttpService {
         )
     }
 
-    // get list$(): Observable<ExcelModel[]> {
+    // get stations$(): Observable<ExcelModel[]> {
     //   return this.sub$.pipe(
     //    // filter(v => !!v),
     //     debounceTime(300),
     //     switchMap(m => {
-    //       return this.list(m);
+    //       return this.stations(m);
     //     }),
     //     catchError(err => {
     //       onerror(err);
