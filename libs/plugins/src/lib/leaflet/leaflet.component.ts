@@ -48,7 +48,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     private map: Map & { enablePopup?: boolean }
     markerHistory: Array<{ m: Marker; id: string }> = []
     constructor(private states: ExcelStates, private route: ActivatedRoute) {
-        const s0 = this.subSelect$
+ const s0 = this.subSelect$
             .pipe(
                 debounceTime(500),
                 filter((n) => !isFalsy(n))
@@ -177,7 +177,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.markerHistory.filter((n) => n.id === metadata.id).length) return false
 
         // when adding new item to the map hide selectedMapItem
-        if (this.selectedMapItem) this.selectedMapItem = undefined
+        //if (this.selectedMapItem) this.selectedMapItem = undefined
 
         log('addMarker for:', metadata.id)
 

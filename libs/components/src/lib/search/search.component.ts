@@ -3,7 +3,7 @@
  * - add selected item to state management
  */
 
-import { Component, ElementRef, Input, OnInit, ViewChild, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
@@ -40,7 +40,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     @Input() searchStations$: Observable<ExcelModel[]>
-
     @ViewChild('nameInput') nameInput: ElementRef<HTMLInputElement>
 
     // list only items not yet selected
@@ -75,14 +74,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchCtrl.setValue(null)
     }
 
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes?.searchStations$?.currentValue) {
-    //         // will preselect all items in search bar
-    //         // this.items = copy(this.searchStations)
-
-    //         this.searchCtrl.setValue(null)
-    //     }
-    // }
 
     /** on real time update make change to selected chip items */
     itemsRealTimeUpdate(list: ExcelModel[]): void {
@@ -107,6 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
                     // also send update to the map
                     if (!initial) {
+                        // NOTE need delay to make sure its send last, and after any selection changes
                         delay(200).then(() => {
                             this.states.setSelectedSearchResults(this.items)
                         })

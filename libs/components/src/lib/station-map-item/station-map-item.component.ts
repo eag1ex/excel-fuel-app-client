@@ -22,19 +22,19 @@ interface ProductWithPrice extends ExcelProduct {
 
 type EditableField = 'name' | 'price'
 
-interface StationMapItem {
-    nameCtr: string
-    priceCtr: number
-    updateCtr: any
-    editCtr: number
-}
+// interface StationMapItem {
+//     nameCtr: string
+//     priceCtr: number
+//     updateCtr: any
+//     editCtr: number
+// }
 
 @Component({
-    selector: 'lib-map-item',
-    templateUrl: './map-item.component.html',
-    styleUrls: ['./map-item.component.scss'],
+    selector: 'lib-station-map-item',
+    templateUrl: './station-map-item.component.html',
+    styleUrls: ['./station-map-item.component.scss'],
 })
-export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
+export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
     subscriptions = []
     item: ExcelModel
 
@@ -72,7 +72,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
        const s0 = this.excelUpdateHttpService.update$.subscribe(n => {
 
             log('[excelUpdateHttpService]', n)
-           
+
             if (n){
                 this.resetForm()
                 this.states.setUpdatedStation(n)
