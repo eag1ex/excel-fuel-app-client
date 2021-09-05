@@ -5,42 +5,18 @@
 
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
-import { ExcelModel, ExcelPrice, ExcelProduct, UserPermType } from '@excel/interfaces'
+import { ExcelUpdateHttpService } from '@excel/http'
+import { ExcelModel, ExcelPrice, ExcelProduct, ExcelUpdate, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
+import { ExcelStates } from '@excel/states'
 
-import { filter } from 'rxjs/operators'
-import { copy, log, onerror, unsubscribe, warn } from 'x-utils-es'
-
-/*
-   "prices": [
-      {
-        "price": 1.81,
-        "currency": "CHF",
-        "product_id": "DIESEL"
-      }
-    ],
-
-    "products": [
-      {
-        "product_id": "DIESEL",
-        "points": [
-          {
-            "id": "1",
-            "status": "available"
-          },
-
-          {
-            "id": "2",
-            "status": "not_available"
-          }
-        ]
-      }
-    ]
-* */
+import { filter, debounceTime } from 'rxjs/operators';
+import { copy, log,  unsubscribe, warn } from 'x-utils-es'
 
 interface ProductWithPrice extends ExcelProduct {
     priceItem?: ExcelPrice
 }
+
 
 /** each station has price presets assigned to products */
 
@@ -61,21 +37,24 @@ interface StationMapItem {
 export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
     subscriptions = []
     item: ExcelModel
-    itemNameValue: string
+
     permissions: UserPermType = 'BASIC'
 
     /** aka station map item */
     mapItemGroup = new FormGroup({
         nameCtr: new FormControl(''),
-        priceCtr: new FormControl(),
+        /** hidden input that stores ExcelPrice*/
+        productCtr: new FormControl(),
+        priceCtr: new FormControl(0),
         /** can update once edit ctr is enabled */
         updateCtr: new FormControl(0),
         /** makes name/price ctrs editable  */
         editCtr: new FormControl(0),
     })
 
-    constructor(private authService: AuthPermissionsService) {
-
+    constructor(
+        private states: ExcelStates,
+        private authService: AuthPermissionsService, private excelUpdateHttpService: ExcelUpdateHttpService) {
         this.initSubs()
 
         // disable permissions on load
@@ -83,13 +62,25 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
         this.mapItemGroup.get('priceCtr').disable({ onlySelf: true })
         this.mapItemGroup.get('updateCtr').disable({ onlySelf: true })
         this.mapItemGroup.get('editCtr').disable({ onlySelf: true })
+        this.mapItemGroup.get('productCtr').disable({ onlySelf: true })
     }
 
     @Input() selectedMapItem: ExcelModel
 
     initSubs(): void {
+
+       // http update events
+       // we emit change to location component to update {excelStationsSnapShot}
+       const s0 = this.excelUpdateHttpService.update$.subscribe(n => {
+            log('[excelUpdateHttpService]', n)
+            this.resetForm()
+            if (n){
+                this.states.setUpdatedStation(n)
+            }
+
+        })
         // set user permissions
-        const s0 = this.authService.user$.subscribe((n) => {
+       const s1 = this.authService.user$.subscribe((n) => {
             if (n?.type) {
                 this.permissions = n.type
             } else {
@@ -98,7 +89,7 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
             }
         })
 
-        const s1 = this.mapItemGroup
+       const s2 = this.mapItemGroup
             .get('editCtr')
             .valueChanges.pipe(filter((n) => this.canEdit))
             .subscribe((n: number) => {
@@ -106,26 +97,43 @@ export class MapItemComponent implements OnInit, OnChanges, OnDestroy {
                     this.mapItemGroup.get('updateCtr').enable({ onlySelf: true })
                     this.mapItemGroup.get('nameCtr').enable({ onlySelf: true })
                     this.mapItemGroup.get('priceCtr').enable({ onlySelf: true })
-                    log('nameCtr/enabled!')
+                    this.mapItemGroup.get('productCtr').enable({ onlySelf: true })
                 }
             })
 
         // on update is like submit
-        const s2 = this.mapItemGroup
+       const s3 = this.mapItemGroup
             .get('updateCtr')
-            .valueChanges.pipe(filter((n) => this.canUpdate))
+            .valueChanges.pipe(filter((n) => this.canUpdate), debounceTime(700))
             .subscribe((n: number) => {
                 if (n) {
-                    this.mapItemGroup.markAsPristine()
-                    this.mapItemGroup.markAsUntouched()
-                    this.mapItemGroup.get('updateCtr').patchValue(0, { onlySelf: true })
-                    this.mapItemGroup.get('nameCtr').disable({ onlySelf: true })
-                    this.mapItemGroup.get('priceCtr').disable({ onlySelf: true })
-                    log('form send')
+                    this.excelUpdateHttpService.sub$.next({id: this.item.id, data: this.formValues})
                 }
             })
 
-        this.subscriptions.push(...[s0, s1, s2])
+       this.subscriptions.push(...[s0, s1, s2, s3])
+    }
+
+    get formValues(): ExcelUpdate {
+        const excelPrice: ExcelPrice = this.mapItemGroup.get('productCtr').value
+        return {
+            name: this.mapItemGroup.get('nameCtr').value,
+            price: Number(excelPrice.price),
+            product_id: excelPrice.product_id,
+        }
+    }
+
+    /**
+     *  on data send reset form values
+     */
+    resetForm(): void {
+
+           this.mapItemGroup.markAsPristine()
+           this.mapItemGroup.markAsUntouched()
+           this.mapItemGroup.get('updateCtr').patchValue(0, { onlySelf: true })
+           this.mapItemGroup.get('nameCtr').disable({ onlySelf: true })
+           this.mapItemGroup.get('priceCtr').disable({ onlySelf: true })
+           this.mapItemGroup.get('productCtr').disable({ onlySelf: true })
     }
 
     /** we are an admit, ctr is enabled and value is th>0 */

@@ -20,6 +20,19 @@
     </mat-card-content>
 
     <mat-card-content *ngIf="productsWithPrice?.length" class="mb-1">
+        <div class="products-item-update-price mb-2" *ngIf="canEdit">
+            <div class="text-muted strong">Update product prices:</div>
+            <div *ngFor="let price of item.prices; let inx = index" class="price-item-update d-flex flex-column">
+                <div class="d-flex flex-row my-1">
+                    <span>{{ price.product_id }}/{{ price.currency }}&nbsp;</span>
+                    <input min="0" formControlName="priceCtr" pattern="/^\d*$/" *ngIf="item?.prices[inx]" [(ngModel)]="item?.prices[inx].price" type="text" class="py-0" />
+
+                    <input [(ngModel)]="item?.prices[inx]" formControlName="productCtr" type="hidden" />
+                    <lib-icons *ngIf="fieldUpdated('price')" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
+                </div>
+            </div>
+        </div>
+
         <div class="products-item">
             <div class="text-muted strong">Available Products:</div>
 
@@ -38,16 +51,6 @@
                         </div>
                     </div>
                 </ng-container>
-            </div>
-        </div>
-        <div class="products-item-update-price mt-2" *ngIf="canEdit">
-            <div class="text-muted strong">Update product prices:</div>
-            <div *ngFor="let price of item.prices; let inx = index" class="price-item-update d-flex flex-column">
-                <div class="d-flex flex-row my-1">
-                    <span>{{ price.product_id }}/{{ price.currency }}&nbsp;</span>
-                    <input pattern="/^\d*$/" *ngIf="item?.prices[inx]" [(ngModel)]="item?.prices[inx].price" type="text" formControlName="priceCtr" class="py-0" />
-                    <lib-icons *ngIf="fieldUpdated('price')" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
-                </div>
             </div>
         </div>
     </mat-card-content>

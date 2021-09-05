@@ -5,7 +5,7 @@
 
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute,  Router } from '@angular/router';
-import { PLUser } from '@excel/interfaces'
+import { ExcelUser } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { log } from 'x-utils-es'
 
@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
 
     /** set user and reroute */
     reRoute(): void{
-      const user: PLUser = {
+      const user: ExcelUser = {
         username: 'johndoe',
         // we will change that to match with server token
         token: '3455465656fgffgh',
@@ -43,7 +43,7 @@ export class AuthComponent implements OnInit {
 
     }
 
-    get userSnapShotdata(): { user: PLUser } {
+    get userSnapShotdata(): { user: ExcelUser } {
         return this.route.snapshot.data as any
     }
 

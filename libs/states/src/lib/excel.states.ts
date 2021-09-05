@@ -9,12 +9,13 @@ import { Injectable, isDevMode } from '@angular/core'
 import { Observable } from 'rxjs'
 import { copy} from 'x-utils-es'
 import { RxStore } from '@excel/utils';
-import { ExcelListResp, ExcelModel } from '@excel/interfaces';
-
+import { ExcelStationsResp, ExcelModel } from '@excel/interfaces';
 
 
 interface IState {
-    excelList: ExcelListResp;
+    /** last updated station from map-item */
+    updatedStation: ExcelModel,
+    excelStations: ExcelStationsResp;
     selectedSearchResults: {
         data: ExcelModel[]
         // so the state is alwasy new
@@ -22,8 +23,10 @@ interface IState {
     }
 }
 
+
 const initialState: IState = {
-    excelList: undefined,
+    updatedStation: undefined,
+    excelStations: undefined,
     selectedSearchResults: undefined
 }
 
@@ -36,13 +39,24 @@ export class ExcelStates extends RxStore<IState> {
         super(initialState, { debug: isDevMode() })
     }
 
-    setExcelList(data: ExcelListResp): void {
-        this.setState({ excelList: copy(data) })
+    setUpdatedStation(data: ExcelModel): void {
+        this.setState({ updatedStation: copy(data) })
     }
 
-    get excelList$(): Observable<ExcelModel[]> {
+    setExcelStations(data: ExcelStationsResp): void {
+        this.setState({ excelStations: copy(data) })
+    }
+
+    /** last updated station from map-item */
+    get updatedStation$(): Observable<ExcelModel> {
         return this.select((state) => {
-            return state.excelList?.response
+            return state.updatedStation
+        })
+    }
+
+    get excelStations$(): Observable<ExcelModel[]> {
+        return this.select((state) => {
+            return state.excelStations?.response
         })
     }
 
@@ -51,7 +65,7 @@ export class ExcelStates extends RxStore<IState> {
         // make sure state is never equal
         let index = Number(this.getState().selectedSearchResults?.index) || 0;
         index++
-        
+
         this.setState({ selectedSearchResults: {data: copy(items), index }})
     }
 

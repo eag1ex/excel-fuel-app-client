@@ -1,5 +1,5 @@
 /**
- * @description excel/stations api calling our excel/server, to get static data
+ * @description excel/products api calling our excel/server, to get static data
  */
 import { HttpClient } from '@angular/common/http'
 import { log } from 'x-utils-es'
@@ -11,7 +11,7 @@ import { ENV, ExcelStationsResp } from '@excel/interfaces'
 @Injectable({
     providedIn: 'root',
 })
-export class ExcelStationsHttpService {
+export class ExcelProductsHttpService {
     private apiBaseUrl: string
     sub$: Subject<any> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
@@ -19,11 +19,11 @@ export class ExcelStationsHttpService {
     }
 
      /**
-     * (GET) /api/excel/stations
-     * list all stations for current user
+     * (GET) /api/excel/products
+     * list all products from Excel
      */
-    stations(): Observable<ExcelStationsResp> {
-        const url = this.apiBaseUrl + `/excel/stations`
+    products(): Observable<ExcelStationsResp> {
+        const url = this.apiBaseUrl + `/excel/products`
         log(`-- calling ${url}`)
         return this.http.get<any>(`${url}`)
         .pipe(
@@ -32,12 +32,12 @@ export class ExcelStationsHttpService {
         )
     }
 
-    // get stations$(): Observable<ExcelModel[]> {
+    // get products$(): Observable<ExcelModel[]> {
     //   return this.sub$.pipe(
     //    // filter(v => !!v),
     //     debounceTime(300),
     //     switchMap(m => {
-    //       return this.stations(m);
+    //       return this.products(m);
     //     }),
     //     catchError(err => {
     //       onerror(err);
@@ -47,6 +47,4 @@ export class ExcelStationsHttpService {
     //   );
     // }
 }
-
-
 

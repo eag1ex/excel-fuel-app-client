@@ -21,6 +21,9 @@ export class PLhttpInterceptor implements HttpInterceptor {
             'Access-Control-Allow-Origin': '*',
         }
 
+        if (request.method === 'POST') {
+            headers['Content-Type'] = 'application/json;charset=utf-8'
+        }
 
         // let token;
         // if (this.FAKE_AUTH) {
@@ -42,7 +45,7 @@ export class PLhttpInterceptor implements HttpInterceptor {
 
         log('intercept/url', request.url)
         log('intercept/headers', request.headers)
-		
+
         return next.handle(request).pipe(
             switchMap((l) => {
                 // if (!token) {

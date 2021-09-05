@@ -24,10 +24,9 @@ export class ExcelUpdateHttpService {
      */
     update(id: string, data: ExcelUpdate): Observable<ExcelItemResp> {
         if (isFalsy(data)) return throwError('no data provided for update')
-
         const url = this.apiBaseUrl + `/excel/update/${id}`
         log(`-- calling ${url}`)
-        return this.http.post<any>(`${url}`, JSON.stringify(data)).pipe(share())
+        return this.http.post<any>(`${url}`, JSON.stringify(data)).pipe(  timeout(10000), retry(1))
     }
 
     get update$(): Observable<ExcelModel> {
@@ -44,8 +43,6 @@ export class ExcelUpdateHttpService {
                     // do not exit from stream
                     return this.update$
                 }),
-                timeout(10000),
-                retry(1)
             )
     }
 }
