@@ -76,7 +76,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
 
     /** on real time update make change to selected chip items */
-    itemsRealTimeUpdate(list: ExcelModel[]): void {
+    itemsUpdate(list: ExcelModel[]): void {
         const match = (id): ExcelModel => list.filter((n) => n.id === id)[0]
 
         if (this.items?.length) {
@@ -88,13 +88,24 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** on live update check prev selected items and remove if any */
+    itemsRemove(n:ExcelModel[]):void{
+         let match = (item:ExcelModel)=>n.filter(x=>x.id===item.id).length
+
+         this.items.forEach((item,inx)=>{
+             if(!match(item)) this.items.splice(inx,1)   
+         })
+    }
+
     ngOnInit(): void {
         let initial = true
         if (this.searchStations$){
            const s0 = this.searchStations$.subscribe(n => {
                 if (n){
-                    this.searchStations = n
-                    this.itemsRealTimeUpdate(n)
+                    
+                    this.searchStations = n   
+                    this.itemsRemove(n)    
+                    this.itemsUpdate(n)
 
                     // also send update to the map
                     if (!initial) {

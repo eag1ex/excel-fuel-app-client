@@ -31,8 +31,11 @@
     </mat-chip-list>
 
     <mat-autocomplete (click)="onUpdate($event)" #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let item of filteredItems | async" [value]="item"
-            ><span class="strong">{{ item.name }}</span> | {{ item.address }} | {{ item.city }}</mat-option
-        >
+        <ng-container *ngIf="filteredItems | async as list">
+            <mat-option value="" *ngIf="!list.length">No stations available.</mat-option>
+            <mat-option *ngFor="let item of list" [value]="item"
+                ><span class="strong">{{ item.name }}</span> | {{ item.address }} | {{ item.city }}</mat-option
+            >
+        </ng-container>
     </mat-autocomplete>
 </mat-form-field>

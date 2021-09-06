@@ -16,6 +16,7 @@ import { Marker } from 'leaflet';
 interface IState {
     /** last updated station from map-item */
     updatedStation: {
+        delete_id?:string,
         station:ExcelModel,
         marker?:Marker
     },
@@ -43,8 +44,8 @@ export class ExcelStates extends RxStore<IState> {
         super(initialState, { debug: isDevMode() })
     }
 
-    setUpdatedStation(data: ExcelModel,marker?:Marker): void {
-        this.setState({ updatedStation: {station:copy(data),marker }})
+    setUpdatedStation(data: ExcelModel & {delete_id?:string},marker?:Marker): void {
+        this.setState({ updatedStation: {station:copy(data),marker, ...(data?.delete_id ? {delete_id:data?.delete_id}:{}) }})
     }
 
     setExcelStations(data: ExcelStationsResp): void {
@@ -52,7 +53,7 @@ export class ExcelStates extends RxStore<IState> {
     }
 
     /** last updated station from map-item */
-    get updatedStation$(): Observable<{station:ExcelModel,marker?:Marker}> {
+    get updatedStation$(): Observable<{station:ExcelModel,marker?:Marker, delete_id?:string}> {
         return this.select((state) => {
             return state.updatedStation
         })

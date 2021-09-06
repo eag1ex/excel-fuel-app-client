@@ -3,6 +3,7 @@
         <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
             <button (click)="stationForm.edit()" type="button" [value]="1" mat-stroked-button>EDIT</button>
             <button type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>UPDATE</button>
+            <button (click)="deleteStation()" type="button" [value]="1" color='warn' mat-stroked-button>DELETE</button>
         </mat-card-actions>
 
         <mat-card-title class="mb-1">

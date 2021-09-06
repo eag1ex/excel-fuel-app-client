@@ -25,14 +25,14 @@ export class LocationsComponent implements OnInit {
      */
     get excelStations$(): Observable<ExcelModel[]>{
         return this.excelStates.updatedStation$.pipe(map(stationItem => {
-            const { station} = stationItem || {}
-
-            if (isFalsy(station)) return this.excelStationsSnapShot?.data
+            const { station,delete_id} = stationItem || {}
+            if (isFalsy(station) && !delete_id ) return this.excelStationsSnapShot?.data
             else{
                 return this.excelStationsSnapShot.data = this.excelStationsSnapShot.data.map((n) => {
+                    if(n.id===delete_id) return null
                     if (n.id === station.id)  n = station
                     return n
-                })
+                }).filter(n=>!!n)
             }
         })).pipe(tap(n => {
                 log('excelStations$ update', n)
