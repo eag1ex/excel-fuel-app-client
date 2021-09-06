@@ -1,5 +1,5 @@
 import { Marker } from 'leaflet';
-import { ExcelModel } from './excel.interface';
+import { ExcelModel, ExcelPrice, ExcelProductPoint } from './excel.interface';
 
 export type AvailRoutes = 'locations' | 'login'
 
@@ -23,6 +23,19 @@ export interface SelectedMapItem{
     station:ExcelModel;
     marker:Marker;
 }
+
+export interface StationFormValues{
+    formName:string;
+    formPrices:Array<string|number>;
+    formProduct_ids:Array<string>
+}
+
+
+
+export interface ExcelProductDetail extends ExcelPrice{
+    points: ExcelProductPoint[]
+}
+
 
 export interface Iicon{
     name: string; path: string;

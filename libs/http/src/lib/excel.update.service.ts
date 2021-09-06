@@ -13,7 +13,7 @@ import { ENV, ExcelItemResp, ExcelModel, ExcelUpdate } from '@excel/interfaces'
 })
 export class ExcelUpdateHttpService {
     private apiBaseUrl: string
-    sub$: Subject<{ id: string; data: ExcelUpdate }> = new Subject()
+    sub$: Subject<{ id: string; data: ExcelUpdate[] }> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
         this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
     }
@@ -22,7 +22,7 @@ export class ExcelUpdateHttpService {
      * (POST) /api/excel/update/:id
      * Update existing excel station by {id} with details: {price,name}, accepting: {price,name,product_id}
      */
-    update(id: string, data: ExcelUpdate): Observable<ExcelItemResp> {
+    update(id: string, data: ExcelUpdate[]): Observable<ExcelItemResp> {
         if (isFalsy(data)) return throwError('no data provided for update')
         const url = this.apiBaseUrl + `/excel/update/${id}`
         log(`-- calling ${url}`)

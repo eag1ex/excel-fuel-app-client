@@ -4,32 +4,19 @@
  */
 
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
+import { FormGroup } from '@angular/forms'
 import { ExcelUpdateHttpService } from '@excel/http'
-import { ExcelModel, ExcelPrice, ExcelProduct, ExcelUpdate, SelectedMapItem, UserPermType } from '@excel/interfaces'
+import { ExcelModel, ExcelPrice, ExcelProduct, ExcelUpdate, SelectedMapItem, StationFormValues, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
-import { makeMarkerPopUp } from '@excel/utils'
+import { makeMarkerPopUp, toExcelUpdate } from '@excel/utils'
 import { Marker } from 'leaflet'
-
-import { filter, debounceTime } from 'rxjs/operators';
-import { copy, delay, log,  unsubscribe, warn } from 'x-utils-es'
+import { copy, log,  onerror,  unsubscribe, warn } from 'x-utils-es'
+import {StationForm} from './station-form'
 
 interface ProductWithPrice extends ExcelProduct {
     priceItem?: ExcelPrice
 }
-
-
-/** each station has price presets assigned to products */
-
-type EditableField = 'name' | 'price'
-
-// interface StationMapItem {
-//     nameCtr: string
-//     priceCtr: number
-//     updateCtr: any
-//     editCtr: number
-// }
 
 @Component({
     selector: 'lib-station-map-item',
@@ -37,59 +24,39 @@ type EditableField = 'name' | 'price'
     styleUrls: ['./station-map-item.component.scss'],
 })
 export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
+    stationForm: StationForm
     subscriptions = []
+    productsWithPrice: ProductWithPrice[]
     item: ExcelModel
+    itemCopy: ExcelModel
 
     /**
      * Give power to this component and allow interaction with current marker it belongs to!
      */
     activeMarker: Marker
-
     permissions: UserPermType = 'BASIC'
 
-    /** aka station map item */
-    mapItemGroup = new FormGroup({
-        nameCtr: new FormControl(''),
-        /** hidden input that stores ExcelPrice*/
-        productCtr: new FormControl(),
-        priceCtr: new FormControl(0),
-        /** can update once edit ctr is enabled */
-        updateCtr: new FormControl(0),
-        /** makes name/price ctrs editable  */
-        editCtr: new FormControl(0),
-    })
-
-    constructor(
-        private states: ExcelStates,
-        private authService: AuthPermissionsService, private excelUpdateHttpService: ExcelUpdateHttpService) {
+    constructor(private states: ExcelStates, private authService: AuthPermissionsService, private excelUpdateHttpService: ExcelUpdateHttpService) {
         this.initSubs()
-
-        // disable permissions on load
-
-        this.mapItemGroup.disable({ onlySelf: true })
-
     }
 
     @Input() selectedMapItem: SelectedMapItem
 
     initSubs(): void {
+        // http update events
+        // we emit change to location component to update {excelStationsSnapShot}
+        const s0 = this.excelUpdateHttpService.update$.subscribe((n) => {
 
-       // http update events
-       // we emit change to location component to update {excelStationsSnapShot}
-       const s0 = this.excelUpdateHttpService.update$.subscribe(n => {
-
-            log('[excelUpdateHttpService]', n)
-
-            if (n){
-                this.resetForm()
-                 // update selected marker
+            if (n) {
+                // update selected marker
+                this.initializeChanges(n)
                 this.updateLeafletMarker(n)
                 this.states.setUpdatedStation(n, this.activeMarker)
             }
-
         })
+
         // set user permissions
-       const s1 = this.authService.user$.subscribe((n) => {
+        const s1 = this.authService.user$.subscribe((n) => {
             if (n?.type) {
                 this.permissions = n.type
             } else {
@@ -98,138 +65,76 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
             }
         })
 
-       const s2 = this.mapItemGroup
-            .get('editCtr')
-            .valueChanges.pipe(filter((n) => this.canEdit))
-            .subscribe((n: number) => {
-                if (n) {
-                    this.mapItemGroup.get('updateCtr').enable({ onlySelf: true })
-                    this.mapItemGroup.get('nameCtr').enable({ onlySelf: true })
-                    this.mapItemGroup.get('priceCtr').enable({ onlySelf: true })
-                    this.mapItemGroup.get('productCtr').enable({ onlySelf: true })
-                }
-            })
-
-        // on update is like submit
-       const s3 = this.mapItemGroup
-            .get('updateCtr')
-            .valueChanges.pipe(filter((n) => this.canUpdate), debounceTime(700))
-            .subscribe((n: number) => {
-                if (n) {
-                    this.excelUpdateHttpService.sub$.next({id: this.item.id, data: this.formValues})
-                }
-            })
-
-       this.subscriptions.push(...[s0, s1, s2, s3])
+        this.subscriptions.push(...[s0, s1])
     }
 
-    get formValues(): ExcelUpdate {
-        const excelPrice: ExcelPrice = this.mapItemGroup.get('productCtr').value
-        return {
-            name: this.mapItemGroup.get('nameCtr').value,
-            price: Number(excelPrice.price),
-            product_id: excelPrice.product_id,
-        }
-    }
-
-    updateLeafletMarker(n: ExcelModel): void{
-        this.activeMarker.options.title = n.name;
-        (this.activeMarker.options as any).data = n;
+    updateLeafletMarker(n: ExcelModel): void {
+        this.activeMarker.options.title = n.name
+        ;(this.activeMarker.options as any).data = n
         this.activeMarker.bindPopup(makeMarkerPopUp(n))
         this.activeMarker = Object.assign(this.activeMarker)
-    }
-
-    /**
-     *  on data send reset form values
-     */
-    resetForm(): void {
-
-           this.mapItemGroup.markAsPristine()
-           this.mapItemGroup.markAsUntouched()
-           this.mapItemGroup.get('updateCtr').patchValue(0, { onlySelf: true })
-           this.mapItemGroup.get('nameCtr').disable({ onlySelf: true })
-           this.mapItemGroup.get('priceCtr').disable({ onlySelf: true })
-           this.mapItemGroup.get('productCtr').disable({ onlySelf: true })
-    }
-
-    /** we are an admit, ctr is enabled and value is th>0 */
-    // canEditField(fieldName: EditableField): boolean {
-    //     if (fieldName === 'name') {
-    //         return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('nameCtr').enabled
-    //     }
-
-    //     if (fieldName === 'price') {
-    //         return this.permissions === 'ADMINISTRATOR' && this.mapItemGroup.get('priceCtr').enabled
-    //     } else return false
-    // }
-
-    /** check if current ctr was updated */
-    fieldUpdated(fieldName: EditableField): boolean {
-        if (fieldName === 'name') {
-            return this.canEdit && this.mapItemGroup.get('nameCtr').touched
-        }
-        if (fieldName === 'price') {
-            return this.canEdit && this.mapItemGroup.get('priceCtr').touched
-        } else return false
     }
 
     validPrice(price: number) {
         return !isNaN(Number((price || '').toString()))
     }
 
-    get canEdit(): boolean {
-        return this.mapItemGroup.get('editCtr').enabled && this.permissions === 'ADMINISTRATOR'
-    }
+    setProductsWithPrice(item: ExcelModel): ProductWithPrice[] {
+        const matchedWithPrice = (prod_id: string): ExcelPrice => item.prices.filter((n) => n.product_id === prod_id)[0]
 
-    get canUpdate(): boolean {
-        return this.canEdit && this.mapItemGroup.get('updateCtr').enabled && this.mapItemGroup.touched
-    }
-
-    get productsWithPrice(): ProductWithPrice[] {
-        const matchedWithPrice = (prod_id: string): ExcelPrice => this.item.prices.filter((n) => n.product_id === prod_id)[0]
-
-        return this.item.products.reduce((n, prod, i) => {
+        return item.products.reduce((n, prod, i) => {
             const priceItem = matchedWithPrice(prod.product_id)
             if (priceItem) n.push({ ...prod, priceItem })
             return n
         }, []) as any
     }
 
-    public onEdit() {
-        this.mapItemGroup.get('editCtr').patchValue(1)
-    }
-
-    public onUpdate() {
-        this.mapItemGroup.get('updateCtr').patchValue(1)
-    }
-
-
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.selectedMapItem?.currentValue) {
-
-            this.activeMarker = this.selectedMapItem.marker
-            const selectedMapItemStation = copy(this.selectedMapItem.station)
-            this.item = selectedMapItemStation
-
-            // this.mapItemGroup.get('nameCtr').enable({onlySelf: true})
-            this.mapItemGroup.get('nameCtr').setValue(this.item.name)
+    /** aka on update */
+    public submitForm(f: FormGroup) {
+        let formValues: StationFormValues = f.value
+        // ExcelUpdate
+        if (f.status === 'VALID') {
+            this.excelUpdateHttpService.sub$.next({ id: this.item.id, data: toExcelUpdate(formValues) })
+            this.stationForm.reset()
+            log('errors', this.stationForm.fromGroup.errors)
+            log('is valid', this.stationForm.fromGroup.get('formPrices').valid)
+        } else {
+            onerror('form invalid',f)
         }
     }
 
+    trackByID(index: number, item: any) {
+        return index
+    }
+
+    initializeChanges(item:ExcelModel):void{
+        this.item = item
+        // initialize our form
+        this.stationForm = new StationForm(this.item)
+        this.productsWithPrice = this.setProductsWithPrice(this.item)
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.selectedMapItem?.currentValue) {
+            this.activeMarker = this.selectedMapItem.marker
+            const selectedMapItemStation = copy(this.selectedMapItem.station)
+            this.initializeChanges(selectedMapItemStation)
+        }
+    }
+
+
+
     ngOnInit(): void {
-        // enable permissions
-        if (this.permissions === 'ADMINISTRATOR') {
-            this.mapItemGroup.get('editCtr').enable({ onlySelf: true })
+        // disable permissions
+        if (this.permissions !== 'ADMINISTRATOR') {
+            this.stationForm.fromGroup.disable({ onlySelf: true })
         }
 
         // NOTE optional!
         // this will bind immidate power to each chip in search list
-        if (this.activeMarker){
-            this.states.setUpdatedStation(this.item, this.activeMarker)
-        }
-
-
+        // if (this.activeMarker){
+        //     this.states.setUpdatedStation(this.item, this.activeMarker)
+        // }
     }
 
     ngOnDestroy(): void {

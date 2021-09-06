@@ -11,8 +11,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
   declarations: [LeafletComponent, StationMapItemComponent],
   imports: [
     SharedComponentsModule,
-    ReactiveFormsModule,
     FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
    LeafletModule,
