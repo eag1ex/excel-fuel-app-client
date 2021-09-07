@@ -22,13 +22,19 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 // import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+
 const ANGULAR_MATERIAL_MODULES = [
+    MatCardModule,
+
+    MatButtonModule,
+    MatSelectModule,
        MatToolbarModule,
 //     MatTooltipModule,
 //     MatSlideToggleModule,
         MatAutocompleteModule,
 //     MatButtonToggleModule,
-//     MatInputModule,
+     MatInputModule,
     MatFormFieldModule,
 //     MatSelectModule,
 //     MatIconModule,

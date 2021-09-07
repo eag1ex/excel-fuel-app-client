@@ -28,6 +28,8 @@ export class AuthComponent implements  OnDestroy {
           this.reRoute()
         }, error => {
           onerror('auth/error ', error)
+          // clear old session
+          this.authService.setUser(undefined)
           this.router.navigate(['app/error'], {queryParams: {message: 'Authentication error'}})
         })
         this.subscriptions.push(s0)

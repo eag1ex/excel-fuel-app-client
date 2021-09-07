@@ -23,7 +23,7 @@ export class ExcelStationsServiceResolver implements Resolve<ExcelStationsResolv
                 map(n => ({data: n.response, ...(currentRoute('locations') || {})}))
             ).pipe(catchError((err) => {
                 onerror(err)
-                this.router.navigate(['app/error'])
+                this.router.navigate(['app/error'], {queryParams: {message: 'Authentication error, or session cleared. Try loading app/ again'}})
                 return throwError(err)
             })) as Observable<ExcelStationsResolver>
 

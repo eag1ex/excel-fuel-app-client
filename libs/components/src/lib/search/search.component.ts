@@ -88,12 +88,12 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    /** on live update check prev selected items and remove if any */
-    itemsRemove(n:ExcelModel[]):void{
-         let match = (item:ExcelModel)=>n.filter(x=>x.id===item.id).length
+    /** on live update remove old non existing items*/
+    itemsRemoveSelected(n: ExcelModel[]): void{
+         const match = (item: ExcelModel) => n.filter(x => x.id === item.id).length
 
-         this.items.forEach((item,inx)=>{
-             if(!match(item)) this.items.splice(inx,1)   
+         this.items.forEach((item, inx) => {
+             if (!match(item)) this.items.splice(inx, 1)
          })
     }
 
@@ -102,9 +102,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (this.searchStations$){
            const s0 = this.searchStations$.subscribe(n => {
                 if (n){
-                    
-                    this.searchStations = n   
-                    this.itemsRemove(n)    
+
+                    this.searchStations = n
+                    this.itemsRemoveSelected(n)
                     this.itemsUpdate(n)
 
                     // also send update to the map

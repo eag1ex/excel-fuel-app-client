@@ -1,32 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService, ExcelStationsServiceResolver } from '@excel/services';
+import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { AuthGuardService, ExcelStationsServiceResolver } from '@excel/services'
 const routes: Routes = [
-
-  {
-    path: 'error',
-    loadChildren: () => import('./error/error.module').then((mod) => mod.ErrorModule),
-    runGuardsAndResolvers: 'paramsChange',
-  },
-  {
-      path: 'locations',
-      loadChildren: () => import('./locations/locations.module').then((mod) => mod.LocationsModule),
-      runGuardsAndResolvers: 'paramsChange',
-      canLoad: [AuthGuardService],
-      resolve: {
-        list: ExcelStationsServiceResolver,
+    {
+        path: 'error',
+        loadChildren: () => import('./error/error.module').then((mod) => mod.ErrorModule),
+        runGuardsAndResolvers: 'paramsChange',
     },
-  },
-  { path: '**', redirectTo: 'locations' },
-];
+    {
+        path: 'locations',
+        loadChildren: () => import('./locations/locations.module').then((mod) => mod.LocationsModule),
+        runGuardsAndResolvers: 'paramsChange',
+        canLoad: [AuthGuardService],
+        resolve: {
+            list: ExcelStationsServiceResolver,
+        },
+    },
+    { path: '**', redirectTo: 'locations' },
+]
 
 @NgModule({
-  declarations: [
-
-  ],
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule],
-
+    declarations: [],
+    imports: [CommonModule, RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class PageRoutesModule { }
+export class PageRoutesModule {}

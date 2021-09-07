@@ -1,0 +1,32 @@
+@import 'mixins';
+
+:host {
+    display: block;
+    width: 100%;
+    mat-card {
+        @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 8px, /* $size:*/ 3px, /*$color:*/ rgba(0, 0, 0, 0.2));
+    }
+    .update-icon {
+        opacity: 0.6;
+    }
+    .name-item {
+        font-size: 0.75em;
+    }
+
+    .input-update {
+        &.name-item {
+            // font-size: 0.75em;
+        }
+    }
+    .products-item {
+    }
+    .products-item-update-price {
+        .price-item-update {
+            input {
+                max-width: 60px;
+                top: -2px;
+                position: relative;
+            }
+        }
+    }
+}

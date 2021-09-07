@@ -23,7 +23,7 @@ if (environment.production === true) {
 
 // NOTE remove session, will re/auth
 // credentials are at @excel/data {credentials}
-localStorage.removeItem('excel-user')
+// localStorage.removeItem('excel-user')
 
 @NgModule({
   declarations: [

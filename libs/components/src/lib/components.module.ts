@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { SearchComponent } from './search/search.component'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedComponentsModule } from './shared.components.module';
+import { StationMapCreateComponent } from './station-map-create/station-map-create.component';
 
 @NgModule({
   declarations: [
@@ -14,9 +15,10 @@ import { SharedComponentsModule } from './shared.components.module';
     NavBarComponent,
     FooterComponent,
     SearchComponent,
-
+    StationMapCreateComponent
   ],
   imports: [
+
     SharedComponentsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -25,7 +27,8 @@ import { SharedComponentsModule } from './shared.components.module';
   ],
   exports: [
     LayoutComponent,
-    SearchComponent
+    SearchComponent,
+    StationMapCreateComponent
   ]
 })
 export class ComponentsModule { }

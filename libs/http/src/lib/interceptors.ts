@@ -44,12 +44,19 @@ export class PLhttpInterceptor implements HttpInterceptor {
         )
     }
 
-    private errorHandler(method: string, error: HttpErrorResponse) {
-        const { status } = error
+    private errorHandler(method: string, err: HttpErrorResponse) {
+
+
+        const { status, error } = err
+
+        // clear old token on this error
+        if (error?.code === '000') localStorage.removeItem('excel-user')
+
         if (status === 401 || status === 403 || (status === 500 && method === 'GET')) {
-            this.httpManager.addErrors(error)
+            this.httpManager.addErrors(err)
         }
-        return throwError(error)
+
+        return throwError(err)
     }
 }
 

@@ -1,10 +1,17 @@
-import { ExcelModel } from './excel.interface';
+import { ExcelModel, ExcelProduct } from './excel.interface';
 
 
 export interface ExcelStationsResp{
     response: ExcelModel[];
     code?: number
 }
+
+export interface ExcelProductsResp{
+    response: ExcelProduct[];
+    code?: number
+}
+
+
 
 export interface ExcelItemResp{
     response: ExcelModel;

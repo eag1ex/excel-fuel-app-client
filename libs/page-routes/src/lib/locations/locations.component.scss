@@ -1,0 +1,12 @@
+:host {
+    .leaflet-container {
+        position: relative;
+        lib-station-map-create {
+            top: 0;
+            left: 0;
+            z-index: 1111;
+            max-width: 320px;
+            position: absolute;
+        }
+    }
+}

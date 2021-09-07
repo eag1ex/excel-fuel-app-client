@@ -36,9 +36,9 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
     activeMarker: Marker
     permissions: UserPermType = 'BASIC'
 
-    constructor(private states: ExcelStates, private authService: AuthPermissionsService, 
-        private excelDeleteHttpService:ExcelDeleteHttpService,
-        private excelUpdateHttpService: ExcelUpdateHttpService) {
+    constructor(private states: ExcelStates, private authService: AuthPermissionsService,
+                private excelDeleteHttpService: ExcelDeleteHttpService,
+                private excelUpdateHttpService: ExcelUpdateHttpService) {
         this.initSubs()
     }
 
@@ -50,22 +50,22 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
         const s0 = this.excelUpdateHttpService.update$.subscribe((n) => {
 
             if (n) {
-               
+
                 this.initializeChanges(n)
                 this.updateLeafletMarker(n)
                 this.states.setUpdatedStation(n, this.activeMarker)
-                log('station updated',n)
+                log('station updated', n)
             }
         })
 
         // http delete request
-        const s1 = this.excelDeleteHttpService.delete$.subscribe(n=>{
-  
-            this.states.setUpdatedStation({delete_id:this.item.id} as any, this.activeMarker)
+        const s1 = this.excelDeleteHttpService.delete$.subscribe(n => {
+
+            this.states.setUpdatedStation({delete_id: this.item.id} as any, this.activeMarker)
             // remove marker
             this.activeMarker.closePopup()
             this.activeMarker.unbindPopup()
-            log('station deleted',n)
+            log('station deleted', n)
         })
 
         // set user permissions
@@ -78,12 +78,12 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
             }
         })
 
-        this.subscriptions.push(...[s0, s1,s2])
+        this.subscriptions.push(...[s0, s1, s2])
     }
 
     updateLeafletMarker(n: ExcelModel): void {
         this.activeMarker.options.title = n.name
-        ;(this.activeMarker.options as any).data = n
+        ; (this.activeMarker.options as any).data = n
         this.activeMarker.bindPopup(makeMarkerPopUp(n))
         this.activeMarker = Object.assign(this.activeMarker)
     }
@@ -109,25 +109,22 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
 
     /** aka on update */
     public submitForm(f: FormGroup) {
-        let formValues: StationFormValues = f.value
+        const formValues: StationFormValues = f.value
         // ExcelUpdate
         if (f.status === 'VALID') {
-            let update = { id: this.item.id, data: toExcelUpdate(formValues) }
-            log('update with',update)
+            const update = { id: this.item.id, data: toExcelUpdate(formValues) }
+            log('update with', update)
             this.excelUpdateHttpService.sub$.next(update)
             this.stationForm.reset()
             log('errors', this.stationForm.fromGroup.errors)
             log('is valid', this.stationForm.fromGroup.get('formPrices').valid)
         } else {
-            onerror('form invalid',f)
+            onerror('form invalid', f)
         }
     }
 
-    trackByID(index: number, item: any) {
-        return index
-    }
 
-    initializeChanges(item:ExcelModel):void{
+    initializeChanges(item: ExcelModel): void{
         this.item = item
         // initialize our form
         this.stationForm = new StationForm(this.item)
@@ -147,14 +144,8 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void {
         // disable permissions
         if (this.permissions !== 'ADMINISTRATOR') {
-            this.stationForm.fromGroup.disable({ onlySelf: true })
+           if (this.stationForm) this.stationForm.fromGroup.disable({ onlySelf: true })
         }
-
-        // NOTE optional!
-        // this will bind immidate power to each chip in search list
-        // if (this.activeMarker){
-        //     this.states.setUpdatedStation(this.item, this.activeMarker)
-        // }
     }
 
     ngOnDestroy(): void {
