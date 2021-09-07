@@ -2,6 +2,7 @@
  * Public API Surface of http
  */
 
+export * from './lib/excel.auth.service';
 export * from './lib/excel.stations.service';
 export * from './lib/excel.products.service';
 export * from './lib/excel.update.service';

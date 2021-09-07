@@ -1,1 +1,17 @@
-<p>error works!</p>
+<section>
+    <div class="row">
+        <div class="col-auto py-3">
+            <h1 class="light-weigth mb-0">Error</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 alert alert-danger">
+            <ng-container *ngIf="error$ | async as error">
+                <p class="m-0">{{ error }}</p>
+            </ng-container>
+            <ng-container *ngIf="!(error$ | async)">
+                <p class="m-o">Ups... Contact your admin</p>
+            </ng-container>
+        </div>
+    </div>
+</section>

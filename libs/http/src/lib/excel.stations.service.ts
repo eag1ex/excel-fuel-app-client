@@ -3,7 +3,7 @@
  */
 import { HttpClient } from '@angular/common/http'
 import { log } from 'x-utils-es'
-import { Observable, Subject } from 'rxjs'
+import { Observable } from 'rxjs'
 import { timeout, retry } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
 import { ENV, ExcelStationsResp } from '@excel/interfaces'
@@ -13,7 +13,6 @@ import { ENV, ExcelStationsResp } from '@excel/interfaces'
 })
 export class ExcelStationsHttpService {
     private apiBaseUrl: string
-    sub$: Subject<any> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
         this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
     }
@@ -31,21 +30,6 @@ export class ExcelStationsHttpService {
             retry(1)
         )
     }
-
-    // get stations$(): Observable<ExcelModel[]> {
-    //   return this.sub$.pipe(
-    //    // filter(v => !!v),
-    //     debounceTime(300),
-    //     switchMap(m => {
-    //       return this.stations(m);
-    //     }),
-    //     catchError(err => {
-    //       onerror(err);
-    //       // re/sub on error
-    //       return this.list$;
-    //     })
-    //   );
-    // }
 }
 
 

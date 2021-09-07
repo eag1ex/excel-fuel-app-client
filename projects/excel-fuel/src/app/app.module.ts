@@ -12,6 +12,7 @@ import { PLbackendProvider } from '@excel/http';
 import { ComponentsModule } from '@excel/components';
 import { MainComponent } from './main/main.component';
 import { AuthComponent } from './auth/auth.component';
+
 if (environment.production === true) {
     debug(`-- Using Angular 11.x --`);
     debug(`-- CONSOLE LOGS DISABLES --`);
@@ -19,6 +20,10 @@ if (environment.production === true) {
     console.log = function() {};
     disableLogging();
 }
+
+// NOTE remove session, will re/auth
+// credentials are at @excel/data {credentials}
+localStorage.removeItem('excel-user')
 
 @NgModule({
   declarations: [

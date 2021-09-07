@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs'
 import { AuthPermissionsService } from './auth.permissions.service'
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanLoad, Route, Router } from '@angular/router'
+import { CanLoad, Route, Router } from '@angular/router'
 import { map, tap } from 'rxjs/operators'
 import { log } from 'x-utils-es'
 
@@ -21,6 +21,8 @@ export class AuthGuardService implements CanLoad {
             tap(n => {
                 if (!n) {
                     this.authService.toLocation = toLocation as any
+                    // NO TOKEN AVAILABLE, THEN...
+                    // navigate to auth route, make (POST) /api/auth request with hardcoded credentials
                     this.router.navigate(['auth'])
                 }
             })

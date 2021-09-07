@@ -14,7 +14,6 @@ interface IState{
     user: ExcelUser
 }
 
-
 const initialState = {
     user: undefined
 }
@@ -38,14 +37,14 @@ export class AuthPermissionsService extends RxStore<IState>  {
      */
     setUser(user: ExcelUser): void{
         this.user = user
-        localStorage.setItem('pl-user', JSON.stringify(user))
+        localStorage.setItem('excel-user', JSON.stringify(user))
         this.setState({ user: copy(user) })
     }
 
     /** return user from start or from localStore */
     get user$(): Observable<ExcelUser>{
         return this.select((state) => {
-            const user: ExcelUser =  JSON.parse(localStorage.getItem('pl-user'))
+            const user: ExcelUser =  JSON.parse(localStorage.getItem('excel-user'))
             if (isFalsy(user)) return state.user
             else return user
         })

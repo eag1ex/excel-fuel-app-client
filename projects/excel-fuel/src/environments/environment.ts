@@ -6,7 +6,7 @@ export const environment: ENV = {
   production: false,
   serviceWorker: false,
   apiBaseUrl: '/api',
-  user: JSON.parse(localStorage.getItem('pl-user'))
+  user: JSON.parse(localStorage.getItem('excel-user'))
 };
 
 

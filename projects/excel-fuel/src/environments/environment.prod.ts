@@ -3,5 +3,5 @@ export const environment = {
   serviceWorker: true,
   /** REVIEW Update our api in production  */
   apiBaseUrl: '/api',
-  user: JSON.parse(localStorage.getItem('pl-user'))
+  user: JSON.parse(localStorage.getItem('excel-user'))
 };

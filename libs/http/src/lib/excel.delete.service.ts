@@ -43,6 +43,6 @@ export class ExcelDeleteHttpService {
                     onerror(err)
                     // do not exit from stream
                     return this.delete$
-                })              )
+                }))
     }
 }

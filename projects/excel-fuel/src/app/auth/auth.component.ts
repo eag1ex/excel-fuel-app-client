@@ -1,34 +1,57 @@
 /**
- * @description We use this component to set our PLUser token and update AuthPermissionsService
+ * @description We use this component to set our ExcelUser token and update AuthPermissionsService
  * we are only redirected to this component if there is no User/token available
  **/
 
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { ActivatedRoute,  Router } from '@angular/router';
+import { credentials } from '@excel/data';
+import { ExcelAuthHttpService } from '@excel/http';
 import { ExcelUser } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
-import { log } from 'x-utils-es'
+import { of, Observable } from 'rxjs';
+import { map, switchMap, first } from 'rxjs/operators';
+import { log, onerror, unsubscribe } from 'x-utils-es'
 
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html',
     styleUrls: ['./auth.component.scss'],
 })
-export class AuthComponent implements OnInit {
-    constructor(private router: Router, private route: ActivatedRoute, private authService: AuthPermissionsService) {
-        log('userSnapShotdata?', this.userSnapShotdata)
-        this.reRoute()
+export class AuthComponent implements  OnDestroy {
+  subscriptions = []
+    constructor(
+      private excelAuthHttpService: ExcelAuthHttpService,
+      private router: Router, private route: ActivatedRoute, private authService: AuthPermissionsService) {
+
+        const s0 = this.auth$.subscribe(n => {
+          this.reRoute()
+        }, error => {
+          onerror('auth/error ', error)
+          this.router.navigate(['app/error'], {queryParams: {message: 'Authentication error'}})
+        })
+        this.subscriptions.push(s0)
     }
 
-    /** set user and reroute */
+    get auth$(){
+     return this.authService.user$.pipe(switchMap(n => {
+       log('got user from session', n)
+       if (!n){
+
+          // make auth call and update response
+          const http = (): Observable<ExcelUser> => this.excelAuthHttpService.auth(credentials).pipe(map(x => ({username: credentials.username, token: x?.response?.token, type: 'ADMINISTRATOR'})))
+
+          return http().pipe(map(user => {
+            // set new user
+            log('setting new user: ', user)
+            this.authService.setUser(user)
+            return n
+          }))
+        } else return of(n)
+    }), first())
+    }
+
     reRoute(): void{
-      const user: ExcelUser = {
-        username: 'johndoe',
-        // we will change that to match with server token
-        token: '3455465656fgffgh',
-        type: 'ADMINISTRATOR'
-      }
-      this.authService.setUser(user)
 
       // value gets set on the url being asked to load, so if asking from top route, then will follow routing step process instead
       // go to designated location
@@ -39,13 +62,9 @@ export class AuthComponent implements OnInit {
       } else{
         this.router.navigate(['app/locations'])
       }
-
-
     }
 
-    get userSnapShotdata(): { user: ExcelUser } {
-        return this.route.snapshot.data as any
+    ngOnDestroy(): void{
+      unsubscribe(this.subscriptions, 'AuthComponent')
     }
-
-    ngOnInit(): void {}
 }

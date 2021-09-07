@@ -41,3 +41,8 @@ export interface ExcelUpdate{
     name: string;
     price: number;
 }
+
+export interface AuthCreds{
+    username: string;
+    password?: string;
+}

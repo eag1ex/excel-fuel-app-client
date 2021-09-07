@@ -14,3 +14,9 @@ export interface ExcelDeleteResp{
     response: Array<string>;
     code?: number
 }
+
+export interface AuthResp{
+    /**  Bearer {token} */
+    response: {token: string};
+    code?: number
+}

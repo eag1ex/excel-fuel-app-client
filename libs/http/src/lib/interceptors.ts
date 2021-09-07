@@ -4,6 +4,7 @@
 
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { ExcelUser } from '@excel/interfaces'
 import { HttpManagerService } from '@excel/utils'
 
 import { Observable, of, throwError } from 'rxjs'
@@ -15,28 +16,17 @@ export class PLhttpInterceptor implements HttpInterceptor {
     constructor(private httpManager: HttpManagerService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+
+        const user: ExcelUser = JSON.parse(localStorage.getItem('excel-user')) || {}
         const headers = {
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Origin': '*',
+            ...(request.method === 'POST' ? {['Content-Type']: 'application/json;charset=utf-8'} : {}),
+            //  NOTE  check for token on all routes except for /auth
+            ...(user?.token && !request.url.includes('/auth') ? { Authorization: `Bearer ${user?.token}` } : {})
         }
 
-        if (request.method === 'POST') {
-            headers['Content-Type'] = 'application/json;charset=utf-8'
-        }
-
-        // let token;
-        // if (this.FAKE_AUTH) {
-        // 	token = localStorage.getItem('token'); /// not auth integrated for the moment
-        // } else {
-        // 	token = null;
-        // }
-
-        // const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-        // if (request.method === 'POST') {
-        // 	headers['Content-Type'] = 'application/json;charset=utf-8';
-        // }
 
         request = request.clone({
             url: request.url,
@@ -44,18 +34,10 @@ export class PLhttpInterceptor implements HttpInterceptor {
         })
 
         log('intercept/url', request.url)
-        log('intercept/headers', request.headers)
+       // log('intercept/headers', request.headers)
 
         return next.handle(request).pipe(
-            switchMap((l) => {
-                // if (!token) {
-                // 	return throwError('NO_TOKEN, not provided');
-                // }
-                // if (request.responseType !== 'json' && request.url.indexOf('exportData') === -1) {
-                // 	return throwError('responseType not JSON');
-                // }
-                return of(l)
-            }),
+            switchMap((n) => of(n)),
             this.httpManager.operators(),
             timeout(10000),
             catchError((error) => this.errorHandler(request.method, error))
