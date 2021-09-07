@@ -1,5 +1,5 @@
 import { routeList } from '@excel/data'
-import { AvailRoutes, LatLng, ExcelModel, RouteItem, ExcelProductDetail, ExcelUpdate, StationFormValues } from '@excel/interfaces'
+import { AvailRoutes, LatLng, ExcelModel, RouteItem, ExcelProductDetail, ExcelUpdate, StationFormValues, ExcelProduct } from '@excel/interfaces'
 import { copy, log, matched } from 'x-utils-es'
 
 
@@ -15,6 +15,7 @@ export const formatTime = (time) => {
 }
 
 export const now = () => formatTime(new Date())
+
 
 
 /** make html marker content, popup */
@@ -42,9 +43,9 @@ export const makeMarkerPopUp = (metadata: ExcelModel): string => {
 
 /** construct update format for http request */
 export const toExcelUpdate = (formValues: StationFormValues): ExcelUpdate[] => {
-    if(!formValues) return undefined
-    let size = formValues?.formProduct_ids?.length ||0
-    let data: ExcelUpdate[] = []
+    if (!formValues) return undefined
+    const size = formValues?.formProduct_ids?.length || 0
+    const data: ExcelUpdate[] = []
     // NOTE we use the same name value in the loop, not ideal, ok for now
     for (let inx = 0; inx < Array(size).length; inx++) {
         data.push({ name: formValues.formName, price: formValues.formPrices[inx] as any, product_id: formValues.formProduct_ids[inx] })

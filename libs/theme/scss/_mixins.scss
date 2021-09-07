@@ -46,7 +46,15 @@
     }
 
     h1 {
-        font-size: 2.25em;
+        font-size: 2.25em !important;
+    }
+
+    h2 {
+        font-size: 1.75em !important;
+    }
+
+    h3 {
+        font-size: 1.25em !important;
     }
 
     .smaller {
@@ -66,6 +74,11 @@
     mat-form-field {
         .mat-form-field-infix {
             border-top: 0 !important;
+        }
+        &.reset-width {
+            .mat-form-field-infix {
+                width: inherit !important;
+            }
         }
     }
 }

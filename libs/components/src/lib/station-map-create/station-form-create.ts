@@ -1,7 +1,8 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
-import { ExcelModel, ExcelPrice, ExcelProduct } from '@excel/interfaces'
+import { ExcelProduct } from '@excel/interfaces'
+
 import { debounceTime } from 'rxjs/operators'
-import { log } from 'x-utils-es'
+import {  copy, log } from 'x-utils-es'
 
 
 // export interface ExcelModel {
@@ -26,12 +27,13 @@ import { log } from 'x-utils-es'
 export class StationForm {
     excelProducts: ExcelProduct[] = []
     fromGroup: FormGroup
+    formProductsSelected = null
     constructor(excelProducts: ExcelProduct[]) {
         this.excelProducts = excelProducts
 
         this.initForm()
+       // this.patchValues()
 
-      //  this.patchValues()
         this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
             log('fromGroup/changes', n)
         })
@@ -39,6 +41,7 @@ export class StationForm {
 
 
     initForm(){
+
         const priceValidators = [Validators.min(0), Validators.required]
         this.fromGroup = new FormGroup({
             formName: new FormControl('', [Validators.required]),
@@ -47,11 +50,10 @@ export class StationForm {
             formLatitude: new FormControl(0, [Validators.required]),
             formLongitude: new FormControl(0, [Validators.required]),
             // select price for available products
-            formSetPrices: new FormArray([new FormControl(undefined, priceValidators)]),
-            // select-list
-            formProducts: new FormControl([], [Validators.required]),
-            // Choose from available products
-         //   formProducts: new FormArray([new FormControl({})])
+            formSetPrices: new FormArray(this.excelProducts.map(n => new FormControl(0, priceValidators))),
+            formProducts: new FormControl([]),
+            formProductsUpdated: new FormArray(this.excelProducts.map(n => new FormControl(''))),
+
         })
     }
 
@@ -60,22 +62,34 @@ export class StationForm {
         this.fromGroup.markAsUntouched()
     }
 
-    // patchValues() {
-    //     this.fromGroup.patchValue({ formName: this.item.name })
-    //     this.fromGroup.patchValue({ formPrices: this.item.prices.map((n) => n.price) })
-    //     // same index
-    //     this.fromGroup.patchValue({ formProduct_ids: this.item.prices.map((n) => n.product_id) })
-    // }
+    onFormProductsSelected(selected: ExcelProduct[]): void{
+        let formProductsUpdated: ExcelProduct[] = copy(this.formProductsUpdated.value)
 
-    // priceItem(index: number): ExcelPrice {
-    //     return this.item?.prices[index]
-    // }
+        if (selected?.length !== formProductsUpdated.length){
 
-    /** these values are always the same and should be both send on change */
-    // updateFormProduct_ids(): void {
-    //     const product_ids = this.item?.prices.map((n) => n.product_id)
-    //     this.fromGroup.get('formProduct_ids').patchValue(product_ids)
-    // }
+            if (selected.length){
+                const notFound = (updated: ExcelProduct) => selected.filter(n => n.product_id !== updated.product_id).length
+
+                formProductsUpdated.forEach((updated, inx) => {
+                    if (notFound(updated)) formProductsUpdated.splice(inx, 1)
+                })
+
+            } else formProductsUpdated = []
+
+
+            this.fromGroup.patchValue({formProductsUpdated})
+        }
+
+    }
+
+    onFormProductsUpdated(selected: ExcelProduct, indexOrder: number): void{
+
+        // grab correct index
+        let formProductsUpdated: ExcelProduct[] = this.formProductsUpdated.value
+        if (formProductsUpdated?.length)   formProductsUpdated[indexOrder] = selected
+        else formProductsUpdated = [selected]
+        this.fromGroup.patchValue({formProductsUpdated})
+    }
 
     get formName(): FormControl {
         return this.fromGroup.get('formName') as FormControl
@@ -91,6 +105,15 @@ export class StationForm {
 
     get formProducts(): FormControl {
         return this.fromGroup.get('formProducts') as FormControl
+    }
+
+    get productOptions(): ExcelProduct[] {
+        return (this.fromGroup.get('formProducts').value || []) as ExcelProduct[]
+    }
+
+
+    get formProductsUpdated(): FormArray {
+        return this.fromGroup.get('formProductsUpdated') as FormArray
     }
 
 

@@ -17,7 +17,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatSuffix } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 // import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -26,7 +26,6 @@ import { MatCardModule } from '@angular/material/card';
 
 const ANGULAR_MATERIAL_MODULES = [
     MatCardModule,
-
     MatButtonModule,
     MatSelectModule,
        MatToolbarModule,

@@ -1,9 +1,6 @@
 <mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2">
+    <h3 class="mb-2 strong mx-1">Add Excel station</h3>
     <form [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
-        <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
-            <button type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>CREATE</button>
-            <!-- <button (click)="deleteStation()" type="button" [value]="1" color='warn' mat-stroked-button>DELETE</button> -->
-        </mat-card-actions>
         <!-- 
         <mat-card-title class="mb-1">
             <div class="d-flex align-items-center">
@@ -17,51 +14,83 @@
         </mat-card-content> -->
 
         <mat-card-content>
-            <mat-form-field class="mb-1">
+            <mat-form-field class="mb-1 w-100 mx-1">
                 <mat-label>Station name</mat-label>
                 <input formControlName="formName" matInput type="text" />
             </mat-form-field>
 
-            <mat-form-field class="mb-1">
+            <mat-form-field class="mb-1 w-100 mx-1">
                 <mat-label>Address</mat-label>
                 <input formControlName="formAddress" matInput type="text" />
             </mat-form-field>
 
-            <mat-form-field class="mb-1">
+            <mat-form-field class="mb-1 w-100 mx-1">
                 <mat-label>City</mat-label>
                 <input formControlName="formCity" matInput type="text" />
             </mat-form-field>
 
-            <div class="d-flex flex-row align-items-center mb-1">
-                <mat-form-field class="mb-1">
+            <div class="d-flex flex-row align-items-center mb-1 lat-long-fields w-100">
+                <mat-form-field class="mb-1 w-50 reset-width mx-1">
                     <mat-label>Latitude</mat-label>
                     <input formControlName="formLatitude" matInput type="text" />
                 </mat-form-field>
 
-                <mat-form-field class="mb-1">
+                <mat-form-field class="mb-1 w-50 reset-width">
                     <mat-label>Longitude</mat-label>
                     <input formControlName="formLongitude" matInput type="text" />
                 </mat-form-field>
             </div>
 
             <ng-container formArrayName="formSetPrices">
-                <mat-form-field class="mb-1" *ngFor="let priceSet of stationForm.formSetPrices.controls; index as inx; trackBy: inx">
-                    <mat-label>priceSet</mat-label>
+                <mat-form-field class="mb-1 w-100 mx-1" *ngFor="let priceSet of stationForm.formSetPrices.controls; index as inx; trackBy: inx">
+                    <mat-label>Set price:&nbsp;{{ stationForm.excelProducts[inx].product_id }}</mat-label>
+                    <span matPrefix>$&nbsp;</span>
                     <input [formControlName]="inx" matInput name="price_{{ inx }}" min="0" />
+                    <span matSuffix>&nbsp;CHF</span>
                 </mat-form-field>
             </ng-container>
 
-            <mat-form-field class="mb-1">
-                <mat-label>Choose products</mat-label>
+            <mat-form-field class="mb-1 w-100 mx-1">
+                <mat-label>Choose products (optional)</mat-label>
 
                 <mat-select formControlName="formProducts" class="" role="list" [multiple]="true">
-                    <mat-option ngDefaultControl value="">--</mat-option>
-                    <mat-option ngDefaultControl *ngFor="let prod of stationForm.formSetPrices.controls; index as inx; trackBy: inx">
-                        {{ prod.value }}
+                    <mat-option [value]="prod" ngDefaultControl *ngFor="let prod of stationForm.excelProducts; index as inx; trackBy: inx">
+                        {{ prod.product_id }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <div class="d-flex flex-column mb-1" *ngIf="stationForm.productOptions">
+                <ng-container *ngFor="let opt of stationForm.productOptions; index as inx; trackBy: inx">
+                    <mat-form-field class="reset-width w-100 mb-2 justify-content-between">
+                        <mat-label class="w-50 mx-1">Points: {{ opt.product_id }}&nbsp;</mat-label>
+
+                        <mat-select
+                            [multiple]="true"
+                            class="w-50"
+                            (selectionChange)="stationForm.onFormProductsUpdated({ points: $event.value, product_id: opt.product_id }, inx)"
+                            *ngIf="opt?.points?.length"
+                            class=""
+                            role="list"
+                        >
+                            <mat-option [value]="point" *ngFor="let point of opt.points; index as inx2"> id:{{ point.id }}&nbsp;|&nbsp;status:{{ point.status }} </mat-option>
+                        </mat-select>
+
+                        <ng-container formArrayName="formProductsUpdated">
+                            <input [value]="inx" [formControlName]="inx" type="hidden" />
+                        </ng-container>
+                    </mat-form-field>
+                </ng-container>
+            </div>
         </mat-card-content>
+
+        <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
+            <div class="d-flex justify-content-end">
+                <button class="align-self-end" type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>CREATE</button>
+            </div>
+
+            <!-- <button (click)="deleteStation()" type="button" [value]="1" color='warn' mat-stroked-button>DELETE</button> -->
+        </mat-card-actions>
         <!-- 
         <mat-card-content *ngIf="item?.prices?.length" class="mb-1">
             <div class="products-item-update-price mb-2">

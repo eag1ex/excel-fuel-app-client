@@ -8,5 +8,10 @@
             max-width: 320px;
             position: absolute;
         }
+
+        // adjust heigth on active create station component
+        &.station-map-create-active {
+            min-height: 670px;
+        }
     }
 }

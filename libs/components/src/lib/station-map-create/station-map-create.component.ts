@@ -42,6 +42,7 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         private excelUpdateHttpService: ExcelUpdateHttpService) {
 
             const excelProductsAsync = this.excelProductsHttpService.products().toPromise().then(n => n.response)
+            this.initSubs()
             this.initForm(excelProductsAsync)
 
     }
@@ -59,8 +60,14 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
             onerror(err)
             excelProducts = []
         }
+
         this.stationForm = new StationForm(excelProducts)
+
+        if (this.permissions !== 'ADMINISTRATOR') {
+            this.stationForm.fromGroup.disable({ onlySelf: true })
+        }
     }
+
 
     initSubs(): void {
 
@@ -93,8 +100,11 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
 
         // set user permissions
         const s2 = this.authService.user$.subscribe((n) => {
+
             if (n?.type) {
+
                 this.permissions = n.type
+                log('this.permissions', this.permissions)
             } else {
                 this.permissions = 'BASIC'
                 warn('setting basic permission due unhandled setting')
@@ -170,12 +180,9 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         // disable permissions
-        if (this.permissions !== 'ADMINISTRATOR') {
-            if (this.stationForm){
-                this.stationForm?.fromGroup.disable({ onlySelf: true })
-            }
 
-        }
+
+
 
         // NOTE optional!
         // this will bind immidate power to each chip in search list
