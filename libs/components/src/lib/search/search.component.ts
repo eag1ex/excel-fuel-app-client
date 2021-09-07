@@ -48,6 +48,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         return this.searchStations?.filter((x) => (this.items?.length ? this.items.filter((y) => x.id === y.id).length === 0 : true))
     }
 
+ 
     /** on item added clear last input value */
     public added(input: HTMLInputElement): void {
         input.value = ''

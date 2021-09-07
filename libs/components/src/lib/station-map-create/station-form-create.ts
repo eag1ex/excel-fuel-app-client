@@ -1,27 +1,7 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ExcelProduct } from '@excel/interfaces'
-
 import { debounceTime } from 'rxjs/operators'
-import {  copy, log } from 'x-utils-es'
-
-
-// export interface ExcelModel {
-//     /** server assigned */
-//     id?: string
-//     /** user can update */
-//     name: string
-//     address: string
-//     city: string
-//     latitude: number
-//     longitude: number;
-//     /** server assigned */
-//     updated_at?: Date | string;
-//     /** server assigned */
-//     created_at?: Date | string;
-//     /** user can update */
-//     prices: ExcelPrice[]
-//     products: ExcelProduct[]
-// }
+import {   log } from 'x-utils-es'
 
 /** form resembles ExcelModel structure */
 export class StationForm {
@@ -30,10 +10,8 @@ export class StationForm {
     formProductsSelected = null
     constructor(excelProducts: ExcelProduct[]) {
         this.excelProducts = excelProducts
-
         this.initForm()
-       // this.patchValues()
-
+        this.patchValues()
         this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
             log('fromGroup/changes', n)
         })
@@ -51,9 +29,9 @@ export class StationForm {
             formLongitude: new FormControl(0, [Validators.required]),
             // select price for available products
             formSetPrices: new FormArray(this.excelProducts.map(n => new FormControl(0, priceValidators))),
+            formPriceIDS: new FormArray(this.excelProducts.map(n => new FormControl('',  Validators.required))),
             formProducts: new FormControl([]),
             formProductsUpdated: new FormArray(this.excelProducts.map(n => new FormControl(''))),
-
         })
     }
 
@@ -62,28 +40,12 @@ export class StationForm {
         this.fromGroup.markAsUntouched()
     }
 
-    onFormProductsSelected(selected: ExcelProduct[]): void{
-        let formProductsUpdated: ExcelProduct[] = copy(this.formProductsUpdated.value)
-
-        if (selected?.length !== formProductsUpdated.length){
-
-            if (selected.length){
-                const notFound = (updated: ExcelProduct) => selected.filter(n => n.product_id !== updated.product_id).length
-
-                formProductsUpdated.forEach((updated, inx) => {
-                    if (notFound(updated)) formProductsUpdated.splice(inx, 1)
-                })
-
-            } else formProductsUpdated = []
-
-
-            this.fromGroup.patchValue({formProductsUpdated})
-        }
-
+    patchValues(): void{
+        // makes sure we pair price with product_id by selected index
+        this.fromGroup.patchValue({formPriceIDS: this.excelProducts.map(n => n.product_id)})
     }
 
     onFormProductsUpdated(selected: ExcelProduct, indexOrder: number): void{
-
         // grab correct index
         let formProductsUpdated: ExcelProduct[] = this.formProductsUpdated.value
         if (formProductsUpdated?.length)   formProductsUpdated[indexOrder] = selected
@@ -111,10 +73,13 @@ export class StationForm {
         return (this.fromGroup.get('formProducts').value || []) as ExcelProduct[]
     }
 
-
     get formProductsUpdated(): FormArray {
         return this.fromGroup.get('formProductsUpdated') as FormArray
     }
+    get formPriceIDS(): FormArray {
+        return this.fromGroup.get('formPriceIDS') as FormArray
+    }
+
 
 
 }

@@ -29,7 +29,7 @@ const ANGULAR_MATERIAL_MODULES = [
     MatButtonModule,
     MatSelectModule,
        MatToolbarModule,
-//     MatTooltipModule,
+   MatTooltipModule,
 //     MatSlideToggleModule,
         MatAutocompleteModule,
 //     MatButtonToggleModule,

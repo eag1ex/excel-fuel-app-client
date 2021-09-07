@@ -6,13 +6,13 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ExcelDeleteHttpService, ExcelProductsHttpService, ExcelUpdateHttpService } from '@excel/http'
-import { ExcelModel, ExcelPrice, ExcelProduct,  SelectedMapItem, StationFormValues, UserPermType } from '@excel/interfaces'
+import { CreateStationFormValues, ExcelModel, ExcelPrice, ExcelProduct, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
-import { makeMarkerPopUp, toExcelUpdate } from '@excel/utils'
 import { Marker } from 'leaflet'
-import { copy, log,  onerror,  unsubscribe, warn } from 'x-utils-es'
+import { log,  onerror,  unsubscribe, warn } from 'x-utils-es'
 import {StationForm} from './station-form-create'
+
 
 interface ProductWithPrice extends ExcelProduct {
     priceItem?: ExcelPrice
@@ -48,7 +48,7 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /** new id as timestamp */
-    @Input() addNewID?: string | Date
+    @Input() addNewID?: Date
 
 
     async initForm(excelProductsAsync: Promise<ExcelProduct[]>){
@@ -114,35 +114,13 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.push(...[ s2])
     }
 
-    // updateLeafletMarker(n: ExcelModel): void {
-    //     this.activeMarker.options.title = n.name
-    //     ; (this.activeMarker.options as any).data = n
-    //     this.activeMarker.bindPopup(makeMarkerPopUp(n))
-    //     this.activeMarker = Object.assign(this.activeMarker)
-    // }
 
     validPrice(price: number) {
         return !isNaN(Number((price || '').toString()))
     }
 
-    // setProductsWithPrice(item: ExcelModel): ProductWithPrice[] {
-    //     const matchedWithPrice = (prod_id: string): ExcelPrice => item.prices.filter((n) => n.product_id === prod_id)[0]
-
-    //     return item.products.reduce((n, prod, i) => {
-    //         const priceItem = matchedWithPrice(prod.product_id)
-    //         if (priceItem) n.push({ ...prod, priceItem })
-    //         return n
-    //     }, []) as any
-    // }
-
-    /** permanently delete station */
-    // public deleteStation(){
-    //     this.excelDeleteHttpService.sub$.next(this.item.id)
-    // }
-
-    /** aka on update */
     public submitForm(f: FormGroup) {
-        const formValues = f.value
+        const formValues: CreateStationFormValues = f.value
         // ExcelUpdate
         if (f.status === 'VALID') {
             // const update = { id: this.item.id, data: toExcelUpdate(formValues) }
@@ -180,8 +158,6 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         // disable permissions
-
-
 
 
         // NOTE optional!

@@ -1,5 +1,5 @@
 import { Marker } from 'leaflet';
-import { AuthCreds, ExcelModel, ExcelPrice, ExcelProductPoint } from './excel.interface';
+import { AuthCreds, ExcelModel, ExcelPrice, ExcelProduct, ExcelProductPoint } from './excel.interface';
 
 export type AvailRoutes = 'locations' | 'login'
 
@@ -29,6 +29,21 @@ export interface StationFormValues{
     formPrices: Array<string|number>;
     formProduct_ids: Array<string>
 }
+
+export interface CreateStationFormValues{
+    formName: string;
+    formCity: string;
+    formAddress: string;
+    formLatitude: number;
+    formLongitude: number;
+    /** from string to values */
+    formSetPrices: Array<string|number>
+    formPriceIDS: Array<string>
+    formProducts: ExcelProduct[]
+    /** these are the values we consider when updating products */
+    formProductsUpdated?: ExcelProduct[]
+}
+
 
 
 

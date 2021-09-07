@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocationsComponent } from './locations.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ComponentsModule } from '@excel/components';
+import { ComponentsModule, SharedComponentsModule } from '@excel/components';
 import { ExcelLeafletModule } from '@excel/plugins';
 
 const ROUTES: Routes = [{ path: '', component: LocationsComponent }];
@@ -12,6 +12,7 @@ const ROUTES: Routes = [{ path: '', component: LocationsComponent }];
   imports: [
     ExcelLeafletModule,
     ComponentsModule,
+    SharedComponentsModule,
     CommonModule,
     RouterModule.forChild(ROUTES)
   ]

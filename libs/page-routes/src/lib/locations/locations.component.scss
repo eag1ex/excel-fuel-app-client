@@ -1,4 +1,13 @@
 :host {
+    .search-container {
+        position: relative;
+        lib-icons {
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            z-index: 1;
+        }
+    }
     .leaflet-container {
         position: relative;
         lib-station-map-create {

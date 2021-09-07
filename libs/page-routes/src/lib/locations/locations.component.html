@@ -6,12 +6,16 @@
     </div>
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12">
-            <lib-search [searchStations$]="excelStations$"></lib-search>
+            <div class="d-flex justify-content-between search-container">
+                <lib-search class="w-100" [searchStations$]="excelStations$"></lib-search>
+
+                <lib-icons (click)="showCreateStation()" class="mt-3" icon="add_circle_blue" [size]="40"></lib-icons>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col clearfix leaflet-container">
-            <lib-station-map-create></lib-station-map-create>
+        <div class="col clearfix leaflet-container station-map-create-active">
+            <lib-station-map-create *ngIf="createStataion.createOpen" [addNewID]="createStataion.addNewID"></lib-station-map-create>
             <lib-leaflet></lib-leaflet>
         </div>
     </div>

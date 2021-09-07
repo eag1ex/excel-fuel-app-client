@@ -52,7 +52,7 @@
         &.local_gas_station_yellow,
         &.update_yellow,
         &.account_circle,
-        &.menu {
+        &.add_circle_blue &.menu {
             @include icons-preset();
         }
     }

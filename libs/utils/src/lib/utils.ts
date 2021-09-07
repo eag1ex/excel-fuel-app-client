@@ -1,6 +1,6 @@
 import { routeList } from '@excel/data'
-import { AvailRoutes, LatLng, ExcelModel, RouteItem, ExcelProductDetail, ExcelUpdate, StationFormValues, ExcelProduct } from '@excel/interfaces'
-import { copy, log, matched } from 'x-utils-es'
+import { AvailRoutes, LatLng, ExcelModel, RouteItem, ExcelUpdate, StationFormValues, CreateStationFormValues, ExcelPrice } from '@excel/interfaces'
+import { copy, matched, isFalsy, truthFul, objectSize } from 'x-utils-es';
 
 
 export const repeat = (str, times) => new Array(times + 1).join(str)
@@ -52,6 +52,28 @@ export const toExcelUpdate = (formValues: StationFormValues): ExcelUpdate[] => {
     }
     return data
 }
+
+export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel => {
+    if (isFalsy(formValues)) return undefined
+    if (!objectSize(truthFul(formValues))) return undefined
+
+    const {formAddress, formCity, formName, formSetPrices} = formValues
+    if (!formAddress || !formCity || !formName) return undefined
+
+    // const setExcelPrices = (): ExcelPrice[] => {
+
+
+    // const newModel: ExcelModel = {
+    //     name: formName,
+    //     address :formAddress,
+    //     c ity:formCity,
+    //      prices:formSetPrice s. map(n=>)
+    // }
+
+
+}
+
+//
 
 /** make compatible propt */
 export const latLong = ({latitude, longitude}): LatLng => {
