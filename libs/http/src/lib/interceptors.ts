@@ -4,9 +4,7 @@
 
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ExcelUser } from '@excel/interfaces'
 import { HttpManagerService, localStorageGetUser } from '@excel/utils'
-
 import { Observable, of, throwError } from 'rxjs'
 import { catchError, switchMap, timeout } from 'rxjs/operators'
 import { log } from 'x-utils-es'
@@ -16,18 +14,15 @@ export class PLhttpInterceptor implements HttpInterceptor {
     constructor(private httpManager: HttpManagerService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-
-        
         const user = localStorageGetUser('excel-user')
         const headers = {
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Origin': '*',
-            ...(request.method === 'POST' ? {['Content-Type']: 'application/json;charset=utf-8'} : {}),
+            ...(request.method === 'POST' ? { ['Content-Type']: 'application/json;charset=utf-8' } : {}),
             //  NOTE  check for token on all routes except for /auth
-            ...(user?.token && !request.url.includes('/auth') ? { Authorization: `Bearer ${user?.token}` } : {})
+            ...(user?.token && !request.url.includes('/auth') ? { Authorization: `Bearer ${user?.token}` } : {}),
         }
-
 
         request = request.clone({
             url: request.url,
@@ -35,7 +30,6 @@ export class PLhttpInterceptor implements HttpInterceptor {
         })
 
         log('intercept/url', request.url)
-       // log('intercept/headers', request.headers)
 
         return next.handle(request).pipe(
             switchMap((n) => of(n)),
@@ -46,10 +40,7 @@ export class PLhttpInterceptor implements HttpInterceptor {
     }
 
     private errorHandler(method: string, err: HttpErrorResponse) {
-
-
         const { status, error } = err
-
         // clear old token on this error
         if (error?.code === '000') localStorage.removeItem('excel-user')
 
