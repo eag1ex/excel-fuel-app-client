@@ -4,10 +4,10 @@
  */
 import { HttpClient } from '@angular/common/http'
 import { isFalsy, log } from 'x-utils-es'
-import { Observable, Subject, throwError } from 'rxjs'
+import { Observable, throwError } from 'rxjs'
 import { timeout, retry, catchError } from 'rxjs/operators';
 import { Inject, Injectable } from '@angular/core'
-import { AuthCreds, AuthResp, ENV,  ExcelUpdate } from '@excel/interfaces'
+import { AuthCreds, AuthResp, ENV } from '@excel/interfaces'
 
 @Injectable({
     providedIn: 'root',

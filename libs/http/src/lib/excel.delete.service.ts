@@ -2,11 +2,11 @@
  * @description excel/delete api calling our excel/server
  */
 import { HttpClient } from '@angular/common/http'
-import {  log, onerror } from 'x-utils-es'
+import {  isFunction, log, onerror } from 'x-utils-es'
 import { Observable, Subject } from 'rxjs'
 import { switchMap, timeout, debounceTime, map, catchError, retry } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
-import { ENV, ExcelDeleteResp} from '@excel/interfaces'
+import { CreateErrorCallback, ENV, ExcelDeleteResp} from '@excel/interfaces'
 
 @Injectable({
     providedIn: 'root',
@@ -30,7 +30,7 @@ export class ExcelDeleteHttpService {
             retry(1))
     }
 
-    get delete$(): Observable<Array<string>> {
+    delete$(error?:CreateErrorCallback): Observable<Array<string>> {
         return this.sub$
             .pipe(
                 debounceTime(300),
@@ -40,6 +40,7 @@ export class ExcelDeleteHttpService {
             )
             .pipe(
                 catchError((err) => {
+                    if(isFunction(error)) error(err)
                     onerror(err)
                     // do not exit from stream
                     return this.delete$

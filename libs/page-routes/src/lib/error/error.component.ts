@@ -14,9 +14,6 @@ export class ErrorComponent implements OnInit {
 
     get error$(): Observable<string> {
         return this.activatedRoute.queryParams
-        .pipe(tap(n => {
-            log('error route', n)
-        }))
         .pipe(map((n: { message?: string }) => n?.message)).pipe(filter((n) => !!n))
     }
     ngOnInit(): void {}

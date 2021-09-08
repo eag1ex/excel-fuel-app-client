@@ -12,6 +12,15 @@
     align-self: center !important;
 }
 
+// for some reason missing from v5.1 ??
+@mixin bootstrap-missing() {
+    .alert-success {
+        color: #0f5132;
+        background-color: #d1e7dd;
+        border-color: #badbcc;
+    }
+}
+
 @mixin typography() {
     .lh-1 {
         line-height: 0.25em;
@@ -91,9 +100,9 @@
         border: none !important;
     }
 
-    input:disabled {
-        border-style: dotted !important;
-    }
+    // input:disabled {
+    //     border-style: dotted !important;
+    // }
 }
 
 @mixin cdk-overlay-container() {

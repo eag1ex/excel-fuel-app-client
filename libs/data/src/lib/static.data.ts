@@ -10,6 +10,9 @@ export const EUROPE_LAT_LNG: LatLng = {
     lng: 9.14055555556
 }
 
+/** excel price default */
+export const defaultCurrency = 'CHF'
+
 /**
  * For demo only, not secure!
  * our hardcoded credentials, reflect those on server

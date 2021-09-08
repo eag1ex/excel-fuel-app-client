@@ -1,101 +1,104 @@
-<mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2">
-    <h3 class="mb-2 strong mx-1">Add Excel station</h3>
-    <form [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
-        <!-- 
-        <mat-card-title class="mb-1">
-            <div class="d-flex align-items-center">
-                <input class="input-update name-item" formControlName="formName" matInput type="text" />
-                <lib-icons *ngIf="stationForm.formName.dirty" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
-            </div>
-        </mat-card-title>
-        <mat-card-subtitle class="mb-1">{{ item.city }}</mat-card-subtitle>
-        <mat-card-content>
-            <p class="text-muted address-item"><span class="strong">Address:&nbsp;</span>{{ item.address }},&nbsp;{{ item.city }}</p>
-        </mat-card-content> -->
+<div class="wrapper d-flex justify-content-center">
+    <mat-spinner *ngIf="stationFormStatus === 'SUBMITTED'" class="loading-spinner" [diameter]="50"></mat-spinner>
 
-        <mat-card-content>
-            <mat-form-field class="mb-1 w-100 mx-1">
-                <mat-label>Station name</mat-label>
-                <input formControlName="formName" matInput type="text" />
-            </mat-form-field>
-
-            <mat-form-field class="mb-1 w-100 mx-1">
-                <mat-label>Address</mat-label>
-                <input formControlName="formAddress" matInput type="text" />
-            </mat-form-field>
-
-            <mat-form-field class="mb-1 w-100 mx-1">
-                <mat-label>City</mat-label>
-                <input formControlName="formCity" matInput type="text" />
-            </mat-form-field>
-
-            <div class="d-flex flex-row align-items-center mb-1 lat-long-fields w-100">
-                <mat-form-field class="mb-1 w-50 reset-width mx-1">
-                    <mat-label>Latitude</mat-label>
-                    <input formControlName="formLatitude" matInput type="number" />
+    <mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2 form-status-{{ stationFormStatus }}">
+        <h3 class="mb-2 strong mx-1">Add Excel station</h3>
+        <form class="mt-4" [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
+            <mat-card-content>
+                <mat-form-field class="mb-1 w-100 mx-1">
+                    <mat-label>Station name</mat-label>
+                    <input placeholder="Migrol Tankstelle" formControlName="formName" matInput type="text" />
                 </mat-form-field>
 
-                <mat-form-field class="mb-1 w-50 reset-width">
-                    <mat-label>Longitude</mat-label>
-                    <input formControlName="formLongitude" matInput type="number" />
+                <mat-form-field class="mb-1 w-100 mx-1">
+                    <mat-label>Address</mat-label>
+                    <input placeholder="Scheffelstrasse 16" formControlName="formAddress" matInput type="text" />
                 </mat-form-field>
-            </div>
 
-            <ng-container formArrayName="formSetPrices">
-                <mat-form-field class="mb-1 w-100 mx-1" *ngFor="let priceSet of stationForm.formSetPrices.controls; index as inx; trackBy: inx">
-                    <mat-label>Set price:&nbsp;{{ stationForm.excelProducts[inx].product_id }}</mat-label>
-                    <span matPrefix>$&nbsp;</span>
-                    <input type="tel" [formControlName]="inx" matInput name="price_{{ inx }}" min="0" />
-                    <span matSuffix>&nbsp;CHF</span>
+                <mat-form-field class="mb-1 w-100 mx-1">
+                    <mat-label>City</mat-label>
+                    <input placeholder="Zürich" formControlName="formCity" matInput type="text" />
                 </mat-form-field>
-            </ng-container>
 
-            <ng-container formArrayName="formPriceIDS">
-                <ng-container *ngFor="let id of stationForm.formPriceIDS.controls; index as inx; trackBy: inx">
-                    <input [value]="id" [formControlName]="inx" type="hidden" />
-                </ng-container>
-            </ng-container>
+                <div class="d-flex flex-row align-items-center mb-1 lat-long-fields w-100">
+                    <mat-form-field class="mb-1 w-50 reset-width mx-1">
+                        <mat-label>Latitude</mat-label>
+                        <input placeholder="47.3943939" formControlName="formLatitude" matInput type="number" />
+                    </mat-form-field>
 
-            <mat-form-field class="mb-1 w-100 mx-1">
-                <mat-label>Choose products (optional)</mat-label>
+                    <mat-form-field class="mb-1 w-50 reset-width">
+                        <mat-label>Longitude</mat-label>
+                        <input placeholder="8.52981" formControlName="formLongitude" matInput type="number" />
+                    </mat-form-field>
+                </div>
 
-                <mat-select formControlName="formProducts" class="" role="list" [multiple]="true">
-                    <mat-option [value]="prod" ngDefaultControl *ngFor="let prod of stationForm.excelProducts; index as inx; trackBy: inx">
-                        {{ prod.product_id }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <div class="d-flex flex-column mb-1" *ngIf="stationForm.productOptions">
-                <ng-container *ngFor="let opt of stationForm.productOptions; index as inx; trackBy: inx">
-                    <mat-form-field class="reset-width w-100 mb-2 justify-content-between">
-                        <mat-label class="w-50 mx-1">Points: {{ opt.product_id }}&nbsp;</mat-label>
-
-                        <mat-select
-                            [multiple]="true"
-                            class="w-50"
-                            (selectionChange)="stationForm.onFormProductsUpdated({ points: $event.value, product_id: opt.product_id }, inx)"
-                            *ngIf="opt?.points?.length"
-                            class=""
-                            role="list"
-                        >
-                            <mat-option [value]="point" *ngFor="let point of opt.points; index as inx2"> id:{{ point.id }}&nbsp;|&nbsp;status:{{ point.status }} </mat-option>
-                        </mat-select>
-
-                        <ng-container formArrayName="formProductsUpdated">
-                            <input [value]="inx" [formControlName]="inx" type="hidden" />
-                        </ng-container>
+                <ng-container formArrayName="formSetPrices">
+                    <mat-form-field class="mb-1 w-100 mx-1" *ngFor="let priceSet of stationForm.formSetPrices.controls; index as inx; trackBy: inx">
+                        <mat-label>Set price:&nbsp;{{ stationForm.excelProducts[inx].product_id }}</mat-label>
+                        <span matPrefix>$&nbsp;</span>
+                        <input placeholder="1.81" type="tel" [formControlName]="inx" matInput name="price_{{ inx }}" min="0" />
+                        <span matSuffix>&nbsp;CHF</span>
                     </mat-form-field>
                 </ng-container>
-            </div>
-        </mat-card-content>
 
-        <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
-            <div class="d-flex justify-content-end">
-                <button [disabled]="fromGroup.invalid" class="align-self-end" type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>CREATE</button>
-            </div>
+                <ng-container formArrayName="formPriceIDS">
+                    <ng-container *ngFor="let id of stationForm.formPriceIDS.controls; index as inx; trackBy: inx">
+                        <input [value]="id" [formControlName]="inx" type="hidden" />
+                    </ng-container>
+                </ng-container>
 
-            <!-- <button (click)="deleteStation()" type="button" [value]="1" color='warn' mat-stroked-button>DELETE</button> -->
-        </mat-card-actions>
-    </form>
-</mat-card>
+                <mat-form-field class="mb-1 w-100 mx-1">
+                    <mat-label>Choose products (optional)</mat-label>
+
+                    <mat-select (selectionChange)="stationForm.onFormProductsSelected($event.value)" formControlName="formProducts" class="" role="list" [multiple]="true">
+                        <mat-option [value]="prod" ngDefaultControl *ngFor="let prod of stationForm.excelProducts; index as inx; trackBy: inx">
+                            {{ prod.product_id }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="d-flex flex-column mb-1" *ngIf="stationForm.productOptions">
+                    <ng-container *ngFor="let opt of stationForm.productOptions; index as inx; trackBy: inx">
+                        <mat-form-field class="reset-width w-100 mb-2 justify-content-between">
+                            <mat-label class="w-50 mx-1">Points: {{ opt.product_id }}&nbsp;</mat-label>
+
+                            <mat-select
+                                [multiple]="true"
+                                class="w-50"
+                                (selectionChange)="stationForm.onFormProductsUpdated({ points: $event.value, product_id: opt.product_id }, inx)"
+                                *ngIf="opt?.points?.length"
+                                class=""
+                                role="list"
+                            >
+                                <mat-option [value]="point" *ngFor="let point of opt.points; index as inx2"> id:{{ point.id }}&nbsp;|&nbsp;status:{{ point.status }} </mat-option>
+                            </mat-select>
+
+                            <ng-container formArrayName="formProductsUpdated">
+                                <input [value]="inx" [formControlName]="inx" type="hidden" />
+                            </ng-container>
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-0">
+                <div class="d-flex justify-content-end">
+                    <input type="hidden" formControlName="formValid" name="formValid" />
+                    <button
+                        [disabled]="fromGroup.invalid || !fromGroup.dirty"
+                        class="align-self-end"
+                        type="submit"
+                        [color]="fromGroup.valid ? 'warn' : 'accent'"
+                        mat-stroked-button
+                    >
+                        CREATE
+                    </button>
+                </div>
+
+                <div *ngIf="stationFormStatus === 'ERROR'" class="mt-3 alert-danger align-self-start p-1 rounded">
+                    <p class="mb-0">{{ errorMessage }}</p>
+                </div>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

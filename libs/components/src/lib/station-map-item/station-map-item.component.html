@@ -1,64 +1,97 @@
-<mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2">
-    <form [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
-        <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
-            <button (click)="stationForm.edit()" type="button" [value]="1" mat-stroked-button>EDIT</button>
-            <button type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>UPDATE</button>
-            <button (click)="deleteStation()" type="button" [value]="1" color='warn' mat-stroked-button>DELETE</button>
-        </mat-card-actions>
+<div class="wrapper d-flex justify-content-center">
+    <mat-spinner *ngIf="stationFormStatus === 'SUBMITTED'" class="loading-spinner" [diameter]="50"></mat-spinner>
+    <mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2 form-status-{{ stationFormStatus }}">
+        <form [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
+            <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
+                <button (click)="stationForm.edit()" type="button" [value]="1" mat-stroked-button>EDIT</button>
 
-        <mat-card-title class="mb-1">
-            <div class="d-flex align-items-center">
-                <input class="input-update name-item" formControlName="formName" matInput type="text" />
-                <lib-icons *ngIf="stationForm.formName.dirty" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
-            </div>
-        </mat-card-title>
-        <mat-card-subtitle class="mb-1">{{ item.city }}</mat-card-subtitle>
-        <mat-card-content>
-            <p class="text-muted address-item"><span class="strong">Address:&nbsp;</span>{{ item.address }},&nbsp;{{ item.city }}</p>
-        </mat-card-content>
+                <button (click)="deleteStation()" type="button" [value]="1" color="warn" mat-stroked-button>DELETE</button>
+            </mat-card-actions>
 
-        <mat-card-content *ngIf="item?.prices?.length" class="mb-1">
-            <div class="products-item-update-price mb-2">
-                <div class="text-muted strong">Update product prices:</div>
+            <mat-card-title class="mb-1">
+                <div class="d-flex align-items-center">
+                    <input class="input-update name-item" formControlName="formName" matInput type="text" />
+                    <lib-icons *ngIf="stationForm.formName.dirty" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
+                </div>
+            </mat-card-title>
+            <mat-card-subtitle class="mb-1">{{ item.city }}</mat-card-subtitle>
+            <mat-card-content>
+                <p class="text-muted address-item"><span class="strong">Address:&nbsp;</span>{{ item.address }},&nbsp;{{ item.city }}</p>
+            </mat-card-content>
 
-                <ng-container formArrayName="formPrices">
-                    <div *ngFor="let price of stationForm.formPrices.controls; index as inx; trackBy: inx" class="price-item-update d-flex flex-column">
-                        <div class="d-flex flex-row my-1">
-                            <span>{{ stationForm.priceItem(inx).product_id }}/{{ stationForm.priceItem(inx).currency }}&nbsp;</span>
+            <mat-card-content *ngIf="item?.prices?.length" class="mb-1">
+                <div class="products-item-update-price mb-2">
+                    <div class="text-muted strong">Update product prices:</div>
 
-                            <input matInput (ngModelChange)="stationForm.updateFormProduct_ids()" name="price_{{ inx }}" min="0" [formControlName]="inx" type="tel" class="py-0" />
+                    <ng-container formArrayName="formPrices">
+                        <div *ngFor="let price of stationForm.formPrices.controls; index as inx; trackBy: inx" class="price-item-update d-flex flex-column">
+                            <div class="d-flex flex-row my-1">
+                                <span>{{ stationForm.priceItem(inx).product_id }}/{{ stationForm.priceItem(inx).currency }}&nbsp;</span>
 
-                            <lib-icons *ngIf="price.dirty" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
-                        </div>
-                    </div>
-                </ng-container>
+                                <input
+                                    matInput
+                                    (ngModelChange)="stationForm.updateFormProduct_ids()"
+                                    name="price_{{ inx }}"
+                                    min="0"
+                                    [formControlName]="inx"
+                                    type="tel"
+                                    class="py-0"
+                                />
 
-                <ng-container formArrayName="formProduct_ids">
-                    <ng-container *ngFor="let id of stationForm.formProductIds.controls; index as inx; trackBy: inx">
-                        <input [value]="id" [formControlName]="inx" type="hidden" />
-                    </ng-container>
-                </ng-container>
-            </div>
-
-            <div class="products-item">
-                <div class="text-muted strong">Available Products:</div>
-
-                <div *ngFor="let prod of productsWithPrice" class="text-muted price-item mx-2">
-                    <ng-container *ngIf="validPrice(prod.priceItem.price)">
-                        <div class="d-flex flex-row mr-1">
-                            <span>Product:&nbsp;{{ prod.product_id }}&nbsp;</span>
-                            <span>Price:&nbsp;{{ prod.priceItem.price | currency: prod.priceItem.currency }}</span>
-                        </div>
-
-                        <div class="mt-1">
-                            <div class="d-flex flex-row points-item mr-1 small" *ngFor="let point of prod.points">
-                                <span>ID:&nbsp;{{ point.id }},</span>
-                                <span>Status:&nbsp;{{ point.status }}</span>
+                                <lib-icons *ngIf="price.dirty" className="d-block" class="mx-2 update-icon" [size]="20" icon="update_yellow"></lib-icons>
                             </div>
                         </div>
                     </ng-container>
+
+                    <ng-container formArrayName="formProduct_ids">
+                        <ng-container *ngFor="let id of stationForm.formProductIds.controls; index as inx; trackBy: inx">
+                            <input [value]="id" [formControlName]="inx" type="hidden" />
+                        </ng-container>
+                    </ng-container>
                 </div>
-            </div>
-        </mat-card-content>
-    </form>
-</mat-card>
+
+                <div class="products-item">
+                    <ng-container *ngIf="!productsWithPrice.length">
+                        <div class="text-muted strong">No available products</div>
+                    </ng-container>
+                    <ng-container *ngIf="productsWithPrice.length">
+                        <div class="text-muted strong">Available Products:</div>
+                    </ng-container>
+
+                    <div *ngFor="let prod of productsWithPrice" class="text-muted price-item mx-2">
+                        <ng-container *ngIf="validPrice(prod.priceItem.price)">
+                            <div class="d-flex flex-row mr-1">
+                                <span>Product:&nbsp;{{ prod.product_id }}&nbsp;</span>
+                                <span>Price:&nbsp;{{ prod.priceItem.price | currency: prod.priceItem.currency }}</span>
+                            </div>
+
+                            <div class="mt-1">
+                                <div class="d-flex flex-row points-item mr-1 small" *ngFor="let point of prod.points">
+                                    <span>ID:&nbsp;{{ point.id }},</span>
+                                    <span>Status:&nbsp;{{ point.status }}</span>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-card-content>
+
+            <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-0">
+                <div class="d-flex justify-content-end">
+                    <button [disabled]="!fromGroup.dirty || !fromGroup.valid" type="submit" [color]="fromGroup.valid ? 'warn' : 'accent'" mat-stroked-button>UPDATE</button>
+                </div>
+
+                <div role="alert" *ngIf="stationFormStatus === 'ERROR'" class="mt-3 alert-danger align-self-start p-1 rounded">
+                    {{ errorMessage }}
+                </div>
+
+                <div
+                    [innerHTML]="softMessage"
+                    role="alert"
+                    *ngIf="stationFormStatus === 'INITIAL' && softMessage"
+                    class="mt-3 alert alert-success align-self-start p-1 rounded"
+                ></div>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

@@ -2,7 +2,7 @@ export type ExcelProductPoinStatus = 'available' | 'not_available'
 
 export interface ExcelPrice {
      /** editable */
-    price: number;
+    price: number | string;
      /** non editable */
     currency: string;
     /** non editable */
@@ -36,11 +36,7 @@ export interface ExcelModel {
     products: ExcelProduct[]
 }
 
-export interface ExcelUpdate{
-    product_id: string;
-    name: string;
-    price: number;
-}
+
 
 export interface AuthCreds{
     username: string;

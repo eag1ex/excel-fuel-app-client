@@ -5,6 +5,7 @@ import {   log } from 'x-utils-es'
 
 /** form resembles ExcelModel structure */
 export class StationForm {
+    subscriptions = []
     excelProducts: ExcelProduct[] = []
     fromGroup: FormGroup
     formProductsSelected = null
@@ -12,9 +13,13 @@ export class StationForm {
         this.excelProducts = excelProducts
         this.initForm()
         this.patchValues()
-        this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
-            log('fromGroup/changes', n)
+       const s0= this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
+ 
+            log('fromGroup/valueChanges',n)
+            this.fromGroup.get('formValid').patchValue(1,{onlySelf:true})
         })
+
+        this.subscriptions.push(s0)
     }
 
 
@@ -25,13 +30,16 @@ export class StationForm {
             formName: new FormControl('', [Validators.required]),
             formCity: new FormControl('', [Validators.required]),
             formAddress: new FormControl('', [Validators.required]),
-            formLatitude: new FormControl(0, [Validators.required]),
-            formLongitude: new FormControl(0, [Validators.required]),
+            formLatitude: new FormControl('', [Validators.required]),
+            formLongitude: new FormControl('', [Validators.required]),
             // select price for available products
-            formSetPrices: new FormArray(this.excelProducts.map(n => new FormControl(0, priceValidators))),
+            formSetPrices: new FormArray(this.excelProducts.map(n => new FormControl('', priceValidators))),
             formPriceIDS: new FormArray(this.excelProducts.map(n => new FormControl('',  Validators.required))),
             formProducts: new FormControl([]),
             formProductsUpdated: new FormArray(this.excelProducts.map(n => new FormControl(''))),
+
+            /** hidden form, in case it failed toExcelCreate we force in invalidate the form */
+            formValid: new FormControl(0,[Validators.min(1), Validators.required]),
         })
     }
 
@@ -43,6 +51,12 @@ export class StationForm {
     patchValues(): void{
         // makes sure we pair price with product_id by selected index
         this.fromGroup.patchValue({formPriceIDS: this.excelProducts.map(n => n.product_id)})
+    }
+
+    /** make product options selected vyt default  */
+    onFormProductsSelected(selected: ExcelProduct[]):void{
+       
+        this.fromGroup.patchValue({formProductsUpdated:selected})
     }
 
     onFormProductsUpdated(selected: ExcelProduct, indexOrder: number): void{

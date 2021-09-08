@@ -6,7 +6,7 @@
 
 import { Injectable, isDevMode } from '@angular/core';
 import { ExcelUser, ToLocations } from '@excel/interfaces';
-import { RxStore } from '@excel/utils';
+import { localStorageGetUser, RxStore } from '@excel/utils';
 import { Observable } from 'rxjs';
 import { copy, isFalsy } from 'x-utils-es';
 
@@ -37,14 +37,14 @@ export class AuthPermissionsService extends RxStore<IState>  {
      */
     setUser(user: ExcelUser): void{
         this.user = user
-        localStorage.setItem('excel-user', JSON.stringify(user))
+        localStorage.setItem('excel-user', JSON.stringify(user) ||'')
         this.setState({ user: copy(user) })
     }
 
     /** return user from start or from localStore */
     get user$(): Observable<ExcelUser>{
         return this.select((state) => {
-            const user: ExcelUser =  JSON.parse(localStorage.getItem('excel-user'))
+            const user: ExcelUser =  localStorageGetUser('excel-user') 
             if (isFalsy(user)) return state.user
             else return user
         })

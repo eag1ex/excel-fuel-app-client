@@ -23,6 +23,7 @@ export class AuthGuardService implements CanLoad {
                     this.authService.toLocation = toLocation as any
                     // NO TOKEN AVAILABLE, THEN...
                     // navigate to auth route, make (POST) /api/auth request with hardcoded credentials
+                   
                     this.router.navigate(['auth'])
                 }
             })

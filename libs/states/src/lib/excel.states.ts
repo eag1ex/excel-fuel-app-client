@@ -5,21 +5,15 @@
  */
 
 import { Injectable, isDevMode } from '@angular/core'
-
 import { Observable } from 'rxjs'
 import { copy} from 'x-utils-es'
 import { RxStore } from '@excel/utils';
-import { ExcelStationsResp, ExcelModel, ExcelProduct, ExcelProductsResp } from '@excel/interfaces';
-import { Marker } from 'leaflet';
+import { ExcelStationsResp, ExcelModel, ExcelProduct, ExcelProductsResp, UpdatedStation } from '@excel/interfaces';
 
 
 interface IState {
     /** last updated station from map-item */
-    updatedStation: {
-        delete_id?: string,
-        station: ExcelModel,
-        marker?: Marker
-    },
+    updatedStation: UpdatedStation,
     excelStations: ExcelStationsResp;
     selectedSearchResults: {
         data: ExcelModel[]
@@ -28,8 +22,6 @@ interface IState {
     }
     excelProducts: ExcelProduct[]
 }
-
-
 
 
 const initialState: IState = {
@@ -52,8 +44,9 @@ export class ExcelStates extends RxStore<IState> {
         this.setState({ excelProducts: data?.response})
     }
 
-    setUpdatedStation(data: ExcelModel & {delete_id?: string}, marker?: Marker): void {
-        this.setState({ updatedStation: {station: copy(data), marker, ...(data?.delete_id ? {delete_id: data?.delete_id} : {}) }})
+    setUpdatedStation(data:UpdatedStation ): void {
+        data.station = data.station ? copy(data.station):undefined
+        this.setState({ updatedStation: data})
     }
 
     setExcelStations(data: ExcelStationsResp): void {
@@ -66,7 +59,7 @@ export class ExcelStates extends RxStore<IState> {
         })
     }
     /** last updated station from map-item */
-    get updatedStation$(): Observable<{station: ExcelModel, marker?: Marker, delete_id?: string}> {
+    get updatedStation$(): Observable<UpdatedStation> {
         return this.select((state) => {
             return state.updatedStation
         })

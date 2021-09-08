@@ -1,17 +1,22 @@
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
-import { ExcelModel, ExcelPrice } from '@excel/interfaces'
+import { ExcelModel, ExcelPrice, UserPermType } from '@excel/interfaces'
 
 
 /** form resembles ExcelModel structure */
 export class StationForm {
     fromGroup: FormGroup
+    private permissions:UserPermType
     private item: ExcelModel
-    constructor(item: ExcelModel) {
+    constructor(item: ExcelModel, permissions:UserPermType) {
         this.item = item
-    
+        this.permissions = permissions
 
         this.initForm()
         this.patchValues()
+        
+        // disabled initially, edit by user
+        this.fromGroup.disable({ onlySelf: true })
+
         // this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
         //     log('fromGroup/changes', n)
         // })
@@ -29,6 +34,7 @@ export class StationForm {
     }
 
     edit(): void {
+        if(this.permissions!=='ADMINISTRATOR') return
         if (this.fromGroup.disabled) this.fromGroup.enable({ onlySelf: true })
         else this.fromGroup.disable({ onlySelf: true })
     }

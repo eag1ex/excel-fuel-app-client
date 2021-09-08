@@ -24,14 +24,22 @@ export class AuthComponent implements  OnDestroy {
       private excelAuthHttpService: ExcelAuthHttpService,
       private router: Router, private route: ActivatedRoute, private authService: AuthPermissionsService) {
 
-        const s0 = this.auth$.subscribe(n => {
-          this.reRoute()
-        }, error => {
-          onerror('auth/error ', error)
-          // clear old session
-          this.authService.setUser(undefined)
-          this.router.navigate(['app/error'], {queryParams: {message: 'Authentication error'}})
-        })
+        const s0 = this.auth$.subscribe(
+            (n) => {
+                if (!n?.token) {
+                    this.authService.setUser(undefined)
+                    this.router.navigate(['app/error'], { queryParams: { message: 'No token from server provided' } })
+                } else {
+                    this.reRoute()
+                }
+            },
+            (error) => {
+                onerror('auth/error ', error)
+                // clear old session
+                this.authService.setUser(undefined)
+                this.router.navigate(['app/error'], { queryParams: { message: 'Authentication error' } })
+            }
+        )
         this.subscriptions.push(s0)
     }
 
@@ -62,6 +70,7 @@ export class AuthComponent implements  OnDestroy {
         this.authService.toLocation = undefined
 
       } else{
+        log('loading to locations?')
         this.router.navigate(['app/locations'])
       }
     }

@@ -3,20 +3,16 @@
  * - each item is a station map item
  */
 
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { ExcelDeleteHttpService, ExcelProductsHttpService, ExcelUpdateHttpService } from '@excel/http'
-import { CreateStationFormValues, ExcelModel, ExcelPrice, ExcelProduct, UserPermType } from '@excel/interfaces'
+import { ExcelCreateHttpService,ExcelProductsHttpService,} from '@excel/http'
+import { CreateStationFormValues, ExcelProduct, FormStatus, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
-import { Marker } from 'leaflet'
-import { log,  onerror,  unsubscribe, warn } from 'x-utils-es'
-import {StationForm} from './station-form-create'
+import { toExcelCreate } from '@excel/utils'
+import { log, onerror, unsubscribe, warn } from 'x-utils-es'
+import { StationForm } from './station-form-create'
 
-
-interface ProductWithPrice extends ExcelProduct {
-    priceItem?: ExcelPrice
-}
 
 @Component({
     selector: 'lib-station-map-create',
@@ -24,39 +20,37 @@ interface ProductWithPrice extends ExcelProduct {
     styleUrls: ['./station-map-create.component.scss'],
 })
 export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
+    errorMessage:string = ''
+    stationFormStatus: FormStatus = 'INITIAL'
     stationForm: StationForm
     subscriptions = []
-    productsWithPrice: ProductWithPrice[]
-    createdItem: ExcelModel
-
-    /**
-     * Give power to this component and allow interaction with current marker it belongs to!
-     */
-    activeMarker: Marker
     permissions: UserPermType = 'BASIC'
 
     constructor(
         private excelProductsHttpService: ExcelProductsHttpService,
-        private states: ExcelStates, private authService: AuthPermissionsService,
-        private excelDeleteHttpService: ExcelDeleteHttpService,
-        private excelUpdateHttpService: ExcelUpdateHttpService) {
-
-            const excelProductsAsync = this.excelProductsHttpService.products().toPromise().then(n => n.response)
-            this.initSubs()
-            this.initForm(excelProductsAsync)
-
+        private states: ExcelStates,
+        private authService: AuthPermissionsService,
+        private excelCreateHttpService: ExcelCreateHttpService
+    ) {
+        const excelProductsAsync = this.excelProductsHttpService
+            .products()
+            .toPromise()
+            .then((n) => n.response)
+        this.initSubs()
+        this.initForm(excelProductsAsync)
     }
 
     /** new id as timestamp */
     @Input() addNewID?: Date
 
+    /** issue self destroy component  */
+    @Output() destroy = new EventEmitter<Date>(true)
 
-    async initForm(excelProductsAsync: Promise<ExcelProduct[]>){
-
+    async initForm(excelProductsAsync: Promise<ExcelProduct[]>) {
         let excelProducts
-        try{
+        try {
             excelProducts = await excelProductsAsync
-        }catch (err){
+        } catch (err) {
             onerror(err)
             excelProducts = []
         }
@@ -68,41 +62,31 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-
     initSubs(): void {
+        
+        const s0 = this.excelCreateHttpService.create$(err=>{
+            this.stationFormStatus = 'ERROR'
+            if(err.error?.message)  this.errorMessage = err.error?.message
+            else this.errorMessage = 'Form invalid'
+            this.stationForm.fromGroup.enable({ onlySelf: true })
+            this.stationForm.reset()
+        }).subscribe((n) => {
+            
+            let data = {
+                station: n,
+                add_station_id: n.id,
+            }
 
-        // grab available products to select from
-
-
-        // http update request
-        // we emit change to location component to update {excelStationsSnapShot}
-
-        // const s0 = this.excelUpdateHttpService.update$.subscribe((n) => {
-
-        //     if (n) {
-
-        //         this.initializeChanges(n)
-        //         this.updateLeafletMarker(n)
-        //         this.states.setUpdatedStation(n, this.activeMarker)
-        //         log('station updated', n)
-        //     }
-        // })
-
-        // http delete request
-        // const s1 = this.excelDeleteHttpService.delete$.subscribe(n => {
-
-        //     this.states.setUpdatedStation({delete_id: this.item.id} as any, this.activeMarker)
-        //     // remove marker
-        //     this.activeMarker.closePopup()
-        //     this.activeMarker.unbindPopup()
-        //     log('station deleted', n)
-        // })
+            this.states.setUpdatedStation(data)
+            this.stationForm.reset()
+            this.stationFormStatus = 'INITIAL'
+            this.destroy.emit(this.addNewID)
+            log('excelCreateHttpService', n)
+        })
 
         // set user permissions
         const s2 = this.authService.user$.subscribe((n) => {
-
             if (n?.type) {
-
                 this.permissions = n.type
                 log('this.permissions', this.permissions)
             } else {
@@ -111,63 +95,42 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
             }
         })
 
-        this.subscriptions.push(...[ s2])
+        this.subscriptions.push(...[s0, s2])
     }
 
-
-    validPrice(price: number) {
-        return !isNaN(Number((price || '').toString()))
-    }
 
     public submitForm(f: FormGroup) {
+        this.stationFormStatus ='INITIAL'
+        this.errorMessage = undefined
         const formValues: CreateStationFormValues = f.value
         // ExcelUpdate
         if (f.status === 'VALID') {
-            // const update = { id: this.item.id, data: toExcelUpdate(formValues) }
-            // log('update with', update)
-            // this.excelUpdateHttpService.sub$.next(update)
-            this.stationForm.reset()
-            log('errors', this.stationForm.fromGroup.errors)
-            log('is valid', this.stationForm.fromGroup.get('formPrices').valid)
-            log('formValues', f)
+            let addNew = toExcelCreate(formValues)
+            if (addNew) {
+                this.excelCreateHttpService.sub$.next(addNew)
+                this.stationFormStatus = 'SUBMITTED'
+                this.stationForm.fromGroup.disable({ onlySelf: true })
+            } else {
+                // make form invalid
+                this.stationForm.fromGroup.patchValue({ formValid: 0 })
+                this.stationFormStatus = 'ERROR'
+                this.errorMessage = 'Form invalid'
+            }
         } else {
-            onerror('form invalid', f)
+            onerror('submitForm/invalid', f)
+            this.stationFormStatus = 'ERROR'
         }
-    }
-
-
-
-    initializeChanges(){
-       // this.item = item
-        // initialize our form
-
-
-       // this.productsWithPrice = this.setProductsWithPrice(this.item)
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes?.addNewID?.currentValue) {
             log('create new station, time: ', new Date(this.addNewID))
-         //   this.activeMarker = this.selectedMapItem.marker
-         //   const selectedMapItemStation = copy(this.selectedMapItem.station)
-
         }
     }
 
-
-
-    ngOnInit(): void {
-        // disable permissions
-
-
-        // NOTE optional!
-        // this will bind immidate power to each chip in search list
-        // if (this.activeMarker){
-        //     this.states.setUpdatedStation(this.item, this.activeMarker)
-        // }
-    }
+    ngOnInit(): void {}
 
     ngOnDestroy(): void {
-        unsubscribe(this.subscriptions, 'MapItemComponent')
+        unsubscribe([].concat(this.subscriptions, this.stationForm.subscriptions), 'MapItemComponent')
     }
 }

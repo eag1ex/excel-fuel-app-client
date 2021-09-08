@@ -2,11 +2,12 @@
  * @description excel/create api calling our excel/server
  */
 import { HttpClient } from '@angular/common/http'
-import { log, onerror } from 'x-utils-es'
+import { isFunction, log, onerror } from 'x-utils-es'
 import { Observable, Subject} from 'rxjs'
 import { switchMap, timeout, debounceTime, catchError, retry, map } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
-import { ENV, ExcelItemResp, ExcelModel } from '@excel/interfaces'
+import { CreateErrorCallback, ENV, ExcelItemResp, ExcelModel } from '@excel/interfaces'
+
 
 @Injectable({
     providedIn: 'root',
@@ -31,7 +32,7 @@ export class ExcelCreateHttpService {
             retry(1))
     }
 
-    get create$(): Observable<ExcelModel> {
+    create$(error?:CreateErrorCallback): Observable<ExcelModel> {
         return this.sub$
             .pipe(
                 debounceTime(300),
@@ -41,9 +42,10 @@ export class ExcelCreateHttpService {
             )
             .pipe(
                 catchError((err) => {
+                    if(isFunction(error)) error(err)
                     onerror(err)
                     // do not exit from stream
-                    return this.create$
+                    return this.create$(error)
                 }),
             )
     }

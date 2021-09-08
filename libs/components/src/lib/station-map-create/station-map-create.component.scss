@@ -1,9 +1,35 @@
 @import 'mixins';
 
 :host {
+    .wrapper {
+        position: relative;
+        .loading-spinner {
+            top: 20%;
+            position: absolute;
+            z-index: 1;
+        }
+    }
+
+    mat-card {
+        &.form-status-INITIAL {
+            background-color: #fff;
+        }
+
+        &.form-status-SUBMITTED {
+            opacity: 0.7;
+            background-color: #ddd;
+        }
+
+        &.form-status-ERROR {
+            background-color: #fff;
+        }
+    }
     form {
         .lat-long-fields {
             max-width: 300px;
+        }
+        input::placeholder {
+            font-size: smaller;
         }
     }
 

@@ -3,7 +3,27 @@
 :host {
     display: block;
     width: 100%;
+    .wrapper {
+        position: relative;
+        .loading-spinner {
+            top: 20%;
+            position: absolute;
+            z-index: 1;
+        }
+    }
     mat-card {
+        &.form-status-INITIAL {
+            background-color: #fff;
+        }
+
+        &.form-status-SUBMITTED {
+            opacity: 0.7;
+            background-color: #ddd;
+        }
+
+        &.form-status-ERROR {
+            background-color: #fff;
+        }
         @include box-shadow(/*$top*/ 3px, /*$left:*/ 4px, /*$blur:*/ 8px, /* $size:*/ 3px, /*$color:*/ rgba(0, 0, 0, 0.2));
     }
     .update-icon {

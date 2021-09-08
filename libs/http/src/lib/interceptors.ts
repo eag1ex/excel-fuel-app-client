@@ -5,7 +5,7 @@
 import { HTTP_INTERCEPTORS, HttpErrorResponse, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ExcelUser } from '@excel/interfaces'
-import { HttpManagerService } from '@excel/utils'
+import { HttpManagerService, localStorageGetUser } from '@excel/utils'
 
 import { Observable, of, throwError } from 'rxjs'
 import { catchError, switchMap, timeout } from 'rxjs/operators'
@@ -17,7 +17,8 @@ export class PLhttpInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 
-        const user: ExcelUser = JSON.parse(localStorage.getItem('excel-user')) || {}
+        
+        const user = localStorageGetUser('excel-user')
         const headers = {
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',

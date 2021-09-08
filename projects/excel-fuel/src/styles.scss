@@ -9,6 +9,7 @@
 @include resets();
 @include cdk-overlay-container();
 @include leaflet-map();
+@include bootstrap-missing();
 
 lib-search {
     mat-chip-list {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { appTitle } from '@excel/data';
 
 @Component({
   selector: 'lib-footer',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
+  footerTitle = appTitle
   constructor() { }
 
   ngOnInit(): void {

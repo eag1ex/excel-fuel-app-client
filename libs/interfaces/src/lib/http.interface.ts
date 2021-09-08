@@ -27,3 +27,8 @@ export interface AuthResp{
     response: {token: string};
     code?: number
 }
+
+type TError = {code:string,message:string}
+export interface CreateErrorCallback{
+    (error:{error:TError} & Error):void
+}
