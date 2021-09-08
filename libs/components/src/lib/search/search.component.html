@@ -8,6 +8,7 @@
                 [selected]="true"
                 [value]="el"
                 [color]="'warn'"
+                (click)="chipOnClick(el)"
                 *ngFor="let el of items; let inx = index"
                 [selectable]="true"
                 [removable]="true"
@@ -33,7 +34,7 @@
 
     <mat-autocomplete (click)="onUpdate($event)" #auto="matAutocomplete" (optionSelected)="selected($event)">
         <ng-container *ngIf="filteredItems | async as list">
-            <mat-option value="" *ngIf="!list.length">No stations available.</mat-option>
+            <mat-option value="" *ngIf="!list.length && !searchStations?.length">No stations available.</mat-option>
             <mat-option *ngFor="let item of list" [value]="item"
                 ><span class="strong">{{ item.name }}</span> | {{ item.address }} | {{ item.city }}</mat-option
             >

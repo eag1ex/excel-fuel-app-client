@@ -3,7 +3,7 @@
  * - add selected item to state management
  */
 
-import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
@@ -12,7 +12,7 @@ import { filter, map, retry, startWith, tap } from 'rxjs/operators'
 import {  ExcelModel } from '@excel/interfaces'
 import { excelListByName } from '@excel/utils';
 import { ExcelStates } from '@excel/states';
-import { delay, log, unsubscribe } from 'x-utils-es';
+import { delay,  unsubscribe } from 'x-utils-es';
 
 @Component({
     selector: 'lib-search',
@@ -20,6 +20,7 @@ import { delay, log, unsubscribe } from 'x-utils-es';
     styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit, OnDestroy {
+    initialAdd = false
     subscriptions = []
     separatorKeysCodes: number[] = [ENTER, COMMA]
     searchCtrl = new FormControl()
@@ -52,6 +53,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     /** on item added clear last input value */
     public added(input: HTMLInputElement): void {
         input.value = ''
+    }
+
+    /** on click send request to leaflet to go to selected station */
+    public chipOnClick(el: ExcelModel){
+        this.states.setSelectedSearchResults([el])
     }
 
     public remove(el: ExcelModel, inx: number): void {
@@ -107,7 +113,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                     this.searchStations = n
                     this.itemsRemoveSelected(n)
                     this.itemsUpdate(n)
-
+                    this.initialAddItems()
                     // also send update to the map
                     if (!initial) {
                         // NOTE need delay to make sure its send last, and after any selection changes
@@ -123,6 +129,19 @@ export class SearchComponent implements OnInit, OnDestroy {
            this.subscriptions.push(...[s0])
         }
     }
+
+    /** add 1 item to selected results */
+    initialAddItems(){
+        if(!this.initialAdd && this.searchStations[0]){
+            this.items.push(this.searchStations[0])
+            this.states.setSelectedSearchResults(this.items)
+            this.searchCtrl.setValue(null)
+            this.initialAdd = true
+        }
+    }
+
+
+
     ngOnDestroy(): void{
         unsubscribe(this.subscriptions, 'SearchComponent')
     }

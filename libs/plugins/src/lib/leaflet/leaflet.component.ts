@@ -227,14 +227,13 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // provide results when added or removed items
             // data received from search component
-            const s0 = this.states.selectedSearchResults$.pipe(rxDelay(500)).subscribe(async (n) => {
+            const s0 = this.states.selectedSearchResults$.pipe(debounceTime(500),rxDelay(500)).subscribe(async (n) => {
                 if (n === undefined) n = []
                 this.recycle(n)
 
                 n.forEach(async (metadata) => {
-                    if (this.addMarker(metadata)) {
-                        this.map.flyTo(latLong(metadata), 10)
-                    }
+                    this.addMarker(metadata)
+                    this.map.flyTo(latLong(metadata), 10)
                 })
             })
             this.subscriptions.push(...[s0]) 
