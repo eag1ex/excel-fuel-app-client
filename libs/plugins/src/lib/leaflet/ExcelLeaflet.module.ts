@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {LeafletComponent} from './leaflet.component'
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { StationMapItemComponent, SharedComponentsModule } from '@excel/components';
+import { StationMapUpdateComponent, SharedComponentsModule } from '@excel/components';
 import {MatCardModule} from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
-  declarations: [LeafletComponent, StationMapItemComponent],
+  declarations: [LeafletComponent, StationMapUpdateComponent],
   imports: [
     MatProgressSpinnerModule,
     SharedComponentsModule,
@@ -19,7 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
    LeafletModule,
    CommonModule,
   ],
-  exports: [LeafletComponent, StationMapItemComponent]
+  exports: [LeafletComponent, StationMapUpdateComponent]
 })
 export class ExcelLeafletModule { }
  

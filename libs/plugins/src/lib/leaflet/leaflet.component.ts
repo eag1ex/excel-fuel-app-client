@@ -10,7 +10,7 @@ import { log, sq, onerror, isFalsy, unsubscribe } from 'x-utils-es'
 import { Subject } from 'rxjs'
 import { filter, debounceTime, delay as rxDelay } from 'rxjs/operators'
 import { ExcelStates } from '@excel/states'
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs/internal/Observable'
 
 interface TargetOptions {
     draggable?: boolean
@@ -67,7 +67,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /** emitted events from location component */
-    @Input() events$?:Observable<LocationEvents>
+    @Input() events$?: Observable<LocationEvents>
 
     @ViewChild('mapFrame')
     set mapFrame(el: ElementRef) {
@@ -227,7 +227,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // provide results when added or removed items
             // data received from search component
-            const s0 = this.states.selectedSearchResults$.pipe(debounceTime(500),rxDelay(500)).subscribe(async (n) => {
+            const s0 = this.states.selectedSearchResults$.pipe(debounceTime(500), rxDelay(500)).subscribe(async (n) => {
                 if (n === undefined) n = []
                 this.recycle(n)
 
@@ -236,20 +236,18 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.map.flyTo(latLong(metadata), 10)
                 })
             })
-            this.subscriptions.push(...[s0]) 
+            this.subscriptions.push(...[s0])
         })
     }
     ngOnInit(): void {
-
-        if(this.events$){
-            let s0 = this.events$.subscribe(n=>{
-                // destroy current map selection on this event              
-                if(n.eventName==='CLOSE_STATION_MAP') this.selectedMapItem = undefined
+        if (this.events$) {
+            let s0 = this.events$.subscribe((n) => {
+                // destroy current map selection on this event
+                if (n.eventName === 'CLOSE_STATION_MAP') this.selectedMapItem = undefined
             })
-            
+
             this.subscriptions.push(s0)
         }
-
     }
     ngOnDestroy(): void {
         unsubscribe(this.subscriptions, 'LeafletComponent')

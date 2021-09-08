@@ -1,7 +1,18 @@
 import { defaultCurrency, routeList } from '@excel/data'
-import { AvailRoutes, LatLng, ExcelModel, RouteItem, StationFormValues, CreateStationFormValues, ExcelPrice, ExcelProduct, ExcelUser, UpdatedStation, DeletageSteps } from '@excel/interfaces'
-import { copy, matched, isFalsy, truthFul, objectSize, log } from 'x-utils-es';
-
+import {
+    AvailRoutes,
+    LatLng,
+    ExcelModel,
+    RouteItem,
+    StationFormValues,
+    CreateStationFormValues,
+    ExcelPrice,
+    ExcelProduct,
+    ExcelUser,
+    UpdatedStation,
+    DeletageSteps,
+} from '@excel/interfaces'
+import { copy, matched, isFalsy, truthFul, objectSize } from 'x-utils-es'
 
 export const repeat = (str, times) => new Array(times + 1).join(str)
 export const padStart = (num, maxLength, char = ' ') => repeat(char, maxLength - num.toString().length) + num
@@ -17,23 +28,21 @@ export const formatTime = (time) => {
 export const now = () => formatTime(new Date())
 
 /** make delegate stepping process to be used with switch/case for our location update routing */
-export const delegateSteps = (stationUpdate:UpdatedStation):DeletageSteps[]=>{
+export const delegateSteps = (stationUpdate: UpdatedStation): DeletageSteps[] => {
     const { station, delete_id, add_station_id } = stationUpdate || {}
     return [
         !isFalsy(station) && !delete_id && !add_station_id ? 'UPDATE' : null,
         delete_id && isFalsy(station) && !add_station_id ? 'DELETE' : null,
         !isFalsy(station) && add_station_id ? 'NEW' : null,
-    ].filter((n) => !!n) as DeletageSteps[] 
+    ].filter((n) => !!n) as DeletageSteps[]
 }
 
-
-
 /** parse json and get user details */
-export const localStorageGetUser = (storageName:string):ExcelUser=>{
-    if(!storageName) return undefined
-    try{
+export const localStorageGetUser = (storageName: string): ExcelUser => {
+    if (!storageName) return undefined
+    try {
         return JSON.parse(localStorage.getItem(storageName))
-    }catch(err){
+    } catch (err) {
         return undefined
     }
 }
@@ -60,39 +69,36 @@ export const makeMarkerPopUp = (metadata: ExcelModel): string => {
             </ul> `
 }
 
-
 /** create format for http request */
 export const toExcelUpdate = (formValues: StationFormValues): ExcelModel => {
     if (!formValues) return undefined
 
-    let allAreSet = [formValues.formName, formValues.formPrices, formValues.formProduct_ids, ].filter((n) => !isFalsy(n))
+    let allAreSet = [formValues.formName, formValues.formPrices, formValues.formProduct_ids].filter((n) => !isFalsy(n))
     if (allAreSet.length !== 3) return undefined
 
-      // pair index offset by 1
-      let priceStacks: ExcelPrice[] = [formValues.formPrices, formValues.formProduct_ids].reduce((n, el, inx) => {
-          
-          if(formValues.formPrices[inx] &&  formValues.formProduct_ids[inx]){
+    // pair index offset by 1
+    let priceStacks: ExcelPrice[] = [formValues.formPrices, formValues.formProduct_ids].reduce((n, el, inx) => {
+        if (formValues.formPrices[inx] && formValues.formProduct_ids[inx]) {
             const prices = {
                 currency: defaultCurrency,
                 price: formValues.formPrices[inx],
-                product_id: formValues.formProduct_ids[inx],        
+                product_id: formValues.formProduct_ids[inx],
             }
             n.push(prices)
-          }
-    
+        }
+
         return n
     }, [])
 
-    const partialUpdateModel  = {
+    const partialUpdateModel = {
         name: formValues.formName,
-        prices: priceStacks.filter(n=>!!n),
+        prices: priceStacks.filter((n) => !!n),
     } as ExcelModel
-
 
     return partialUpdateModel
 }
 
-/** 
+/**
  * create format for http request,
  * - no validation on check for false values
  * - products are optional
@@ -116,7 +122,7 @@ export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel =
 
     // pair index offset by 1
     let priceStacks: ExcelPrice[] = [formPriceIDS, formSetPrices].reduce((n, el, inx) => {
-        if( formPriceIDS[inx] && formSetPrices[inx]){
+        if (formPriceIDS[inx] && formSetPrices[inx]) {
             const prices = {
                 currency: defaultCurrency,
                 product_id: formPriceIDS[inx],
@@ -124,7 +130,7 @@ export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel =
             }
             n.push(prices)
         }
-      
+
         return n
     }, [])
 
@@ -132,8 +138,8 @@ export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel =
         name: formName,
         address: formAddress,
         city: formCity,
-        prices: priceStacks.filter(n=>!!n),
-        products: productStacks.filter(n=>!!n),
+        prices: priceStacks.filter((n) => !!n),
+        products: productStacks.filter((n) => !!n),
         latitude: formLatitude,
         longitude: formLongitude,
     }
@@ -144,18 +150,16 @@ export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel =
 //
 
 /** make compatible propt */
-export const latLong = ({latitude, longitude}): LatLng => {
-    return {lat: latitude, lng: longitude}
+export const latLong = ({ latitude, longitude }): LatLng => {
+    return { lat: latitude, lng: longitude }
 }
 
 export const currentRoute = (routeValue: AvailRoutes, ref?: string): RouteItem => {
     return copy(routeList).filter((n) => n.value.includes(routeValue))[0]
 }
 
-
 export const excelListByName = (name: string, all: ExcelModel[]): ExcelModel[] => {
     if (!all) return undefined
     if (!name) return undefined
-    return all.filter((el) => matched(el.name, new RegExp(name, 'gi') ))
+    return all.filter((el) => matched(el.name, new RegExp(name, 'gi')))
 }
-

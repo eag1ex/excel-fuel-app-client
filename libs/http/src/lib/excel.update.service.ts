@@ -26,11 +26,11 @@ export class ExcelUpdateHttpService {
         if (isFalsy(d)) return throwError('no data provided for update')
         const url = this.apiBaseUrl + `/excel/update/${id}`
         log(`-- calling ${url}`)
-        log('sending data',d)
-        return this.http.post<any>(`${url}`, JSON.stringify(d)).pipe(  timeout(10000), retry(1))
+        log('sending data', d)
+        return this.http.post<any>(`${url}`, JSON.stringify(d)).pipe(timeout(10000), retry(1))
     }
 
-    update$(error?:CreateErrorCallback): Observable<ExcelModel> {
+    update$(error?: CreateErrorCallback): Observable<ExcelModel> {
         return this.sub$
             .pipe(
                 debounceTime(300),
@@ -40,11 +40,11 @@ export class ExcelUpdateHttpService {
             )
             .pipe(
                 catchError((err) => {
-                    if(isFunction(error)) error(err)
+                    if (isFunction(error)) error(err)
                     onerror(err)
                     // do not exit from stream
                     return this.update$(error)
-                }),
+                })
             )
     }
 }

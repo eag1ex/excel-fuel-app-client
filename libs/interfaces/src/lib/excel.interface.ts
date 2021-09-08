@@ -1,12 +1,12 @@
 export type ExcelProductPoinStatus = 'available' | 'not_available'
 
 export interface ExcelPrice {
-     /** editable */
-    price: number | string;
-     /** non editable */
-    currency: string;
+    /** editable */
+    price: number | string
     /** non editable */
-    product_id: string;
+    currency: string
+    /** non editable */
+    product_id: string
 }
 export interface ExcelProductPoint {
     id: string
@@ -26,19 +26,17 @@ export interface ExcelModel {
     address: string
     city: string
     latitude: number
-    longitude: number;
+    longitude: number
     /** server assigned */
-    updated_at?: Date | string;
+    updated_at?: Date | string
     /** server assigned */
-    created_at?: Date | string;
+    created_at?: Date | string
     /** user can update */
     prices: ExcelPrice[]
     products: ExcelProduct[]
 }
 
-
-
-export interface AuthCreds{
-    username: string;
-    password?: string;
+export interface AuthCreds {
+    username: string
+    password?: string
 }

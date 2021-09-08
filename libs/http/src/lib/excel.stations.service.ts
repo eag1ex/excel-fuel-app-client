@@ -17,20 +17,13 @@ export class ExcelStationsHttpService {
         this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
     }
 
-     /**
+    /**
      * (GET) /api/excel/stations
      * list all stations for current user
      */
     stations(): Observable<ExcelStationsResp> {
         const url = this.apiBaseUrl + `/excel/stations`
         log(`-- calling ${url}`)
-        return this.http.get<any>(`${url}`)
-        .pipe(
-            timeout(10000),
-            retry(1)
-        )
+        return this.http.get<any>(`${url}`).pipe(timeout(10000), retry(1))
     }
 }
-
-
-

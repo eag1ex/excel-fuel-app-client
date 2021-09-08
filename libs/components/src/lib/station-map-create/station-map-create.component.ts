@@ -1,11 +1,6 @@
-/**
- * @description this component is used with Leaflet plugin, and it is imported to {PLLeafletModule}
- * - each item is a station map item
- */
-
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { ExcelCreateHttpService,ExcelProductsHttpService,} from '@excel/http'
+import { ExcelCreateHttpService, ExcelProductsHttpService } from '@excel/http'
 import { CreateStationFormValues, ExcelProduct, FormStatus, UserPermType } from '@excel/interfaces'
 import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
@@ -13,14 +8,16 @@ import { toExcelCreate } from '@excel/utils'
 import { log, onerror, unsubscribe, warn } from 'x-utils-es'
 import { StationForm } from './station-form-create'
 
-
+/**
+ * @description component is used with Locations component, to create new station
+ */
 @Component({
     selector: 'lib-station-map-create',
     templateUrl: './station-map-create.component.html',
     styleUrls: ['./station-map-create.component.scss'],
 })
 export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
-    errorMessage:string = ''
+    errorMessage: string = ''
     stationFormStatus: FormStatus = 'INITIAL'
     stationForm: StationForm
     subscriptions = []
@@ -63,26 +60,26 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     initSubs(): void {
-        
-        const s0 = this.excelCreateHttpService.create$(err=>{
-            this.stationFormStatus = 'ERROR'
-            if(err.error?.message)  this.errorMessage = err.error?.message
-            else this.errorMessage = 'Form invalid'
-            this.stationForm.fromGroup.enable({ onlySelf: true })
-            this.stationForm.reset()
-        }).subscribe((n) => {
-            
-            let data = {
-                station: n,
-                add_station_id: n.id,
-            }
+        const s0 = this.excelCreateHttpService
+            .create$((err) => {
+                this.stationFormStatus = 'ERROR'
+                if (err.error?.message) this.errorMessage = err.error?.message
+                else this.errorMessage = 'Form invalid'
+                this.stationForm.fromGroup.enable({ onlySelf: true })
+                this.stationForm.reset()
+            })
+            .subscribe((n) => {
+                let data = {
+                    station: n,
+                    add_station_id: n.id,
+                }
 
-            this.states.setUpdatedStation(data)
-            this.stationForm.reset()
-            this.stationFormStatus = 'INITIAL'
-            this.destroy.emit(this.addNewID)
-            log('excelCreateHttpService', n)
-        })
+                this.states.setUpdatedStation(data)
+                this.stationForm.reset()
+                this.stationFormStatus = 'INITIAL'
+                this.destroy.emit(this.addNewID)
+                log('excelCreateHttpService', n)
+            })
 
         // set user permissions
         const s2 = this.authService.user$.subscribe((n) => {
@@ -98,9 +95,8 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.push(...[s0, s2])
     }
 
-
     public submitForm(f: FormGroup) {
-        this.stationFormStatus ='INITIAL'
+        this.stationFormStatus = 'INITIAL'
         this.errorMessage = undefined
         const formValues: CreateStationFormValues = f.value
         // ExcelUpdate

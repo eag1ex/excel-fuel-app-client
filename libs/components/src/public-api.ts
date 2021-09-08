@@ -3,5 +3,5 @@
  */
 
 export * from './lib/components.module';
-export * from './lib/station-map-item/station-map-item.component'
+export * from './lib/station-map-update/station-map-update.component'
 export * from './lib/shared.components.module'

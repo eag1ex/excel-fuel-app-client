@@ -1,10 +1,5 @@
-<!-- <div *ngIf="leafletError" class="d-flex flex-column error-wrap my-3">
-    <p class="text-white mb-2 p-2 w-50 rounded error-message">Ups, map communication error, please try again later.</p>
-
-</div> -->
-
 <div class="wrap">
-    <lib-station-map-item *ngIf="selectedMapItem" [selectedMapItem]="selectedMapItem"></lib-station-map-item>
+    <lib-station-map-update *ngIf="selectedMapItem" [selectedMapItem]="selectedMapItem"> </lib-station-map-update>
 
     <div class="map-container clearfix">
         <div class="map-frame" #mapFrame>

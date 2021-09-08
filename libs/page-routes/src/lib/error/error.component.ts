@@ -13,8 +13,7 @@ export class ErrorComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute) {}
 
     get error$(): Observable<string> {
-        return this.activatedRoute.queryParams
-        .pipe(map((n: { message?: string }) => n?.message)).pipe(filter((n) => !!n))
+        return this.activatedRoute.queryParams.pipe(map((n: { message?: string }) => n?.message)).pipe(filter((n) => !!n))
     }
     ngOnInit(): void {}
 }

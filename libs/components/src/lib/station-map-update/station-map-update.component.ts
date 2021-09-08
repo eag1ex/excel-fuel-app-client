@@ -1,8 +1,3 @@
-/**
- * @description this component is used with Leaflet plugin, and it is imported to {PLLeafletModule}
- * - each item is a station map item
- */
-
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ExcelDeleteHttpService, ExcelUpdateHttpService } from '@excel/http'
@@ -11,25 +6,29 @@ import { AuthPermissionsService } from '@excel/services'
 import { ExcelStates } from '@excel/states'
 import { makeMarkerPopUp, toExcelUpdate } from '@excel/utils'
 import { Marker } from 'leaflet'
-import { copy, log, onerror, unsubscribe, warn, delay } from 'x-utils-es';
-import { StationForm } from './station-form'
+import { copy, log, onerror, unsubscribe, warn, delay } from 'x-utils-es'
+import { StationForm } from './station-form-update'
 
 interface ProductWithPrice extends ExcelProduct {
     priceItem?: ExcelPrice
 }
 
+/**
+ * @description component is used with Leaflet plugin, and it is imported to {PLLeafletModule}
+ * - each item is a station map item
+ */
 @Component({
-    selector: 'lib-station-map-item',
-    templateUrl: './station-map-item.component.html',
-    styleUrls: ['./station-map-item.component.scss'],
+    selector: 'lib-station-map-update',
+    templateUrl: './station-map-update.component.html',
+    styleUrls: ['./station-map-update.component.scss'],
 })
-export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
+export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
     stationForm: StationForm
     subscriptions = []
     productsWithPrice: ProductWithPrice[]
     item: ExcelModel
     errorMessage: string = ''
-    softMessage:string = ''
+    softMessage: string = ''
     stationFormStatus: FormStatus = 'INITIAL'
 
     /**
@@ -60,7 +59,6 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
                 else this.errorMessage = 'Form invalid'
                 this.stationForm.fromGroup.enable({ onlySelf: true })
                 this.stationForm.reset()
-           
             })
             .subscribe((n) => {
                 if (n) {
@@ -81,27 +79,28 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
             })
 
         // http delete request
-        const s1 = this.excelDeleteHttpService.delete$(err=>{
-            this.softMessage = ''
-            this.stationFormStatus = 'ERROR'
-            if (err.error?.message) this.errorMessage = err.error?.message
-            else this.errorMessage = 'Station doesnt exist'
-            this.stationForm.fromGroup.enable({ onlySelf: true })
-            this.stationForm.reset()
-      
-        }).subscribe((n) => {
-            let data = {
-                delete_id: this.item.id,
-                marker: this.activeMarker,
-            } as any
-            this.states.setUpdatedStation(data)
+        const s1 = this.excelDeleteHttpService
+            .delete$((err) => {
+                this.softMessage = ''
+                this.stationFormStatus = 'ERROR'
+                if (err.error?.message) this.errorMessage = err.error?.message
+                else this.errorMessage = 'Station doesnt exist'
+                this.stationForm.fromGroup.enable({ onlySelf: true })
+                this.stationForm.reset()
+            })
+            .subscribe((n) => {
+                let data = {
+                    delete_id: this.item.id,
+                    marker: this.activeMarker,
+                } as any
+                this.states.setUpdatedStation(data)
 
-            // remove marker
-            this.activeMarker.closePopup()
-            this.activeMarker.unbindPopup()
-            this.stationFormStatus = 'INITIAL'
-            log('station deleted', n)
-        })
+                // remove marker
+                this.activeMarker.closePopup()
+                this.activeMarker.unbindPopup()
+                this.stationFormStatus = 'INITIAL'
+                log('station deleted', n)
+            })
 
         // set user permissions
         const s2 = this.authService.user$.subscribe((n) => {
@@ -140,19 +139,18 @@ export class StationMapItemComponent implements OnInit, OnChanges, OnDestroy {
 
     /** permanently delete station */
     public deleteStation() {
-        delay(500).then(()=>{
+        delay(500).then(() => {
             this.excelDeleteHttpService.sub$.next(this.item.id)
         })
-        
-        this.stationFormStatus ='SUBMITTED'
+
+        this.stationFormStatus = 'SUBMITTED'
         this.errorMessage = undefined
     }
 
     /** aka on update */
     public submitForm(f: FormGroup) {
-
         this.softMessage = ''
-        this.stationFormStatus ='INITIAL'
+        this.stationFormStatus = 'INITIAL'
         this.errorMessage = undefined
         const formValues: StationFormValues = f.value
 

@@ -11,19 +11,19 @@ import { log } from 'x-utils-es'
 export class AuthGuardService implements CanLoad {
     constructor(private authService: AuthPermissionsService, private router: Router) {}
     canLoad(route: Route): Observable<boolean> {
-      log({route})
-      const toLocation: string = route.path
-      return this.authService.user$.pipe(
+        log({ route })
+        const toLocation: string = route.path
+        return this.authService.user$.pipe(
             map((n) => {
                 return n?.token !== undefined
             }),
             // re/route to auth and quickly set fake token
-            tap(n => {
+            tap((n) => {
                 if (!n) {
                     this.authService.toLocation = toLocation as any
                     // NO TOKEN AVAILABLE, THEN...
                     // navigate to auth route, make (POST) /api/auth request with hardcoded credentials
-                   
+
                     this.router.navigate(['auth'])
                 }
             })

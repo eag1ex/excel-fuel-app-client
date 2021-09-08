@@ -109,18 +109,17 @@ export class LocationsComponent implements OnInit {
      * direction: search > leaflet(component) > station-map-item
      */
     get excelStations$(): Observable<ExcelModel[]> {
-        return this.excelStates.updatedStation$
-            .pipe(
-                map((stationItem) => {
-                    const { station, delete_id, add_station_id } = stationItem || {}
-                    if (isFalsy(station) && !delete_id && !add_station_id) {
-                        return this.excelStationsSnapShot?.data
-                    } else {
-                        this.deletageProcessAndUpdate(stationItem)
-                        return this.excelStationsSnapShot?.data
-                    }
-                })
-            )
+        return this.excelStates.updatedStation$.pipe(
+            map((stationItem) => {
+                const { station, delete_id, add_station_id } = stationItem || {}
+                if (isFalsy(station) && !delete_id && !add_station_id) {
+                    return this.excelStationsSnapShot?.data
+                } else {
+                    this.deletageProcessAndUpdate(stationItem)
+                    return this.excelStationsSnapShot?.data
+                }
+            })
+        )
     }
 
     ngOnInit(): void {}

@@ -3,16 +3,16 @@
  * - add selected item to state management
  */
 
-import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core'
 import { COMMA, ENTER } from '@angular/cdk/keycodes'
 import { FormControl } from '@angular/forms'
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete'
 import { Observable } from 'rxjs'
 import { filter, map, retry, startWith, tap } from 'rxjs/operators'
-import {  ExcelModel } from '@excel/interfaces'
-import { excelListByName } from '@excel/utils';
-import { ExcelStates } from '@excel/states';
-import { delay,  unsubscribe } from 'x-utils-es';
+import { ExcelModel } from '@excel/interfaces'
+import { excelListByName } from '@excel/utils'
+import { ExcelStates } from '@excel/states'
+import { delay, unsubscribe } from 'x-utils-es'
 
 @Component({
     selector: 'lib-search',
@@ -49,14 +49,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         return this.searchStations?.filter((x) => (this.items?.length ? this.items.filter((y) => x.id === y.id).length === 0 : true))
     }
 
- 
     /** on item added clear last input value */
     public added(input: HTMLInputElement): void {
         input.value = ''
     }
 
     /** on click send request to leaflet to go to selected station */
-    public chipOnClick(el: ExcelModel){
+    public chipOnClick(el: ExcelModel) {
         this.states.setSelectedSearchResults([el])
     }
 
@@ -81,7 +80,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.searchCtrl.setValue(null)
     }
 
-
     /** on real time update make change to selected chip items */
     itemsUpdate(list: ExcelModel[]): void {
         const match = (id): ExcelModel => list.filter((n) => n.id === id)[0]
@@ -96,20 +94,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     /** on live update remove old non existing items*/
-    itemsRemoveSelected(n: ExcelModel[]): void{
-         const match = (item: ExcelModel) => n.filter(x => x.id === item.id).length
+    itemsRemoveSelected(n: ExcelModel[]): void {
+        const match = (item: ExcelModel) => n.filter((x) => x.id === item.id).length
 
-         this.items.forEach((item, inx) => {
-             if (!match(item)) this.items.splice(inx, 1)
-         })
+        this.items.forEach((item, inx) => {
+            if (!match(item)) this.items.splice(inx, 1)
+        })
     }
 
     ngOnInit(): void {
         let initial = true
-        if (this.searchStations$){
-           const s0 = this.searchStations$.subscribe(n => {
-                if (n){
-
+        if (this.searchStations$) {
+            const s0 = this.searchStations$.subscribe((n) => {
+                if (n) {
                     this.searchStations = n
                     this.itemsRemoveSelected(n)
                     this.itemsUpdate(n)
@@ -120,19 +117,18 @@ export class SearchComponent implements OnInit, OnDestroy {
                         delay(200).then(() => {
                             this.states.setSelectedSearchResults(this.items)
                         })
-
                     }
                     initial = false
                     this.searchCtrl.setValue(null)
                 }
             })
-           this.subscriptions.push(...[s0])
+            this.subscriptions.push(...[s0])
         }
     }
 
     /** add 1 item to selected results */
-    initialAddItems(){
-        if(!this.initialAdd && this.searchStations[0]){
+    initialAddItems() {
+        if (!this.initialAdd && this.searchStations[0]) {
             this.items.push(this.searchStations[0])
             this.states.setSelectedSearchResults(this.items)
             this.searchCtrl.setValue(null)
@@ -140,9 +136,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-    ngOnDestroy(): void{
+    ngOnDestroy(): void {
         unsubscribe(this.subscriptions, 'SearchComponent')
     }
 }
