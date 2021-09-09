@@ -73,11 +73,11 @@ export const makeMarkerPopUp = (metadata: ExcelModel): string => {
 export const toExcelUpdate = (formValues: StationFormValues): ExcelModel => {
     if (!formValues) return undefined
 
-    let allAreSet = [formValues.formName, formValues.formPrices, formValues.formProduct_ids].filter((n) => !isFalsy(n))
+    const allAreSet = [formValues.formName, formValues.formPrices, formValues.formProduct_ids].filter((n) => !isFalsy(n))
     if (allAreSet.length !== 3) return undefined
 
     // pair index offset by 1
-    let priceStacks: ExcelPrice[] = [formValues.formPrices, formValues.formProduct_ids].reduce((n, el, inx) => {
+    const priceStacks: ExcelPrice[] = [formValues.formPrices, formValues.formProduct_ids].reduce((n, el, inx) => {
         if (formValues.formPrices[inx] && formValues.formProduct_ids[inx]) {
             const prices = {
                 currency: defaultCurrency,
@@ -109,19 +109,19 @@ export const toExcelCreate = (formValues: CreateStationFormValues): ExcelModel =
 
     const { formLatitude, formLongitude, formAddress, formCity, formName, formSetPrices, formPriceIDS, formProducts, formProductsUpdated } = formValues
 
-    let allAreSet = [formLatitude, formLongitude, formAddress, formCity, formName, formSetPrices, formPriceIDS].filter((n) => !isFalsy(n))
+    const allAreSet = [formLatitude, formLongitude, formAddress, formCity, formName, formSetPrices, formPriceIDS].filter((n) => !isFalsy(n))
 
     if (allAreSet.length !== 7) return undefined
 
     // pair index offset by 1
-    let productStacks: ExcelProduct[] = (formProducts.length ? [formProducts, formProductsUpdated] : []).reduce((n, el, inx) => {
+    const productStacks: ExcelProduct[] = (formProducts.length ? [formProducts, formProductsUpdated] : []).reduce((n, el, inx) => {
         if (!isFalsy(formProductsUpdated[inx])) n.push(formProductsUpdated[inx])
         else n.push(formProducts[inx])
         return n
     }, [])
 
     // pair index offset by 1
-    let priceStacks: ExcelPrice[] = [formPriceIDS, formSetPrices].reduce((n, el, inx) => {
+    const priceStacks: ExcelPrice[] = [formPriceIDS, formSetPrices].reduce((n, el, inx) => {
         if (formPriceIDS[inx] && formSetPrices[inx]) {
             const prices = {
                 currency: defaultCurrency,

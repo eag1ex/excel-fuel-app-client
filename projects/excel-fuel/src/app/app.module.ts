@@ -17,7 +17,7 @@ if (environment.production === true) {
     debug(`-- Using Angular 11.x --`)
     debug(`-- CONSOLE LOGS DISABLES --`)
     // tslint:disable-next-line: only-arrow-functions
-    console.log = function () {}
+    console.log = function() {}
     disableLogging()
 }
 

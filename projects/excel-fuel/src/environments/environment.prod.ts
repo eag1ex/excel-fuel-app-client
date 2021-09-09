@@ -1,4 +1,4 @@
-import { localStorageGetUser } from "@excel/utils";
+import { localStorageGetUser } from '@excel/utils';
 
 export const environment = {
   production: true,

@@ -27,8 +27,8 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
     subscriptions = []
     productsWithPrice: ProductWithPrice[]
     item: ExcelModel
-    errorMessage: string = ''
-    softMessage: string = ''
+    errorMessage = ''
+    softMessage = ''
     stationFormStatus: FormStatus = 'INITIAL'
 
     /**
@@ -65,7 +65,7 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
                     this.initializeChanges(n)
                     this.updateLeafletMarker(n)
 
-                    let data = {
+                    const data = {
                         station: n,
                         marker: this.activeMarker,
                     }
@@ -89,7 +89,7 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
                 this.stationForm.reset()
             })
             .subscribe((n) => {
-                let data = {
+                const data = {
                     delete_id: this.item.id,
                     marker: this.activeMarker,
                 } as any
@@ -117,7 +117,7 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
 
     updateLeafletMarker(n: ExcelModel): void {
         this.activeMarker.options.title = n.name
-        ;(this.activeMarker.options as any).data = n
+        ; (this.activeMarker.options as any).data = n
         this.activeMarker.bindPopup(makeMarkerPopUp(n))
         this.activeMarker = Object.assign(this.activeMarker)
     }

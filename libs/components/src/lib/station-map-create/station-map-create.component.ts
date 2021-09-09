@@ -17,7 +17,7 @@ import { StationForm } from './station-form-create'
     styleUrls: ['./station-map-create.component.scss'],
 })
 export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
-    errorMessage: string = ''
+    errorMessage = ''
     stationFormStatus: FormStatus = 'INITIAL'
     stationForm: StationForm
     subscriptions = []
@@ -69,7 +69,7 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
                 this.stationForm.reset()
             })
             .subscribe((n) => {
-                let data = {
+                const data = {
                     station: n,
                     add_station_id: n.id,
                 }
@@ -101,7 +101,7 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         const formValues: CreateStationFormValues = f.value
         // ExcelUpdate
         if (f.status === 'VALID') {
-            let addNew = toExcelCreate(formValues)
+            const addNew = toExcelCreate(formValues)
             if (addNew) {
                 this.excelCreateHttpService.sub$.next(addNew)
                 this.stationFormStatus = 'SUBMITTED'

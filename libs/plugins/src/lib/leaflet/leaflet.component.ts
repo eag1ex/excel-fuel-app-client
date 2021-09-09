@@ -241,7 +241,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     ngOnInit(): void {
         if (this.events$) {
-            let s0 = this.events$.subscribe((n) => {
+            const s0 = this.events$.subscribe((n) => {
                 // destroy current map selection on this event
                 if (n.eventName === 'CLOSE_STATION_MAP') this.selectedMapItem = undefined
             })

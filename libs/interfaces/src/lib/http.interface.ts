@@ -26,6 +26,4 @@ export interface AuthResp {
 }
 
 type TError = { code: string; message: string }
-export interface CreateErrorCallback {
-    (error: { error: TError } & Error): void
-}
+export type CreateErrorCallback = (error: { error: TError } & Error) => void

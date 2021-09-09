@@ -13,10 +13,10 @@ export class StationForm {
         this.excelProducts = excelProducts
         this.initForm()
         this.patchValues()
-       const s0= this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
- 
-            log('fromGroup/valueChanges',n)
-            this.fromGroup.get('formValid').patchValue(1,{onlySelf:true})
+        const s0 = this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
+
+            log('fromGroup/valueChanges', n)
+            this.fromGroup.get('formValid').patchValue(1, {onlySelf: true})
         })
 
         this.subscriptions.push(s0)
@@ -39,7 +39,7 @@ export class StationForm {
             formProductsUpdated: new FormArray(this.excelProducts.map(n => new FormControl(''))),
 
             /** hidden form, in case it failed toExcelCreate we force in invalidate the form */
-            formValid: new FormControl(0,[Validators.min(1), Validators.required]),
+            formValid: new FormControl(0, [Validators.min(1), Validators.required]),
         })
     }
 
@@ -54,9 +54,9 @@ export class StationForm {
     }
 
     /** make product options selected vyt default  */
-    onFormProductsSelected(selected: ExcelProduct[]):void{
-       
-        this.fromGroup.patchValue({formProductsUpdated:selected})
+    onFormProductsSelected(selected: ExcelProduct[]): void{
+
+        this.fromGroup.patchValue({formProductsUpdated: selected})
     }
 
     onFormProductsUpdated(selected: ExcelProduct, indexOrder: number): void{

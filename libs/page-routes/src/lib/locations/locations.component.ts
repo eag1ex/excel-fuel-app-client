@@ -34,8 +34,8 @@ export class LocationsComponent implements OnInit {
         // BUG, for some reason el.nativeElement doesnt work ha?
         if (el?._elementRef) {
             try {
-                let elm: HTMLButtonElement = el._elementRef.nativeElement
-                let s0 = fromEvent(elm, 'click').subscribe((e) => {
+                const elm: HTMLButtonElement = el._elementRef.nativeElement
+                const s0 = fromEvent(elm, 'click').subscribe((e) => {
                     if (!this.createStataion.createOpen) {
                         this.createStataion.createOpen++
                         this.createStataion.addNewID = new Date()
@@ -65,9 +65,9 @@ export class LocationsComponent implements OnInit {
      */
     deletageProcessAndUpdate(stationUpdate: UpdatedStation): void {
         const { station, delete_id } = stationUpdate || {}
-        let conditions = delegateSteps(stationUpdate)
+        const conditions = delegateSteps(stationUpdate)
 
-        let forSwitch = (condition: DeletageSteps): number => {
+        const forSwitch = (condition: DeletageSteps): number => {
             let match = 0
             switch (condition) {
                 case 'NEW': {
@@ -99,7 +99,7 @@ export class LocationsComponent implements OnInit {
             return match
         }
 
-        for (let con of conditions) if (forSwitch(con)) break
+        for (const con of conditions) if (forSwitch(con)) break
     }
 
     /**

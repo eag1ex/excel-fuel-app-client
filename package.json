@@ -4,12 +4,18 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve excel-fuel --proxy-config ./proxy/excel-proxy.json  --disable-host-check --port 4444",
-    "build": "ng build",
+    "build": "ng build excel-fuel --prod --aot --configuration=production --base-href /",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --fix",
     "e2e": "ng e2e"
   },
   "private": true,
+  "license": "CC BY-NC-ND 2.0",
+  "engineStrict": true,
+  "engines": {
+    "node": "~12.0.0",
+    "npm": "~6.9.0"
+  },
   "dependencies": {
     "@angular/animations": "~11.2.0",
     "@angular/cdk": "^12.2.3",
