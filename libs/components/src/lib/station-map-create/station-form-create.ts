@@ -14,7 +14,6 @@ export class StationForm {
         this.initForm()
         this.patchValues()
         const s0 = this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
-
             log('fromGroup/valueChanges', n)
             this.fromGroup.get('formValid').patchValue(1, {onlySelf: true})
         })

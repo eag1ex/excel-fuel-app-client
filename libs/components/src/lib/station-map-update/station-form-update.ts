@@ -17,9 +17,6 @@ export class StationForm {
         // disabled initially, edit by user
         this.fromGroup.disable({ onlySelf: true })
 
-        // this.fromGroup.valueChanges.pipe(debounceTime(300)).subscribe((n) => {
-        //     log('fromGroup/changes', n)
-        // })
     }
 
     initForm() {
@@ -72,7 +69,5 @@ export class StationForm {
     get formProductIds(): FormArray {
         return this.fromGroup.get('formProduct_ids') as FormArray
     }
-
-
 
 }
