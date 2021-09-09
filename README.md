@@ -4,6 +4,7 @@
 Client application displays available fuel stations on the map, using latitude/longitude targeting, with backend rest/api implementation, all authenticated via token. User can: **create**, **update** and **list** available stations in real time, application performs /auth check for every new token when server restarts.
 
 Features:
+
 - Angular 11 MVC
 - Fullstack application
 - Api Authentication with router guards and resolvers 
@@ -76,8 +77,10 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
 - `@excel/states` manage data states 
 - `/libs/plugins` all vendor plugins are placed here, currently LeafletModule
 
-**Diagram overview**:
+**Diagram overview**
+
 **(A) Project structure:**
+
 - Project/=> Excel Fuel
     - Router/=> Lazy module >
         - Locations (Component) >
@@ -87,6 +90,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
                 - Station map update (component)
 
 **(B) Routing:** 
+
 - App (project)/=> main router
     - Child routes:
         - Locations >
@@ -95,6 +99,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
             - Search, Station/create, Leaflet > Station/update, components
 
 **(C) Data flow:**
+
 - Lazy loaded (module) Locations route > 
     - Auth / guard
     - Resolver >
@@ -116,6 +121,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
 
 
 #### Essential VSC plugins
+
 - Angular Essentials (Version 11) `johnpapa.angular-essentials`
 - Angular Language Service `angular.ng-template`
 - Angular Schematics `cyrilletuzi.angular-schematics`
@@ -127,6 +133,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
 
 
 #### Developer Notes
+
 - See environment variables at: `projects\excel-fuel\src\environments` for api configs
 - Not fully optimized for mobile
 - Wasn't entirely sure of  logic for products/points (ExcelProductPoint[]) and how they should behave so implemented my own take on it:)
@@ -134,6 +141,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
 
 
 #### TESTS
+
 - No tests available for this projects
 
 
