@@ -6,7 +6,7 @@
     "start": "ng serve excel-fuel --proxy-config ./proxy/excel-proxy.json  --disable-host-check --port 4444",
     "build": "ng build excel-fuel --prod --aot --configuration=production --base-href /",
     "test": "ng test",
-    "lint": "ng lint --fix",
+    "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "private": true,

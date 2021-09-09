@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { DeletageSteps, ExcelModel, ExcelStationsResolver, LocationEvents, UpdatedStation } from '@excel/interfaces'
 import { ExcelStates } from '@excel/states'
@@ -13,7 +13,7 @@ import { log, isFalsy, unsubscribe, onerror } from 'x-utils-es'
     templateUrl: './locations.component.html',
     styleUrls: ['./locations.component.scss'],
 })
-export class LocationsComponent implements OnInit {
+export class LocationsComponent implements OnInit, OnDestroy {
     subscriptions = []
     locationEventsSub$: Subject<LocationEvents> = new Subject()
     createStataion: { createOpen: number; addNewID: Date } = {

@@ -116,8 +116,8 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     updateLeafletMarker(n: ExcelModel): void {
-        this.activeMarker.options.title = n.name
-        ; (this.activeMarker.options as any).data = n
+        this.activeMarker.options.title = n.name;
+        (this.activeMarker.options as any).data = n
         this.activeMarker.bindPopup(makeMarkerPopUp(n))
         this.activeMarker = Object.assign(this.activeMarker)
     }

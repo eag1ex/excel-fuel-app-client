@@ -47,6 +47,11 @@
                 "glob": "**/*",
                 "input": "libs/theme/fonts/",
                 "output": "/libs/theme/fonts/"
+              },
+              {
+                "glob": "**/*",
+                "input": "libs/theme/scss/",
+                "output": "/libs/theme/scss/"
               }
             ],
             "styles": [  {
@@ -121,11 +126,26 @@
             "karmaConfig": "projects/excel-fuel/karma.conf.js",
             "assets": [
               "projects/excel-fuel/src/favicon.ico",
-              "projects/excel-fuel/src/assets"
+              "projects/excel-fuel/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "/libs/theme/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "libs/theme/assets/",
+                "output": "/libs/theme/assets/"
+              },
+             
+              {
+                "glob": "**/*",
+                "input": "libs/theme/fonts/",
+                "output": "/libs/theme/fonts/"
+              }
+             
             ],
-            "styles": [
-              "projects/excel-fuel/src/styles.css"
-            ],
+         
             "scripts": []
           }
         },
@@ -438,36 +458,36 @@
     },
     "data": {
       "projectType": "library",
-      "root": "projects/data",
-      "sourceRoot": "projects/data/src",
+      "root": "libs/data",
+      "sourceRoot": "libs/data/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/data/tsconfig.lib.json",
-            "project": "projects/data/ng-package.json"
+            "tsConfig": "libs/data/tsconfig.lib.json",
+            "project": "libs/data/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/data/tsconfig.lib.prod.json"
+              "tsConfig": "libs/data/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/data/src/test.ts",
-            "tsConfig": "projects/data/tsconfig.spec.json",
-            "karmaConfig": "projects/data/karma.conf.js"
+            "main": "libs/data/src/test.ts",
+            "tsConfig": "libs/data/tsconfig.spec.json",
+            "karmaConfig": "libs/data/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/data/tsconfig.lib.json",
-              "projects/data/tsconfig.spec.json"
+              "libs/data/tsconfig.lib.json",
+              "libs/data/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
