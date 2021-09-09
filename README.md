@@ -37,6 +37,13 @@ $/ npm start # default app
 - Make sure to start server application: `excel-fuel-server`, or it will route to error due to no token and api access. 
 
 
+### Build
+To build for production just run, then copy the whole dir `excel-fuel` on server app inside: `/views/excel-fuel`
+
+```sh
+$/ npm run build # build at /dist
+```
+
 
 #### Live Demo
 Hosted on heroku node.js server (_server has timeout limit_, free dyno):
@@ -44,6 +51,15 @@ Hosted on heroku node.js server (_server has timeout limit_, free dyno):
 ```
 access:
 https://pacific-meadow-55275.herokuapp.com/app
+```
+
+
+
+#### Server app repo
+Excel fuel, typescript server app can be fount at
+
+```sh
+/$ git clone https://eag1ex@bitbucket.org/eag1ex/excel-fuel-server.git
 ```
 
 
@@ -114,6 +130,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
 - See environment variables at: `projects\excel-fuel\src\environments` for api configs
 - Not fully optimized for mobile
 - Wasn't entirely sure of  logic for products/points (ExcelProductPoint[]) and how they should behave so implemented my own take on it:)
+- No preloader on start, will add later
 
 
 #### TESTS

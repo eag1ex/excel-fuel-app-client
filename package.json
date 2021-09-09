@@ -12,6 +12,7 @@
   },
   "private": true,
   "license": "CC BY-NC-ND 2.0",
+  "author": "eaglex.net",
   "engineStrict": true,
   "engines": {
     "node": "~12.0.0",
