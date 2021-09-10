@@ -40,9 +40,9 @@ export class ExcelStates extends RxStore<IState> {
         this.setState({ excelProducts: data?.response })
     }
 
-    setUpdatedStation(d: UpdatedStation & {index?:number}): void {
-        let data = copy(d)
-        data.station = data.station ? data.station : undefined
+    setUpdatedStation(data: UpdatedStation & {index?:number}): void {
+
+        data.station = data.station ? copy(data.station) : undefined
 
         // make sure states are always changed on any update from last state
         let stateData = (this.getState().updatedStation ||{}) as UpdatedStation & {index?:number}

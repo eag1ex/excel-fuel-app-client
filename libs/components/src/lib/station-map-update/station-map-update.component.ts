@@ -72,6 +72,7 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy,A
 
                     this.stationForm.reset()
                     this.stationFormStatus = 'INITIAL'
+                   
                     this.states.setUpdatedStation(data)
                     this.softMessage = `Station for <strong>${n.name}</strong> updated`
                 }

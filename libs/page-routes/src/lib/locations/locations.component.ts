@@ -142,7 +142,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
     get excelStations$(): Observable<ExcelModel[]> {
         return this.excelStates.updatedStation$.pipe(
             map((stationItem) => {
-       
+                log('got update ?',stationItem)
                 const { station, delete_id, add_station_id, close_create_stataion } = stationItem || {}
                 if (isFalsy(station) && !delete_id && !add_station_id && !close_create_stataion) {
                     return this.excelStationsSnapShot?.data
