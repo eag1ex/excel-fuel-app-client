@@ -109,7 +109,7 @@ Main project lives in `projects/excel-fuel` and components, http, services, util
             - updatedStation$ (feeding latest changes to Leaflet and search components) 
             - Snapshot data ( api/stations )    
             - Station map create (component) >
-                - api: /create
+                - api: /create, /products
                 - update ExcelStates ( without http/requesting new updated list )
             - Search (ExcelStates/stations) >
                 - ExcelStates/setUpdatedStation
