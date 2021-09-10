@@ -29,11 +29,12 @@ export const now = () => formatTime(new Date())
 
 /** make delegate stepping process to be used with switch/case for our location update routing */
 export const delegateSteps = (stationUpdate: UpdatedStation): DeletageSteps[] => {
-    const { station, delete_id, add_station_id } = stationUpdate || {}
+    const { station, delete_id, add_station_id, close_create_stataion } = stationUpdate || {}
     return [
         !isFalsy(station) && !delete_id && !add_station_id ? 'UPDATE' : null,
         delete_id && isFalsy(station) && !add_station_id ? 'DELETE' : null,
         !isFalsy(station) && add_station_id ? 'NEW' : null,
+        isFalsy(station) && close_create_stataion ? 'CANCEL' : null,
     ].filter((n) => !!n) as DeletageSteps[]
 }
 
@@ -46,6 +47,23 @@ export const localStorageGetUser = (storageName: string): ExcelUser => {
         return undefined
     }
 }
+
+/** detect device */
+export const isMobile = (navigator: Navigator) => {
+    const toMatch = [
+      /Android/i,
+      // webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      // iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i,
+    ];
+    return toMatch.some((toMatchItem): any => {
+      return navigator.userAgent.match(toMatchItem);
+    });
+  };
+
 
 /** make html marker content, popup */
 export const makeMarkerPopUp = (metadata: ExcelModel): string => {

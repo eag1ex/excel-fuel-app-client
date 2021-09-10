@@ -1,12 +1,13 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { DeletageSteps, ExcelModel, ExcelStationsResolver, LocationEvents, UpdatedStation } from '@excel/interfaces'
+import { LeafletComponent } from '@excel/plugins'
 import { ExcelStates } from '@excel/states'
 import { delegateSteps } from '@excel/utils'
 import { fromEvent, Subject } from 'rxjs'
 import { Observable } from 'rxjs/internal/Observable'
 import { map } from 'rxjs/operators'
-import { log, isFalsy, unsubscribe, onerror } from 'x-utils-es'
+import { log, isFalsy, unsubscribe, onerror, delay } from 'x-utils-es';
 
 @Component({
     selector: 'lib-locations',
@@ -22,9 +23,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
     }
 
     excelStationsSnapShot: ExcelStationsResolver
-    constructor(private excelStates: ExcelStates, private route: ActivatedRoute) {
+    constructor(
+        private CDR: ChangeDetectorRef,
+        private excelStates: ExcelStates, private route: ActivatedRoute) {
         this.excelStationsSnapShot = this.route.snapshot.data?.list as any
     }
+
+    /** gain access to leaflet component, we can make exxecutions within */
+    @ViewChild('leaflet') leaflet: LeafletComponent
 
     /**
      * Opne and close new create station component controlls
@@ -37,6 +43,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
                 const elm: HTMLButtonElement = el._elementRef.nativeElement
                 const s0 = fromEvent(elm, 'click').subscribe((e) => {
                     if (!this.createStataion.createOpen) {
+                        this.closeOpenLeafletMapMarkers()
                         this.createStataion.createOpen++
                         this.createStataion.addNewID = new Date()
                         this.locationEventsSub$.next({ eventName: 'CLOSE_STATION_MAP' })
@@ -51,6 +58,19 @@ export class LocationsComponent implements OnInit, OnDestroy {
             } catch (err) {
                 onerror('[createStation]', err)
             }
+        }
+    }
+
+    /**  from gained access to leaflet component, we can now accep leaflet markers, nice!! */
+    closeOpenLeafletMapMarkers(){
+        if(this.leaflet){
+            this.leaflet.markerHistory.forEach(({m})=>{
+                try{
+                    m.closePopup()
+                }catch(err){
+
+                }         
+            })
         }
     }
 
@@ -70,6 +90,17 @@ export class LocationsComponent implements OnInit, OnDestroy {
         const forSwitch = (condition: DeletageSteps): number => {
             let match = 0
             switch (condition) {
+
+                case 'CANCEL': {
+                   
+                    // if we clicked on item market to opne update component
+                    // close create statation component if its open
+                    this.createStataion.createOpen = 0
+                    this.CDR.detectChanges()
+                    match = 1
+                    break
+                }
+
                 case 'NEW': {
                     this.excelStationsSnapShot.data.push(station)
                     match = 1
@@ -111,8 +142,9 @@ export class LocationsComponent implements OnInit, OnDestroy {
     get excelStations$(): Observable<ExcelModel[]> {
         return this.excelStates.updatedStation$.pipe(
             map((stationItem) => {
-                const { station, delete_id, add_station_id } = stationItem || {}
-                if (isFalsy(station) && !delete_id && !add_station_id) {
+       
+                const { station, delete_id, add_station_id, close_create_stataion } = stationItem || {}
+                if (isFalsy(station) && !delete_id && !add_station_id && !close_create_stataion) {
                     return this.excelStationsSnapShot?.data
                 } else {
                     this.deletageProcessAndUpdate(stationItem)
@@ -122,7 +154,9 @@ export class LocationsComponent implements OnInit, OnDestroy {
         )
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+ 
+    }
 
     ngOnDestroy(): void {
         unsubscribe(this.subscriptions, 'LocationsComponent')

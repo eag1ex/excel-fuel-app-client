@@ -95,6 +95,10 @@ export class StationMapCreateComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.push(...[s0, s2])
     }
 
+    public closeStationCreate(){
+        this.destroy.emit(this.addNewID)
+    }
+
     public submitForm(f: FormGroup) {
         this.stationFormStatus = 'INITIAL'
         this.errorMessage = undefined

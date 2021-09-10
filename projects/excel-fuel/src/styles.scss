@@ -7,6 +7,7 @@
 
 @include typography();
 @include resets();
+@include style-custom-classes();
 @include cdk-overlay-container();
 @include leaflet-map();
 @include bootstrap-missing();

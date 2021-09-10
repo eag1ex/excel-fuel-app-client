@@ -25,7 +25,10 @@ export class IconsComponent implements OnInit, OnChanges {
     /** custom class, or any onther global class */
     @Input() className?: string
     @Input() icon: string
-    @Input() size?: number
+    @Input() size? = 15 
+
+    /** for width and height to be of the same {size} */
+    @Input() even?:boolean
     @Input() offset?: Offset
 
     ngOnChanges(changes: SimpleChanges) {

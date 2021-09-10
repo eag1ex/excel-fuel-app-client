@@ -2,10 +2,11 @@
     <mat-spinner *ngIf="stationFormStatus === 'SUBMITTED'" class="loading-spinner" [diameter]="50"></mat-spinner>
     <mat-card *ngIf="stationForm?.fromGroup as fromGroup" class="m-2 form-status-{{ stationFormStatus }}">
         <form [formGroup]="fromGroup" (submit)="submitForm(fromGroup)">
-            <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-2">
+            <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-4 d-flex justify-content-between">
                 <button (click)="stationForm.edit()" type="button" [value]="1" mat-stroked-button>EDIT</button>
 
                 <button (click)="deleteStation()" type="button" [value]="1" color="warn" mat-stroked-button>DELETE</button>
+                <button (click)="closeStation()" type="button" mat-stroked-button>CANCEL</button>
             </mat-card-actions>
 
             <mat-card-title class="mb-1">

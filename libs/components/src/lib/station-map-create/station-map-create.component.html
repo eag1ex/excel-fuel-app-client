@@ -82,8 +82,9 @@
             </mat-card-content>
 
             <mat-card-actions *ngIf="permissions === 'ADMINISTRATOR'" class="mx-0 pt-0 mb-0">
-                <div class="d-flex justify-content-end">
-                    <input type="hidden" formControlName="formValid" name="formValid" />
+                <div class="d-flex justify-content-between">
+                    <button type="button" (click)="closeStationCreate()" class="align-self-start" mat-stroked-button>CANCEL</button>
+
                     <button
                         [disabled]="fromGroup.invalid || !fromGroup.dirty"
                         class="align-self-end"
@@ -93,6 +94,7 @@
                     >
                         CREATE
                     </button>
+                    <input type="hidden" formControlName="formValid" name="formValid" />
                 </div>
 
                 <div *ngIf="stationFormStatus === 'ERROR'" class="mt-3 alert-danger align-self-start p-1 rounded">

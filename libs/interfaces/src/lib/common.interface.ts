@@ -74,7 +74,7 @@ export interface ExcelStationsResolver extends RouteItem {
     data: ExcelModel[]
 }
 
-export type DeletageSteps = 'NEW' | 'UPDATE' | 'DELETE'
+export type DeletageSteps = 'NEW' | 'UPDATE' | 'DELETE' | 'CANCEL'
 export type UserPermType = 'ADMINISTRATOR' | 'BASIC'
 
 export interface ExcelUser extends AuthCreds {
@@ -88,6 +88,8 @@ export interface ExcelUser extends AuthCreds {
 export interface UpdatedStation {
     delete_id?: string
     add_station_id?: string
+    /** if we have (new) create station component open, at the same time we open update statation component, we want to close (previous action) for create station component  */
+    close_create_stataion?:boolean;
     station: ExcelModel
     marker?: Marker
 }

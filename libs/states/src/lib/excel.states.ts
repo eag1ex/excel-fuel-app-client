@@ -5,7 +5,7 @@
 
 import { Injectable, isDevMode } from '@angular/core'
 import { Observable } from 'rxjs'
-import { copy } from 'x-utils-es'
+import { copy, log } from 'x-utils-es'
 import { RxStore } from '@excel/utils'
 import { ExcelStationsResp, ExcelModel, ExcelProduct, ExcelProductsResp, UpdatedStation } from '@excel/interfaces'
 
@@ -40,8 +40,14 @@ export class ExcelStates extends RxStore<IState> {
         this.setState({ excelProducts: data?.response })
     }
 
-    setUpdatedStation(data: UpdatedStation): void {
-        data.station = data.station ? copy(data.station) : undefined
+    setUpdatedStation(d: UpdatedStation & {index?:number}): void {
+        let data = copy(d)
+        data.station = data.station ? data.station : undefined
+
+        // make sure states are always changed on any update from last state
+        let stateData = (this.getState().updatedStation ||{}) as UpdatedStation & {index?:number}
+        stateData.index = data.index!==undefined ?  data.index + Number(stateData?.index || 0):0;  
+        (data as any).index = stateData.index;
         this.setState({ updatedStation: data })
     }
 

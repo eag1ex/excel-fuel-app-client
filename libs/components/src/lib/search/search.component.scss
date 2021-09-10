@@ -1,5 +1,8 @@
 :host {
     display: block;
+    mat-form-field {
+        margin-bottom: -18px;
+    }
     lib-icons {
         cursor: pointer;
     }

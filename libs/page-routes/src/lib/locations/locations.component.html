@@ -1,24 +1,24 @@
 <section>
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-auto py-3">
             <h1 class="light-weigth mb-0">Locations</h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-offset">
         <div class="col-md-12 col-lg-12 col-sm-12">
-            <div class="d-flex justify-content-between search-container">
+            <div class="d-flex justify-content-between search-container align-items-center">
                 <lib-search class="w-100" [searchStations$]="excelStations$"></lib-search>
 
-                <button #createStation class="add-station-btn mt-3" mat-icon-button>
-                    <lib-icons [icon]="createStataion.createOpen ? 'remove_circle_blue' : 'add_circle_blue'" [size]="40"></lib-icons>
+                <button #createStation class="add-station-btn" mat-icon-button>
+                    <lib-icons [icon]="createStataion.createOpen ? 'remove_circle_blue' : 'add_circle_blue'" [size]="30" [even]="true"></lib-icons>
                 </button>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-offset">
         <div class="col clearfix leaflet-container {{ createStataion.createOpen ? 'station-map-create-active' : '' }}">
             <lib-station-map-create (destroy)="onDestroyStationComp($event)" *ngIf="createStataion.createOpen" [addNewID]="createStataion.addNewID"></lib-station-map-create>
-            <lib-leaflet [events$]="locationEventsSub$"></lib-leaflet>
+            <lib-leaflet #leaflet [events$]="locationEventsSub$"></lib-leaflet>
         </div>
     </div>
 </section>

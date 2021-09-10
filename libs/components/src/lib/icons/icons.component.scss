@@ -55,7 +55,8 @@
         &.remove_circle_blue,
         &.add_circle_blue,
         &.menu {
-            @include icons-preset();
+            $even-dimensions: true;
+            @include icons-preset($even-dimensions);
         }
     }
 }

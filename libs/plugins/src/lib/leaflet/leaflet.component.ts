@@ -6,9 +6,8 @@ import { ExcelModel, LatLng, LocationEvents, SelectedMapItem } from '@excel/inte
 import { latLong, makeMarkerPopUp } from '@excel/utils'
 import { map, tileLayer, icon, marker, Marker, Map, Icon, MapOptions, IconOptions } from 'leaflet'
 import { log, sq, onerror, isFalsy, unsubscribe } from 'x-utils-es'
-
 import { Subject } from 'rxjs'
-import { filter, debounceTime, delay as rxDelay } from 'rxjs/operators'
+import { filter, debounceTime } from 'rxjs/operators'
 import { ExcelStates } from '@excel/states'
 import { Observable } from 'rxjs/internal/Observable'
 
@@ -51,7 +50,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(private states: ExcelStates, private route: ActivatedRoute) {
         const s0 = this.subSelect$
             .pipe(
-                debounceTime(500),
+                // debounceTime(1000),
                 filter((n) => !isFalsy(n))
             )
             .subscribe((n) => {
@@ -59,10 +58,8 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.selectedMapItem = undefined
                 } else {
                     this.selectedMapItem = { station: n.data, marker: n.marker }
-                    log('selected', this.selectedMapItem)
                 }
             })
-
         this.subscriptions.push(s0)
     }
 
@@ -142,8 +139,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
         log('addMarker for:', metadata.id)
 
         const mrkr: Marker = this.initMarker(metadata)
-        mrkr.addTo(this.map).bindPopup(makeMarkerPopUp(metadata))
-        this.markerTriggerEvents(mrkr)
+        mrkr.addTo(this.map).bindPopup(makeMarkerPopUp(metadata)).closePopup()
         this.markerHistory.push({ m: mrkr, id: metadata.id })
         return true
     }
@@ -160,19 +156,16 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** provide events to each marker on map */
     markerTriggerEvents(mrkr: Marker): void {
-        // add click trigget over the marker and next event
         mrkr.on('popupopen', (e) => {
             const opts: TargetOptions = e.target?.options
-
+            const iconEl: HTMLImageElement = e.sourceTarget?._icon
             // update icon on selected
-            const iconEl: HTMLImageElement = e.sourceTarget._icon
             if (iconEl) iconEl.src = iconUrlSelected
             if (opts) this.subSelect$.next({ ...opts, status: 'OPEN', marker: mrkr })
         })
 
         mrkr.on('popupclose', (e) => {
             const opts: TargetOptions = e.target?.options
-
             // restore icon
             const iconEl: HTMLImageElement = e.sourceTarget._icon
             if (iconEl) iconEl.src = iconUrl
@@ -227,7 +220,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // provide results when added or removed items
             // data received from search component
-            const s0 = this.states.selectedSearchResults$.pipe(debounceTime(500), rxDelay(500)).subscribe(async (n) => {
+            const s0 = this.states.selectedSearchResults$.pipe(debounceTime(500)).subscribe(async (n) => {
                 if (n === undefined) n = []
                 this.recycle(n)
 

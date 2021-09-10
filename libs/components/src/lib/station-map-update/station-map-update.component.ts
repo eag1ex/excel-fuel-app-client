@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ExcelDeleteHttpService, ExcelUpdateHttpService } from '@excel/http'
 import { ExcelModel, ExcelPrice, ExcelProduct, FormStatus, SelectedMapItem, StationFormValues, UserPermType } from '@excel/interfaces'
@@ -22,7 +22,7 @@ interface ProductWithPrice extends ExcelProduct {
     templateUrl: './station-map-update.component.html',
     styleUrls: ['./station-map-update.component.scss'],
 })
-export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
+export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy,AfterViewInit {
     stationForm: StationForm
     subscriptions = []
     productsWithPrice: ProductWithPrice[]
@@ -73,7 +73,6 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
                     this.stationForm.reset()
                     this.stationFormStatus = 'INITIAL'
                     this.states.setUpdatedStation(data)
-                    log('station updated', n)
                     this.softMessage = `Station for <strong>${n.name}</strong> updated`
                 }
             })
@@ -147,6 +146,11 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
         this.errorMessage = undefined
     }
 
+
+    public closeStation() {
+        this.activeMarker.closePopup()
+    }
+
     /** aka on update */
     public submitForm(f: FormGroup) {
         this.softMessage = ''
@@ -186,6 +190,12 @@ export class StationMapUpdateComponent implements OnInit, OnChanges, OnDestroy {
         if (this.permissions !== 'ADMINISTRATOR') {
             if (this.stationForm) this.stationForm.fromGroup.disable({ onlySelf: true })
         }
+ 
+        
+    }
+
+    ngAfterViewInit() {
+        this.states.setUpdatedStation({close_create_stataion:true,index:1} as any)
     }
 
     ngOnDestroy(): void {
