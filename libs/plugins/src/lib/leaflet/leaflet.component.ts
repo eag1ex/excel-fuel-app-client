@@ -140,6 +140,7 @@ export class LeafletComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const mrkr: Marker = this.initMarker(metadata)
         mrkr.addTo(this.map).bindPopup(makeMarkerPopUp(metadata)).closePopup()
+        mrkr.dragging.disable() // do not allow moving the marker
         this.markerHistory.push({ m: mrkr, id: metadata.id })
         return true
     }
