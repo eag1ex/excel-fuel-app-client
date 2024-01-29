@@ -1,0 +1,42 @@
+// iphone 5 down / less then 375 and down
+@media (max-device-width: 330px) {
+}
+
+@media (max-device-width: 375px) {
+}
+
+// standard ipad width
+@media (device-width: 1024px) {
+}
+
+@include media-breakpoint-up(sm) {
+}
+
+@include media-breakpoint-down(sm) {
+    lib-search {
+        input.input-search::placeholder {
+            font-size: 0.9em !important;
+        }
+        mat-chip-list {
+            .mat-chip-list-wrapper {
+                padding: 0 !important;
+            }
+            mat-chip {
+                min-height: 45px !important;
+                line-height: 1.25em !important;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+}
+
+@include media-breakpoint-down(md) {
+}
+
+@include media-breakpoint-up(lg) {
+}
+
+@include media-breakpoint-up(xl) {
+}
