@@ -4,7 +4,7 @@
 import { HttpClient } from '@angular/common/http'
 import { isFalsy, log } from 'x-utils-es'
 import { Observable, throwError } from 'rxjs'
-import { timeout, retry, catchError } from 'rxjs/operators'
+import { timeout, retry, catchError, map } from 'rxjs/operators'
 import { Inject, Injectable } from '@angular/core'
 import { AuthCreds, AuthResp, ENV } from '@excel/interfaces'
 
@@ -14,7 +14,7 @@ import { AuthCreds, AuthResp, ENV } from '@excel/interfaces'
 export class ExcelAuthHttpService {
     private apiBaseUrl: string
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
-        this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
+        this.apiBaseUrl = this.ENVIRONMENT.URI ? this.ENVIRONMENT.URI + `/${this.ENVIRONMENT.apiBaseUrl}` : this.ENVIRONMENT.apiBaseUrl
     }
 
     /**
@@ -28,6 +28,15 @@ export class ExcelAuthHttpService {
         return this.http
             .post<any>(`${url}`, JSON.stringify(creds))
             .pipe(timeout(10000), retry(1))
+            .pipe(
+                map((n) => {
+                    if (this.ENVIRONMENT.URI && this.ENVIRONMENT.functionCode) {
+                        n.response.token = 'test_abc'
+                    }
+
+                    return n
+                })
+            )
             .pipe(
                 catchError((err) => {
                     onerror('[auth]', err)

@@ -1,8 +1,15 @@
 {
     "/api": {
-      "target": "http://localhost:5000",
-      "secure": false,
-      "logLevel": "debug",
-      "changeOrigin": true
+        "target": "http://localhost:5000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+
+    "/excel-fuel-api": {
+        "target": "https://kind-gold-armadillo-sari.cyclic.app",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
     }
-  }
+}

@@ -8,6 +8,10 @@ export interface ENV {
     serviceWorker: boolean
     /** REVIEW Update our api in production  */
     apiBaseUrl: string
+    /** cyclic remote server full url  */
+    URI?: string
+    /** give access to remote api */
+    functionCode?: string
     user: ExcelUser
 }
 
@@ -89,7 +93,7 @@ export interface UpdatedStation {
     delete_id?: string
     add_station_id?: string
     /** if we have (new) create station component open, at the same time we open update statation component, we want to close (previous action) for create station component  */
-    close_create_stataion?:boolean;
+    close_create_stataion?: boolean
     station: ExcelModel
     marker?: Marker
 }

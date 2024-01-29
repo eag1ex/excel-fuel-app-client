@@ -15,7 +15,7 @@ import { ExcelStates } from '@excel/states'
 export class ExcelProductsHttpService {
     private apiBaseUrl: string
     constructor(private states: ExcelStates, private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
-        this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
+        this.apiBaseUrl = this.ENVIRONMENT.URI ? this.ENVIRONMENT.URI + `/${this.ENVIRONMENT.apiBaseUrl}` : this.ENVIRONMENT.apiBaseUrl
     }
 
     /**

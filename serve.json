@@ -1,0 +1,4 @@
+{
+    "public": "./dist/excel-fuel",
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+}

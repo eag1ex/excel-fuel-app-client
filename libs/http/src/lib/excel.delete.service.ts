@@ -15,7 +15,7 @@ export class ExcelDeleteHttpService {
     private apiBaseUrl: string
     sub$: Subject<string> = new Subject()
     constructor(private http: HttpClient, @Inject('ENVIRONMENT') protected ENVIRONMENT: ENV) {
-        this.apiBaseUrl = this.ENVIRONMENT.apiBaseUrl
+        this.apiBaseUrl = this.ENVIRONMENT.URI ? this.ENVIRONMENT.URI + `/${this.ENVIRONMENT.apiBaseUrl}` : this.ENVIRONMENT.apiBaseUrl
     }
 
     /**
