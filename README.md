@@ -21,7 +21,7 @@ Features:
 #### <span style="color:red">Latest updates</span>
 
 <i>Project demo is now available on github pages: </i>
-[ >> bucket-list <<](https://eag1ex.github.io/excel-fuel/)
+[ >> bucket-list <<](https://eag1ex.github.io/excel-fuel-app-client/)
 
 <img src="./screens/excel-1.png" width="400" />
 <img src="./screens/excel-2.png" width="400" />

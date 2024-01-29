@@ -7,10 +7,11 @@
         "build": "ng build excel-fuel --prod --aot --configuration=production --base-href /",
         "dep-graph": "./node_modules/.bin/nx dep-graph",
         "deploy:github": "npx angular-cli-ghpages --dir=dist/excel-fuel",
-        "build:prod": "ng build excel-fuel --prod --aot --configuration=production --base-href https://eag1ex.github.io/excel-fuel/",
+        "build:prod": "ng build excel-fuel --prod --aot --configuration=production --base-href https://eag1ex.github.io/excel-fuel-app-client/",
         "test": "ng test",
         "lint": "ng lint",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "serve": "serve"
     },
     "private": true,
     "license": "CC BY-NC-ND 2.0",
