@@ -10,7 +10,7 @@ Features:
 -   Fullstack application
 -   Api Authentication with router guards and resolvers
 -   Good architecture and modular separations
--   Map api with opensource Leaflet.js
+-   Map api with open-source Leaflet.js
 -   Module Lazy loading with Angular's multi-project feature
 -   Material design with theme and bootstrap variables
 -   Api proxy for development with environment variables
@@ -18,13 +18,16 @@ Features:
 -   Production ready
 -   Linted
 
-#### <span style="color:red">Latest updates</span>
+<br>
+
+### <span style="color:red">Latest updates</span>
 
 <i>Project demo is now available on github pages: </i>
-[ >> bucket-list <<](https://eag1ex.github.io/excel-fuel-app-client/)
+**[ >> bucket-list <<](https://eag1ex.github.io/excel-fuel-app-client/)**
 
 <img src="./screens/excel-1.png" width="400" />
 <img src="./screens/excel-2.png" width="400" />
+<br>
 <br>
 
 ### Install
@@ -58,11 +61,13 @@ $/ npm run build # build at /dist
 
 #### Live Demo
 
-Hosted on heroku node.js server (_server has timeout limit_, free dyno):
+```sh
+## OLD, INACTIVE
 
-```
-access:
-https://pacific-meadow-55275.herokuapp.com/app
+# Hosted on heroku node.js server (_server has timeout limit_, free dyno):
+
+# access:
+# https://pacific-meadow-55275.herokuapp.com/app
 ```
 
 #### Server app repo
@@ -70,7 +75,7 @@ https://pacific-meadow-55275.herokuapp.com/app
 Excel fuel, typescript server app can be fount at
 
 ```sh
-/$ git clone https://eag1ex@bitbucket.org/eag1ex/excel-fuel-server.git
+/$ git clone https://github.com/eag1ex/excel-fuel-server
 ```
 
 ### Stack
