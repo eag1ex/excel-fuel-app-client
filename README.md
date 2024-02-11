@@ -25,7 +25,7 @@ Features:
 <i>Project demo is now available on github pages: </i>
 **[ >> excel-fuel-app <<](https://eag1ex.github.io/excel-fuel-app-client/)**
 
-<img src="./screens/excel-3.png" width="400" />
+<img src="./screens/excel-3.jpg" width="400" />
 <br>
 <br>
 
