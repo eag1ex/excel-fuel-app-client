@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1719472470938,
+  "timestamp": 1719472980664,
   "index": "https://eag1ex.github.io/excel-fuel-app-client/index.html",
   "assetGroups": [
     {
@@ -16,7 +16,7 @@
         "https://eag1ex.github.io/excel-fuel-app-client/7.fb6b3930fd9880d20875.js",
         "https://eag1ex.github.io/excel-fuel-app-client/favicon.ico",
         "https://eag1ex.github.io/excel-fuel-app-client/index.html",
-        "https://eag1ex.github.io/excel-fuel-app-client/main.f5b7c73ab10edacbc7f2.js",
+        "https://eag1ex.github.io/excel-fuel-app-client/main.a2c923c861e5d2d49299.js",
         "https://eag1ex.github.io/excel-fuel-app-client/polyfills.df3cc2ee6a66a283d2e2.js",
         "https://eag1ex.github.io/excel-fuel-app-client/project-excel.a4bd70f618f46fe9dea9.css",
         "https://eag1ex.github.io/excel-fuel-app-client/runtime.c83ace702dd8922eb11f.js",
@@ -65,10 +65,10 @@
     "https://eag1ex.github.io/excel-fuel-app-client/6.589fbb4c84d2bd06f6a1.js": "06dc04b4918ab8a7658a1c409ac717bd935eb7ab",
     "https://eag1ex.github.io/excel-fuel-app-client/7.fb6b3930fd9880d20875.js": "563637329fbc1ccb72046e0b2d58c4705d610620",
     "https://eag1ex.github.io/excel-fuel-app-client/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "https://eag1ex.github.io/excel-fuel-app-client/index.html": "92713abb492c477419fb41e2cb2985cf29da05d3",
+    "https://eag1ex.github.io/excel-fuel-app-client/index.html": "a0953bb7746e0c1a496a94960a01d2a68150f4d4",
     "https://eag1ex.github.io/excel-fuel-app-client/layers-2x.8f2c4d11474275fbc161.png": "152a162333e46d24f9d89f566312fc0c64011dee",
     "https://eag1ex.github.io/excel-fuel-app-client/layers.416d91365b44e4b4f477.png": "c9e7528e491a39232ba24a2706c6c739d6fb0f06",
-    "https://eag1ex.github.io/excel-fuel-app-client/main.f5b7c73ab10edacbc7f2.js": "5b9b3d8526248f80c77f98967e06be87497728dc",
+    "https://eag1ex.github.io/excel-fuel-app-client/main.a2c923c861e5d2d49299.js": "19853f2d6d0b0d53aa1c87fc25be08dcd88c5846",
     "https://eag1ex.github.io/excel-fuel-app-client/marker-icon.2b3e1faf89f94a483539.png": "60a90bcbb2b42b7ddb4556db94eb7c1084b0e5da",
     "https://eag1ex.github.io/excel-fuel-app-client/muli-bold-webfont.7fa5778e8bbf25e59013.woff2": "15c20e3fc25237a1e5c501ab37469fe269153fbd",
     "https://eag1ex.github.io/excel-fuel-app-client/muli-bold-webfont.a08e57fab39417ea2615.woff": "0052c4a0974afcea258b3f1c9cf6cb10e7eb9f8f",
