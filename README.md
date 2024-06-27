@@ -164,3 +164,7 @@ Initial deadline 9 days.
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.0.
 
 #### Thank you
+
+
+### Logs
+- 27/Jun/24 migrated cyclic.sh (EOL) to another koyeb.app

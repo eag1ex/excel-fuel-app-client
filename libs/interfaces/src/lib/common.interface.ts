@@ -8,7 +8,7 @@ export interface ENV {
     serviceWorker: boolean
     /** REVIEW Update our api in production  */
     apiBaseUrl: string
-    /** cyclic remote server full url  */
+    /** koyeb.app remote server full url  */
     URI?: string
     /** give access to remote api */
     functionCode?: string

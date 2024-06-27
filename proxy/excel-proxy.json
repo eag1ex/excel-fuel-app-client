@@ -7,7 +7,7 @@
     },
 
     "/excel-fuel-api": {
-        "target": "https://kind-gold-armadillo-sari.cyclic.app",
+        "target": "https://wily-tomi-eag1ex-3730bf26.koyeb.app",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true
